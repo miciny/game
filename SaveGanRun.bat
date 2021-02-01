@@ -11,4 +11,4 @@ exit /B
 :gotAdmin
 if exist "%temp%\getadmin.vbs" ( del "%temp%\getadmin.vbs" )
 
-python C:\Users\miciny\Desktop\SaveGanPro.py
+python E:\project\game\SaveGanPro.py

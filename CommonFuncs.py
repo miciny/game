@@ -4,6 +4,7 @@ import sys
 from Email import send_mail
 from Config import rec_list, self_path
 import pyautogui as auto
+from WechatServices import send_wechat_notice
 
 
 def get_average(data_list):
@@ -67,6 +68,7 @@ def mcy_send_mail(content_str, status=1):
         title = "通知"
     auto.screenshot(pic_path)
     try:
+        send_wechat_notice(title, content_str)
         send_mail(title, content_str, rec_list, [pic_path])
     except Exception as e:
         print(e)
