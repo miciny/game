@@ -4,15 +4,14 @@ urllib3.disable_warnings()
 
 
 def send_wechat_notice(title, desc):
-    key = 'SCU140810T91212209da974ea43a3e07e211d41c095feacae619327'
-    url = 'https://sc.ftqq.com/%s.send' % key
+    url = 'http://39.105.72.114:2205/v1/sendNotice'
     para_data = {
-        'text': title,
-        'desp': desc
+        'title': title,
+        'desc': desc
     }
-    return requests.get(url, params=para_data)
+    return requests.post(url, json=para_data)
 
 
 if __name__ == '__main__':
-    res = send_wechat_notice("ceshiss", '自己')
+    res = send_wechat_notice("wo", '自己')
     print(res.text)
