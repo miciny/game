@@ -4,7 +4,7 @@ urllib3.disable_warnings()
 
 
 def send_wechat_notice(title, desc):
-    url = 'http://39.105.72.114:2205/v1/sendNotice'
+    url = 'http://39.105.72.114/v1/sendNotice'
     para_data = {
         'title': title,
         'desc': desc
