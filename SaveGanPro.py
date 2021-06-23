@@ -2,7 +2,7 @@
 from yys.CommonFuncs import *
 from yys.Utils import *
 from Config import *
-import RunTimeSetting
+from yys import RunTimeSetting
 
 
 class McyYysScript:
@@ -49,6 +49,7 @@ class McyYysScript:
         begin_flag = self.switch_and_begin(1)
         if not begin_flag:
             return False
+        print_wait(RunTimeSetting.fight_sec, "等待战斗结束：")
 
         # 检查是否结束了
         if self.current_index == 0 and RunTimeSetting.fight_type == 3:

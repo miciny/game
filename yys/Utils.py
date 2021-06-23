@@ -1,7 +1,7 @@
 import pyautogui as auto
 from yys.CommonFuncs import print_wait
 from Config import self_path, screen_width, screen_height, confidence_setting
-import RunTimeSetting
+from yys import RunTimeSetting
 import os
 import random
 
@@ -93,7 +93,7 @@ def check_other_btn():
 # 应该是可以通用的 返回是否结束，结束图片有两个，一个刚结束，一个结束了出现了奖励，底色不一样
 def check_finish():
     res_pos = get_pic_pos("finish_check_1") or get_pic_pos("finish_check_2") or get_pic_pos("finish_yl")
-    return False if res_pos else True
+    return True if res_pos else False
 
 
 # 返回是否在准备战斗页的坐标，组队的话，只有一种图片group，个人的话，都用挑战检测single
