@@ -37,7 +37,7 @@ class McyYysScript:
             two_flags[0] = self.switch_and_begin(1)  # 第一个屏幕
         if two_flags[1]:
             two_flags[1] = self.switch_and_begin(2)  # 第二个屏幕
-        print_wait(RunTimeSetting.fight_sec, "等待检测：")
+        print_wait(RunTimeSetting.fight_sec, "等待战斗结束：")
         if two_flags[0]:
             switch_and_finish(1)  # 第一个屏幕
         if two_flags[1]:
@@ -202,6 +202,10 @@ class McyYysScript:
     def gan_init(self):
         if self.windows_no == 0:
             print("未检测到游戏窗口")
+            return
+
+        if self.windows_no == 0 and RunTimeSetting.fight_type in [3, 5]:
+            print("只检测到一个游戏窗口")
             return
 
         # 单刷觉醒，四个轮着来刷, fight_list=[1, 2, 3, 4]

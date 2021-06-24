@@ -248,6 +248,9 @@ def close_hun_plus(open_flag=False, hun_flag=True):
 
 # 关闭加成，灰度检测，所以可开可关
 def close_plus_operation(open_flag=False):
+    if RunTimeSetting.fight_to not in [1, 4]:
+        return
+
     hun_flag = True
 
     # 4觉醒
@@ -321,6 +324,7 @@ def check_main_false():
 def check_main_true_operation(start_pos):
     click_screen(start_pos, "点击开始战斗！位置：")
     print_wait(3, "等待检测是否真的开始")
+    click_screen(get_pic_pos('prepare_fight'), '点击准备')
     for i in range(3):
         print("检测是否真的开始！第", i, "次")
         start_pos = check_back_main()
