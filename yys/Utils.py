@@ -87,6 +87,8 @@ def switch_screen_click(to_screen):
 # 检测是否出现了接收按钮 确认按钮，一般在结束后容易出现意外
 def check_other_btn():
     click_screen(get_pic_pos("confirm"), "点击确认")
+    click_screen(get_pic_pos("confirm_1"), "点击确认")
+    click_screen(get_pic_pos("confirm_2"), "点击确认")
     click_screen(get_pic_pos("accept"), "点击确认")
 
 
