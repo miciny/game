@@ -8,7 +8,9 @@ self_path = os.path.dirname(os.path.realpath(__file__))
 # pip3 install smtplib -i http://mirrors.aliyun.com/pypi/simple  --trusted-host mirrors.aliyun.com
 # YysImage的截图，截图之后不能再调整窗口大小，两个屏幕不要挡着左上角的游戏logo
 
-# bat文件，需要管理员方式打开：
+# bat
+# 
+# 文件，需要管理员方式打开：
 # @echo off
 # >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
 # if '%errorlevel%' NEQ '0' (
@@ -21,7 +23,7 @@ self_path = os.path.dirname(os.path.realpath(__file__))
 # exit /B
 # :gotAdmin
 # if exist "%temp%\getadmin.vbs" ( del "%temp%\getadmin.vbs" )
-# python C:\Users\miciny\Desktop\SaveGanPro.py
+# python C:\Users\miciny\Desktop\ZDXCBRun.py
 
 # 窗口大小
 screen_width = 1144  # 1144 1440

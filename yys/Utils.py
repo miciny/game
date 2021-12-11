@@ -32,6 +32,26 @@ def get_pic_pos(pic_name, center=True):
         return auto.locateOnScreen(pic_path, region=pic_region, confidence=confidence_setting, grayscale=True)
 
 
+# 检测图片，返回中心点 或 None
+def get_pic_list_pos(pic_name_list, center=True, dir_name='DXCBImage'):
+    for pic_name in pic_name_list:
+        pic_path = os.path.join(self_path, dir_name + "\\" + pic_name + ".png")
+        print(str(RunTimeSetting.current_screen), '屏幕，检测图片: ', pic_path)
+        if RunTimeSetting.current_screen == 1:
+            pic_region = (RunTimeSetting.det_one_x, RunTimeSetting.det_one_y, screen_width, screen_height)
+        elif RunTimeSetting.current_screen == 2:
+            pic_region = (RunTimeSetting.det_two_x, RunTimeSetting.det_two_y, screen_width, screen_height)
+        else:
+            width, height = auto.size()
+            pic_region = (0, 0, width, height)
+        if center:
+            res = auto.locateCenterOnScreen(pic_path, region=pic_region, confidence=confidence_setting, grayscale=True)
+        else:
+            res = auto.locateOnScreen(pic_path, region=pic_region, confidence=confidence_setting, grayscale=True)
+        if res:
+            return res
+    return None
+
 # 自动寻找两个窗口的点
 def find_windows():
     window_1_pos = get_pic_pos("window_1", center=False) or get_pic_pos("window_11", center=False)
