@@ -1,4 +1,5 @@
 from yys.Utils import get_pic_list_pos, click_screen
+from yys.WechatServices import send_wechat_notice
 
 
 def ghost_thing():
@@ -20,6 +21,7 @@ def ghost_thing():
 
 def ghost_thing_little():
     i = 0
+    flag = 1
     while True:
         the_list = ["loss_choose_jiuguan", "goin",
                     "forward", "fight_boss", "go_next",
@@ -38,8 +40,14 @@ def ghost_thing_little():
             res_pos = get_pic_list_pos(["finish"])
             click_screen(res_pos)
 
+            flag = 1
+
             i += 1
             print(i)
+
+        flag += 1
+        if flag > 100:
+            send_wechat_notice("error", "出错了!")
 
 
 if __name__ == '__main__':
