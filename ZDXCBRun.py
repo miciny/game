@@ -22,7 +22,8 @@ def ghost_thing():
 def ghost_thing_little():
     i = 0
     flag = 1
-    while True:
+    run_flag = True
+    while run_flag:
         the_list = ["loss_choose_jiuguan", "goin",
                     "forward", "fight_boss", "go_next",
                     "go_on_1", "go_on_2", "boss_1", "leave",
@@ -30,6 +31,7 @@ def ghost_thing_little():
                     "blank_33", "blank_44", "blank_55",  "blank_66"]
         res_pos = get_pic_list_pos(the_list)
         if res_pos:
+            flag = 1
             click_screen(res_pos)
 
         res_pos = get_pic_list_pos(["finish_check_1"])
@@ -47,6 +49,7 @@ def ghost_thing_little():
 
         flag += 1
         if flag > 100:
+            run_flag = False
             send_wechat_notice("error", "出错了!")
 
 
