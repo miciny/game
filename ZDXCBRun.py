@@ -1,3 +1,4 @@
+from yys.CommonFuncs import shutdown_pc
 from yys.Utils import get_pic_list_pos, click_screen
 from yys.WechatServices import send_wechat_notice
 
@@ -26,24 +27,14 @@ def ghost_thing_little():
     while run_flag:
         the_list = ["loss_choose_jiuguan", "goin",
                     "forward", "fight_boss", "go_next",
+                    "finish_check_1",
                     "go_on_1", "go_on_2", "boss_1", "leave",
-                    "next_lvl_1", "fight_2", "fight_3", "fight_4", "fight_boss",
-                    "blank_33", "blank_44", "blank_55",  "blank_66"]
+                    "next_lvl_1", "fight_2", "fight_22", "fight_3", "fight_4",
+                    "blank_33", "blank_44", "blank_55", "blank_66"]
         res_pos = get_pic_list_pos(the_list)
         if res_pos:
             flag = 1
             click_screen(res_pos)
-
-        res_pos = get_pic_list_pos(["finish_check_1"])
-        if res_pos:
-            res_pos = get_pic_list_pos(["back_to"])
-            click_screen(res_pos)
-
-            res_pos = get_pic_list_pos(["finish"])
-            click_screen(res_pos)
-
-            flag = 1
-
             i += 1
             print(i)
 
@@ -56,3 +47,4 @@ def ghost_thing_little():
 if __name__ == '__main__':
     # ghost_thing()
     ghost_thing_little()
+    shutdown_pc()
