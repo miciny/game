@@ -33,7 +33,7 @@ def get_pic_pos(pic_name, center=True):
 
 
 # 检测图片，返回中心点 或 None
-def get_pic_list_pos(pic_name_list, center=True, dir_name='DXCBImage'):
+def get_pic_list_pos(pic_name_list, center=True, dir_name='TempImages'):
     for pic_name in pic_name_list:
         pic_path = os.path.join(self_path, dir_name + "\\" + pic_name + ".png")
         print(str(RunTimeSetting.current_screen), '屏幕，检测图片: ', pic_path)

@@ -23,7 +23,7 @@ self_path = os.path.dirname(os.path.realpath(__file__))
 # exit /B
 # :gotAdmin
 # if exist "%temp%\getadmin.vbs" ( del "%temp%\getadmin.vbs" )
-# python C:\Users\miciny\Desktop\ZDXCBRun.py
+# python C:\Users\miciny\Desktop\OtherRun.py
 
 # 窗口大小
 screen_width = 1144  # 1144 1440
