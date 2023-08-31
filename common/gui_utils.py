@@ -16,8 +16,10 @@ def click_screen(click_pos, des=None, delay_sec=None):
 # 检测图片，返回中心点 或 None
 def get_pic_position(pic_name, dir_name, pic_region, center=True):
     pic_path = os.path.join(self_path, dir_name + "\\" + pic_name + ".png")
-    print(f'屏幕，检测图片: {pic_path}')
     if center:
-        return auto.locateCenterOnScreen(pic_path, region=pic_region, confidence=confidence_setting, grayscale=True)
+        res = auto.locateCenterOnScreen(pic_path, region=pic_region, confidence=confidence_setting, grayscale=True)
     else:
-        return auto.locateOnScreen(pic_path, region=pic_region, confidence=confidence_setting, grayscale=True)
+        res = auto.locateOnScreen(pic_path, region=pic_region, confidence=confidence_setting, grayscale=True)
+
+    print(f'屏幕，检测图片: {pic_path}, 结果： {res}')
+    return res

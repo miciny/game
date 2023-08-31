@@ -1,7 +1,7 @@
 import time
 import os
 import sys
-from Config import self_path
+from config import self_path
 import pyautogui as auto
 from common.wechat_services import send_wechat_notice
 

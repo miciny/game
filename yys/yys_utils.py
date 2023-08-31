@@ -1,77 +1,80 @@
-import pyautogui as auto
-from common.common_utils import print_wait
 from common.gui_utils import *
-from config import screen_width, screen_height
+from config import *
 from yys import runtime_setting
 import random
 
 
-
-# 检测图片，返回中心点 或 None
-def get_pic_pos(pic_name, center=True):
-    if runtime_setting.current_screen == 1:
-        pic_region = (runtime_setting.det_one_x, runtime_setting.det_one_y, screen_width, screen_height)
-    elif runtime_setting.current_screen == 2:
-        pic_region = (runtime_setting.det_two_x, runtime_setting.det_two_y, screen_width, screen_height)
-    else:
-        width, height = auto.size()
-        pic_region = (0, 0, width, height)
-    return get_pic_position(pic_name, 'yys_image', pic_region, center=center)
-
-
 # 检测图片, 有一个存在就返回，返回中心点 或 None
-def get_pic_list_pos(pic_name_list, center=True, dir_name='yys_image'):
+def get_pic_list_pos(pic_name_list, center=True, dir_name='yys_images'):
     for pic_name in pic_name_list:
         if runtime_setting.current_screen == 1:
-            pic_region = (runtime_setting.det_one_x, runtime_setting.det_one_y, screen_width, screen_height)
+            pic_region = (runtime_setting.det_one_x - runtime_setting.det_width_one - 60, runtime_setting.det_one_y,
+                          screen_width, screen_height)
         elif runtime_setting.current_screen == 2:
-            pic_region = (runtime_setting.det_two_x, runtime_setting.det_two_y, screen_width, screen_height)
+            pic_region = (runtime_setting.det_two_x - runtime_setting.det_width_two - 60, runtime_setting.det_two_y,
+                          screen_width, screen_height)
         else:
             width, height = auto.size()
             pic_region = (0, 0, width, height)
+        # print(f'pic_region: {pic_region}')
+        # pic_path = os.path.join(self_path, "Logs\\temp.png")
+        # auto.screenshot(pic_path, region=pic_region)
         res = get_pic_position(pic_name, dir_name, pic_region, center=center)
         if res:
             return res
     return None
 
+
+# 检测图片，返回中心点 或 None
+def get_pic_pos(pic_name, center=True):
+    return get_pic_list_pos([pic_name], center=center)
+
+
 # 自动寻找两个窗口的左上标识
 def find_windows():
-    window_1_pos = get_pic_list_pos(["window_1", "window_11"], center=False)
-    window_2_pos = get_pic_list_pos(["window_2", "window_22"], center=False)
+    window_1_pos = get_pic_list_pos(["window_1", "window_11"])
+    window_2_pos = get_pic_list_pos(["window_2", "window_22"])
+    main_pos = get_pic_list_pos(["mumu_main", "mumu_main_1"])
+    print(f"main_pos: {main_pos}")
 
     if window_1_pos is None and window_2_pos is None:
         print("请不要遮挡左上角logo")
         return 0
     if window_1_pos is None and window_2_pos is not None:
         print("没有找到第一个游戏窗口")
-        runtime_setting.det_one_x = window_2_pos[0] - 5
-        runtime_setting.det_one_y = window_2_pos[1] - 5
+        runtime_setting.det_width_one = window_2_pos[0] - main_pos[0]
+        runtime_setting.det_one_x = window_2_pos[0]
+        runtime_setting.det_one_y = window_2_pos[1]
         return 1
     if window_1_pos is not None and window_2_pos is None:
         print("没有找到第二个游戏窗口")
-        runtime_setting.det_one_x = window_1_pos[0] - 5
-        runtime_setting.det_one_y = window_1_pos[1] - 5
+        runtime_setting.det_width_one = window_1_pos[0] - main_pos[0]
+        runtime_setting.det_one_x = window_1_pos[0]
+        runtime_setting.det_one_y = window_1_pos[1]
         return 1
     if window_1_pos is not None and window_2_pos is not None:
-        runtime_setting.det_one_x = window_1_pos[0] - 5
-        runtime_setting.det_one_y = window_1_pos[1] - 5
-        runtime_setting.det_two_x = window_2_pos[0] - 5
-        runtime_setting.det_two_y = window_2_pos[1] - 5
-        if runtime_setting.det_two_y < runtime_setting.det_one_y:
-            print("位置切换，位置高的为第一个窗口")
-            runtime_setting.det_one_x, runtime_setting.det_two_x = runtime_setting.det_two_x, runtime_setting.det_one_x
-            runtime_setting.det_one_y, runtime_setting.det_two_y = runtime_setting.det_two_y, runtime_setting.det_one_y
+        print("找到二个游戏窗口")
+        runtime_setting.det_width_one = window_1_pos[0] - main_pos[0]
+        runtime_setting.det_one_x = window_1_pos[0]
+        runtime_setting.det_one_y = window_1_pos[1]
+        runtime_setting.det_width_two = window_2_pos[0] - main_pos[0]
+        runtime_setting.det_two_x = window_2_pos[0]
+        runtime_setting.det_two_y = window_2_pos[1]
+        # if runtime_setting.det_two_y < runtime_setting.det_one_y:
+        #     print("位置切换，位置高的为第一个窗口")
+        #     runtime_setting.det_one_x, runtime_setting.det_two_x = runtime_setting.det_two_x, runtime_setting.det_one_x
+        #     runtime_setting.det_one_y, runtime_setting.det_two_y = runtime_setting.det_two_y, runtime_setting.det_one_y
         return 2
 
 
 # 返回当前游戏窗口的位置
 def get_screen_pos():
     if runtime_setting.current_screen == 1:
-        click_x = runtime_setting.det_one_x + 80
-        click_y = runtime_setting.det_one_y + 10
+        click_x = runtime_setting.det_one_x
+        click_y = runtime_setting.det_one_y
     else:
-        click_x = runtime_setting.det_two_x + 80
-        click_y = runtime_setting.det_two_y + 10
+        click_x = runtime_setting.det_two_x
+        click_y = runtime_setting.det_two_y
     return [click_x, click_y]
 
 
@@ -88,10 +91,7 @@ def switch_screen_click(to_screen):
 
 # 检测是否出现了接收按钮 确认按钮，一般在结束后容易出现意外
 def check_other_btn():
-    click_screen(get_pic_pos("confirm"), "点击确认")
     click_screen(get_pic_pos("confirm_1"), "点击确认")
-    click_screen(get_pic_pos("confirm_2"), "点击确认")
-    click_screen(get_pic_pos("accept"), "点击确认")
 
 
 # 应该是可以通用的 返回是否结束，结束图片有两个，一个刚结束，一个结束了出现了奖励，底色不一样
@@ -132,12 +132,15 @@ def fight_click_pos(pos_type=1):
         click_x = screen_width * 0.05769
         click_y = screen_height * 0.29455 + (screen_height * 0.17) * (pos_type - 3)
     else:
-        click_x = screen_width * 0.83333 + random.randint(10, 150)
-        click_y = screen_height * 0.6596 + random.randint(-90, 70)
+        click_x = screen_width * 0.83333 + random.randint(10, 10)
+        click_y = screen_height * 0.6596 + random.randint(-10, 10)
     if runtime_setting.current_screen == 1:
-        return [click_x + runtime_setting.det_one_x, click_y + runtime_setting.det_one_y]
+        regine = [click_x + runtime_setting.det_one_x - runtime_setting.det_width_one,
+                  click_y + runtime_setting.det_one_y]
     else:
-        return [click_x + runtime_setting.det_two_x, click_y + runtime_setting.det_two_y]
+        regine = [click_x + runtime_setting.det_two_x - runtime_setting.det_width_two,
+                  click_y + runtime_setting.det_two_y]
+    return regine
 
 
 # 主线任务的点击点
