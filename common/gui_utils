@@ -1,9 +1,7 @@
 import pyautogui as auto
 from common.common_utils import print_wait
 from config import self_path, confidence_setting
-from yys import runtime_setting
 import os
-import random
 
 
 # 点击屏幕， delay_sec 点击完成后等待时常

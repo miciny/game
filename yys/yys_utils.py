@@ -1,9 +1,8 @@
 import pyautogui as auto
 from common.common_utils import print_wait
 from common.gui_utils import *
-from config import self_path, screen_width, screen_height, confidence_setting
+from config import screen_width, screen_height
 from yys import runtime_setting
-import os
 import random
 
 

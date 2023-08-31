@@ -1,15 +1,15 @@
 # -*- coding: UTF-8 -*-
-from yys.CommonFuncs import *
-from yys.Utils import *
-from Config import *
-from yys import RunTimeSetting
+from common.common_utils import *
+from yys.yys_utils import *
+from config import *
+from yys import runtime_setting
 
 
 class McyYysScript:
     def __init__(self, count=1, fight_sec=7, fight_type=1, fight_to=1, fight_list=None):
-        RunTimeSetting.fight_type = fight_type
-        RunTimeSetting.fight_to = fight_to
-        RunTimeSetting.fight_sec = fight_sec
+        runtime_setting.fight_type = fight_type
+        runtime_setting.fight_to = fight_to
+        runtime_setting.fight_sec = fight_sec
 
         self.count = count          # 战斗总轮数
         self.current_index = 0      # 战斗第几轮
@@ -23,11 +23,11 @@ class McyYysScript:
         # 检查是否到首页了
         start_pos = check_main_false()
         if not start_pos:
-            mcy_send_notice(self.content_str + "<br>第" + str(RunTimeSetting.current_screen) + "个游戏似乎出错了，没有回到主页！", 2)
+            mcy_send_notice(self.content_str + "<br>第" + str(runtime_setting.current_screen) + "个游戏似乎出错了，没有回到主页！", 2)
             return False
         not_main_check = check_main_true_operation(start_pos)
         if not not_main_check:
-            mcy_send_notice(self.content_str + "<br>第" + str(RunTimeSetting.current_screen) + "个游戏似乎出错了，没有真的开始！", 2)
+            mcy_send_notice(self.content_str + "<br>第" + str(runtime_setting.current_screen) + "个游戏似乎出错了，没有真的开始！", 2)
             return False
         return True
 
@@ -37,7 +37,7 @@ class McyYysScript:
             two_flags[0] = self.switch_and_begin(1)  # 第一个屏幕
         if two_flags[1]:
             two_flags[1] = self.switch_and_begin(2)  # 第二个屏幕
-        print_wait(RunTimeSetting.fight_sec, "等待战斗结束：")
+        print_wait(runtime_setting.fight_sec, "等待战斗结束：")
         if two_flags[0]:
             switch_and_finish(1)  # 第一个屏幕
         if two_flags[1]:
@@ -49,14 +49,14 @@ class McyYysScript:
         begin_flag = self.switch_and_begin(1)
         if not begin_flag:
             return False
-        print_wait(RunTimeSetting.fight_sec, "等待战斗结束：")
+        print_wait(runtime_setting.fight_sec, "等待战斗结束：")
 
         # 检查是否结束了
-        if self.current_index == 0 and RunTimeSetting.fight_type == 3:
+        if self.current_index == 0 and runtime_setting.fight_type == 3:
             switch_and_finish(1, index_check=False)
         else:
             switch_and_finish(1)
-        if RunTimeSetting.fight_type == 3:
+        if runtime_setting.fight_type == 3:
             switch_and_finish(2, finish_check=False)
         return True
 
@@ -150,9 +150,6 @@ class McyYysScript:
         time_list = []
         result_flag = False
 
-        gan_to_prepare()                    # 准备工作
-        close_plus_operation(True)          # 开加成
-
         for i in range(self.count):
             result_flag = False
             start_time = time.time()
@@ -161,29 +158,26 @@ class McyYysScript:
             print(self.content_str)
 
             # 百鬼
-            if RunTimeSetting.fight_to == 9:
+            if runtime_setting.fight_to == 9:
                 if self.ghost_hit() != "":
                     break
 
             # 个人或组队
-            elif RunTimeSetting.fight_type == 1 or RunTimeSetting.fight_type == 3:
+            elif runtime_setting.fight_type == 1 or runtime_setting.fight_type == 3:
                 if not self.one_fight():
                     break
-            # 双号
-            elif RunTimeSetting.fight_type == 5:
+                
+            # 双号单刷
+            elif runtime_setting.fight_type == 5:
                 if not self.two_fight(two_flags):
                     break
 
             end_time = time.time()
 
-            # 第一次的邀请 接受
-            if RunTimeSetting.fight_type == 3 and i == 0:
-                invite_accept_operation()
-
             # 邮件部分
             time_list.append(end_time - start_time)
             avg_time = get_average(time_list)
-            if RunTimeSetting.fight_to != 7 and ((i + 1) % 10) == 0 and (i + 1) != self.count:
+            if runtime_setting.fight_to != 7 and ((i + 1) % 10) == 0 and (i + 1) != self.count:
                 time_str = "<br>已耗时：" + time_format(end_time - all_start_time)
                 time_str += "<br>平均单次耗时：" + time_format(avg_time)
                 time_str += "<br>预计结束时间：" + time_format(avg_time * (self.count - i - 1))
@@ -192,31 +186,26 @@ class McyYysScript:
             print("==========单次耗时：", time_format(end_time - start_time), "平均耗时：", time_format(avg_time))
             result_flag = True
 
-        # 关加成
-        close_plus_operation()
-
         print("===========结束==========")
         return result_flag
 
     # 主入口
     def gan_init(self):
         if self.windows_no == 0:
-            print("未检测到游戏窗口")
-            return
+            raise RuntimeError("未检测到游戏窗口")
 
-        if self.windows_no == 0 and RunTimeSetting.fight_type in [3, 5]:
-            print("只检测到一个游戏窗口")
-            return
+        if self.windows_no == 1 and runtime_setting.fight_type in [3, 5]:
+            raise RuntimeError("只检测到一个游戏窗口")
 
         # 单刷觉醒，四个轮着来刷, fight_list=[1, 2, 3, 4]
-        if RunTimeSetting.fight_type == 1 and RunTimeSetting.fight_to == 4 and self.fight_list is not None:
+        if runtime_setting.fight_type == 1 and runtime_setting.fight_to == 4 and self.fight_list is not None:
             for item in self.fight_list:
                 click_pos = fight_click_pos(item + 2)
                 click_screen(click_pos, "切换到第" + str(item) + "个觉醒！位置：", 1)
                 if not self.gan_begin():      # 其他的战斗开始入口
                     return False
             return True
-        elif RunTimeSetting.fight_to == 7:    # 主线
+        elif runtime_setting.fight_to == 7:    # 主线
             return self.main_mission()
         else:
             return self.gan_begin()           # 其他的战斗开始入口
