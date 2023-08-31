@@ -3,7 +3,7 @@ import os
 import sys
 from Config import self_path
 import pyautogui as auto
-from yys.WechatServices import send_wechat_notice
+from common.wechat_services import send_wechat_notice
 
 
 # 平均值
