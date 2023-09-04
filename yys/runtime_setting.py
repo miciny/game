@@ -1,8 +1,11 @@
-# 第一个窗口，离原点的位置
-det_one_x = 0
-det_one_y = 0
-det_width_one = 0
-det_width_two = 0
+# 切换到第一个窗口，点击的位置
+screen_pos_one = (0, 0)
+# 第一个窗口扫描的开始点
+screen_scan_one = (0, 0)
+# 切换到第二个窗口，点击的位置
+screen_pos_two = (0, 0)
+# 第二个窗口扫描的开始点
+screen_scan_two = (0, 0)
 
 # 第二个窗口，离原点的位置
 det_two_x = 0

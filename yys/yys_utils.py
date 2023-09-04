@@ -8,11 +8,9 @@ import random
 def get_pic_list_pos(pic_name_list, center=True, dir_name='yys_images'):
     for pic_name in pic_name_list:
         if runtime_setting.current_screen == 1:
-            pic_region = (runtime_setting.det_one_x - runtime_setting.det_width_one - 60, runtime_setting.det_one_y,
-                          screen_width, screen_height)
+            pic_region = runtime_setting.screen_scan_one + (screen_width, screen_height)
         elif runtime_setting.current_screen == 2:
-            pic_region = (runtime_setting.det_two_x - runtime_setting.det_width_two - 60, runtime_setting.det_two_y,
-                          screen_width, screen_height)
+            pic_region = runtime_setting.screen_scan_two + (screen_width, screen_height)
         else:
             width, height = auto.size()
             pic_region = (0, 0, width, height)
@@ -34,58 +32,38 @@ def get_pic_pos(pic_name, center=True):
 def find_windows():
     window_1_pos = get_pic_list_pos(["window_1", "window_11"])
     window_2_pos = get_pic_list_pos(["window_2", "window_22"])
-    main_pos = get_pic_list_pos(["mumu_main", "mumu_main_1"])
-    print(f"main_pos: {main_pos}")
+
+    # 左上的标识，这个不能找不到，否则报错
+    main_pos = get_pic_list_pos(["mumu_main", "mumu_main_1"], center=False)
+    runtime_setting.screen_scan_one = (main_pos[0], main_pos[1]+main_pos[3])
+    runtime_setting.screen_scan_two = (main_pos[0], main_pos[1]+main_pos[3])
 
     if window_1_pos is None and window_2_pos is None:
         print("请不要遮挡左上角logo")
         return 0
     if window_1_pos is None and window_2_pos is not None:
         print("没有找到第一个游戏窗口")
-        runtime_setting.det_width_one = window_2_pos[0] - main_pos[0]
-        runtime_setting.det_one_x = window_2_pos[0]
-        runtime_setting.det_one_y = window_2_pos[1]
+        runtime_setting.screen_pos_one = window_2_pos[:2]
         return 1
     if window_1_pos is not None and window_2_pos is None:
         print("没有找到第二个游戏窗口")
-        runtime_setting.det_width_one = window_1_pos[0] - main_pos[0]
-        runtime_setting.det_one_x = window_1_pos[0]
-        runtime_setting.det_one_y = window_1_pos[1]
+        runtime_setting.screen_pos_one = window_1_pos[:2]
         return 1
     if window_1_pos is not None and window_2_pos is not None:
         print("找到二个游戏窗口")
-        runtime_setting.det_width_one = window_1_pos[0] - main_pos[0]
-        runtime_setting.det_one_x = window_1_pos[0]
-        runtime_setting.det_one_y = window_1_pos[1]
-        runtime_setting.det_width_two = window_2_pos[0] - main_pos[0]
-        runtime_setting.det_two_x = window_2_pos[0]
-        runtime_setting.det_two_y = window_2_pos[1]
-        # if runtime_setting.det_two_y < runtime_setting.det_one_y:
-        #     print("位置切换，位置高的为第一个窗口")
-        #     runtime_setting.det_one_x, runtime_setting.det_two_x = runtime_setting.det_two_x, runtime_setting.det_one_x
-        #     runtime_setting.det_one_y, runtime_setting.det_two_y = runtime_setting.det_two_y, runtime_setting.det_one_y
+        runtime_setting.screen_pos_one = window_1_pos[:2]
+        runtime_setting.screen_pos_two = window_2_pos[:2]
         return 2
-
-
-# 返回当前游戏窗口的位置
-def get_screen_pos():
-    if runtime_setting.current_screen == 1:
-        click_x = runtime_setting.det_one_x
-        click_y = runtime_setting.det_one_y
-    else:
-        click_x = runtime_setting.det_two_x
-        click_y = runtime_setting.det_two_y
-    return [click_x, click_y]
 
 
 # 点击切换游戏屏幕
 def switch_screen_click(to_screen):
     if to_screen == 1:
         runtime_setting.current_screen = 1
-        click_pos = get_screen_pos()
+        click_pos = runtime_setting.screen_pos_one
     else:
         runtime_setting.current_screen = 2
-        click_pos = get_screen_pos()
+        click_pos = runtime_setting.screen_pos_two
     click_screen(click_pos, "切换到第 " + str(runtime_setting.current_screen) + " 个窗口！位置：", delay_sec=1)
 
 
@@ -94,8 +72,8 @@ def check_other_btn():
     click_screen(get_pic_pos("confirm_1"), "点击确认")
 
 
-# 应该是可以通用的 返回是否结束，结束图片有两个，一个刚结束，一个结束了出现了奖励，底色不一样
-def check_finish():
+# 返回是否在战斗结束界面，结束图片有两个，一个刚结束，一个结束了出现了奖励，底色不一样
+def check_is_finish_page():
     res_pos = get_pic_list_pos(["finish_check_1", "finish_check_2", "finish_yl"])
     return res_pos is not None
 
@@ -110,17 +88,13 @@ def check_back_main():
 
 
 # 结束时的点击，检测不到结束图片，就结束
-def final_click(index_check=True):
-    if index_check:
-        print("随机点击最多30次屏幕，为了返回首页")
-        for _ in range(30):
-            click_screen(fight_click_pos(1), "点击屏幕！位置：", random.randint(5, 8) / 8)
-            if not check_finish():
-                break
-    else:
-        print("随机点击最多5次屏幕，由于是首次，不检测图片")
-        for _ in range(5):
-            click_screen(fight_click_pos(1), "点击屏幕！位置：", random.randint(5, 8) / 8)
+def final_click():
+    times = 10
+    print(f"随机点击最多{times}次屏幕，为了返回首页")
+    for _ in range(times):
+        click_screen(fight_click_pos(1), "点击屏幕！位置：", random.randint(5, 8) / 8)
+        if not check_is_finish_page():
+            break
 
 
 # 1战斗结束点击屏幕的位置, 2战斗中点击屏幕的位置，[3, 4, 5, 6]觉醒切换位置时点击屏幕的位置
@@ -135,11 +109,11 @@ def fight_click_pos(pos_type=1):
         click_x = screen_width * 0.83333 + random.randint(10, 10)
         click_y = screen_height * 0.6596 + random.randint(-10, 10)
     if runtime_setting.current_screen == 1:
-        regine = [click_x + runtime_setting.det_one_x - runtime_setting.det_width_one,
-                  click_y + runtime_setting.det_one_y]
+        regine = [click_x + runtime_setting.screen_scan_one[0],
+                  click_y + runtime_setting.screen_scan_one[1]]
     else:
-        regine = [click_x + runtime_setting.det_two_x - runtime_setting.det_width_two,
-                  click_y + runtime_setting.det_two_y]
+        regine = [click_x + runtime_setting.screen_scan_one[0],
+                  click_y + runtime_setting.screen_scan_one[1]]
     return regine
 
 
@@ -185,9 +159,9 @@ def ghost_hit_pos(pos_type=1):
         click_x = screen_width / 2 + index
         click_y = screen_height * 0.594
     if runtime_setting.current_screen == 1:
-        return [click_x + runtime_setting.det_one_x, click_y + runtime_setting.det_one_y]
+        return [click_x + runtime_setting.screen_scan_one[0], click_y + runtime_setting.screen_scan_one[1]]
     else:
-        return [click_x + runtime_setting.det_two_x, click_y + runtime_setting.det_two_y]
+        return [click_x + runtime_setting.screen_scan_two[0], click_y + runtime_setting.screen_scan_two[1]]
 
 
 # 检测主页面，失败了就重试三次，每次重新点击第一个屏幕和第二个屏幕
@@ -240,7 +214,7 @@ def check_finish_false_operation():
     count = int(runtime_setting.fight_sec / 2)
     for i in range(count):
         print("检测是否结束：", i, "/", count)
-        finish_check = check_finish()
+        finish_check = check_is_finish_page()
         if not finish_check:
             if runtime_setting.fight_type == 1:
                 start_pos = check_back_main()
@@ -258,9 +232,9 @@ def check_finish_false_operation():
 
 
 # 切换窗口 - 检测结束
-def switch_and_finish(to_screen, finish_check=True, index_check=True):
+def switch_and_finish(to_screen, finish_check=True):
     switch_screen_click(to_screen)
     # 检查是否结束了
     if finish_check:
         check_finish_false_operation()
-    final_click(index_check)
+    final_click()

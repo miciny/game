@@ -52,10 +52,7 @@ class McyYysScript:
         print_wait(runtime_setting.fight_sec, "等待战斗结束：")
 
         # 检查是否结束了
-        if self.current_index == 0 and runtime_setting.fight_type == 3:
-            switch_and_finish(1, index_check=False)
-        else:
-            switch_and_finish(1)
+        switch_and_finish(1)
         if runtime_setting.fight_type == 3:
             switch_and_finish(2, finish_check=False)
         return True
