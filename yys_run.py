@@ -244,9 +244,10 @@ if __name__ == '__main__':
     try:
         all_start_time = time.time()
         yys_handler = McyYysScript(count=f_times, fight_sec=f_sec, fight_type=f_type, fight_to=f_to, fight_list=f_list)
-        yys_handler.gan_init()
+        res = yys_handler.gan_init()
         all_end_time = time.time()
-        mcy_send_notice("成功刷完" + str(f_times) + "次，耗时：" + time_format(all_end_time - all_start_time), 1)
+        if res:
+            mcy_send_notice("成功刷完" + str(f_times) + "次，耗时：" + time_format(all_end_time - all_start_time), 1)
 
     except KeyboardInterrupt:
         print("键盘打断，退出")

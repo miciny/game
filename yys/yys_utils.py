@@ -84,7 +84,7 @@ def check_back_main():
     if runtime_setting.fight_type == 1 or runtime_setting.fight_type == 5:
         pic_name = "single"
     the_pos = get_pic_pos(pic_name)
-    return [the_pos.x + random.randint(-10, 10), the_pos.y + random.randint(-5, 10)] if the_pos else None
+    return [the_pos[0] + random.randint(-10, 10), the_pos[1] + random.randint(-5, 10)] if the_pos else None
 
 
 # 结束时的点击，检测不到结束图片，就结束
