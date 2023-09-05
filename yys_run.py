@@ -1,7 +1,6 @@
 # -*- coding: UTF-8 -*-
 from common.common_utils import *
 from yys.yys_utils import *
-from config import *
 from yys import runtime_setting
 
 

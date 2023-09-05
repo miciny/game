@@ -8,9 +8,9 @@ import random
 def get_pic_list_pos(pic_name_list, center=True, dir_name='yys_images'):
     for pic_name in pic_name_list:
         if runtime_setting.current_screen == 1:
-            pic_region = runtime_setting.screen_scan_one + (screen_width, screen_height)
+            pic_region = runtime_setting.screen_scan_one + (yys_screen_width, yys_screen_height)
         elif runtime_setting.current_screen == 2:
-            pic_region = runtime_setting.screen_scan_two + (screen_width, screen_height)
+            pic_region = runtime_setting.screen_scan_two + (yys_screen_width, yys_screen_height)
         else:
             width, height = auto.size()
             pic_region = (0, 0, width, height)
@@ -100,20 +100,20 @@ def final_click():
 # 1战斗结束点击屏幕的位置, 2战斗中点击屏幕的位置，[3, 4, 5, 6]觉醒切换位置时点击屏幕的位置
 def fight_click_pos(pos_type=1):
     if pos_type == 2:
-        click_x = screen_width * 0.5 + random.randint(-int(0.1 * screen_width), int(0.1 * screen_width))
-        click_y = screen_height * 0.5 + random.randint(-int(0.17 * screen_height), int(0.17 * screen_width))
+        click_x = yys_screen_width * 0.5 + random.randint(-int(0.1 * yys_screen_width), int(0.1 * yys_screen_width))
+        click_y = yys_screen_height * 0.5 + random.randint(-int(0.17 * yys_screen_height), int(0.17 * yys_screen_width))
     elif pos_type in [3, 4, 5, 6]:
-        click_x = screen_width * 0.05769
-        click_y = screen_height * 0.29455 + (screen_height * 0.17) * (pos_type - 3)
+        click_x = yys_screen_width * 0.05769
+        click_y = yys_screen_height * 0.29455 + (yys_screen_height * 0.17) * (pos_type - 3)
     else:
-        click_x = screen_width * 0.83333 + random.randint(10, 10)
-        click_y = screen_height * 0.6596 + random.randint(-10, 10)
+        click_x = yys_screen_width * 0.83333 + random.randint(10, 10)
+        click_y = yys_screen_height * 0.6596 + random.randint(-10, 10)
     if runtime_setting.current_screen == 1:
         regine = [click_x + runtime_setting.screen_scan_one[0],
                   click_y + runtime_setting.screen_scan_one[1]]
     else:
-        regine = [click_x + runtime_setting.screen_scan_one[0],
-                  click_y + runtime_setting.screen_scan_one[1]]
+        regine = [click_x + runtime_setting.screen_scan_two[0],
+                  click_y + runtime_setting.screen_scan_two[1]]
     return regine
 
 
@@ -138,8 +138,8 @@ def ghost_hit_pos(pos_type=1):
         return get_pic_pos("ghost_add")
     elif pos_type == 2:
         index = random.randint(-1, 1)
-        click_x = screen_width / 2 + screen_width * 0.30873 * index
-        click_y = screen_height * 0.677
+        click_x = yys_screen_width / 2 + yys_screen_width * 0.30873 * index
+        click_y = yys_screen_height * 0.677
     elif pos_type == 3:
         return get_pic_pos("ghost_begin")
     elif pos_type == 4:
@@ -147,17 +147,17 @@ def ghost_hit_pos(pos_type=1):
     elif pos_type == 5:
         return get_pic_pos("ghost_finish")
     elif pos_type == 6:
-        click_x = screen_width / 5
+        click_x = yys_screen_width / 5
         click_y = 80
     elif pos_type == 7:
         return get_pic_pos("ghost_bean_no")
     elif pos_type == 8:
         return get_pic_pos("frozen")
     else:
-        wight = int(screen_width * 0.45)
+        wight = int(yys_screen_width * 0.45)
         index = random.randint(-wight, wight)
-        click_x = screen_width / 2 + index
-        click_y = screen_height * 0.594
+        click_x = yys_screen_width / 2 + index
+        click_y = yys_screen_height * 0.594
     if runtime_setting.current_screen == 1:
         return [click_x + runtime_setting.screen_scan_one[0], click_y + runtime_setting.screen_scan_one[1]]
     else:
