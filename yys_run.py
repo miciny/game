@@ -22,11 +22,11 @@ class McyYysScript:
         # 检查是否到首页了
         start_pos = check_main_false()
         if not start_pos:
-            mcy_send_notice(self.content_str + "<br>第" + str(runtime_setting.current_screen) + "个游戏似乎出错了，没有回到主页！", 2)
+            mcy_send_notice(self.content_str + "\n第" + str(runtime_setting.current_screen) + "个游戏似乎出错了，没有回到主页！", 2)
             return False
         not_main_check = check_main_true_operation(start_pos)
         if not not_main_check:
-            mcy_send_notice(self.content_str + "<br>第" + str(runtime_setting.current_screen) + "个游戏似乎出错了，没有真的开始！", 2)
+            mcy_send_notice(self.content_str + "\n第" + str(runtime_setting.current_screen) + "个游戏似乎出错了，没有真的开始！", 2)
             return False
         return True
 
@@ -123,7 +123,7 @@ class McyYysScript:
             return hit_res
         finally:
             if hit_res != "":
-                mcy_send_notice(self.content_str + "<br>砸百鬼出错了：" + hit_res, 2)
+                mcy_send_notice(self.content_str + "\n砸百鬼出错了：" + hit_res, 2)
 
     # 新号做主线任务
     def main_mission(self):
@@ -149,7 +149,7 @@ class McyYysScript:
         for i in range(self.count):
             result_flag = False
             start_time = time.time()
-            self.content_str = "==========第" + str(i + 1) + "次, 共" + str(self.count) + "次=========="
+            self.content_str = "===第" + str(i + 1) + "次, 共" + str(self.count) + "次==="
             self.current_index = i
             print(self.content_str)
 
@@ -174,15 +174,15 @@ class McyYysScript:
             time_list.append(end_time - start_time)
             avg_time = get_average(time_list)
             if runtime_setting.fight_to != 7 and ((i + 1) % 10) == 0 and (i + 1) != self.count:
-                time_str = "<br>已耗时：" + time_format(end_time - all_start_time)
-                time_str += "<br>平均单次耗时：" + time_format(avg_time)
-                time_str += "<br>预计结束时间：" + time_format(avg_time * (self.count - i - 1))
+                time_str = "\n已耗时：" + time_format(end_time - all_start_time)
+                time_str += "\n平均单次耗时：" + time_format(avg_time)
+                time_str += "\n预计结束时间：" + time_format(avg_time * (self.count - i - 1))
                 mcy_send_notice(self.content_str + time_str, 3)
 
-            print("==========单次耗时：", time_format(end_time - start_time), "平均耗时：", time_format(avg_time))
+            print("===单次耗时：", time_format(end_time - start_time), "平均耗时：", time_format(avg_time))
             result_flag = True
 
-        print("===========结束==========")
+        print("=====结束=====")
         return result_flag
 
     # 主入口

@@ -47,8 +47,8 @@ def print_wait(time_sec, des=None):
 
 
 # 关机
-def shutdown_pc(delay_time=60):
-    mcy_send_notice(str(delay_time) + "秒准备关机！", 4)
+def shutdown_pc(delay_time=99):
+    mcy_send_notice(str(delay_time) + "秒倒计时关机！", 4)
     print_wait(delay_time, "自动关机倒计时：")
     os.system("shutdown /s")
 

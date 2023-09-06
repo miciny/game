@@ -13,5 +13,5 @@ def send_wechat_notice(title, desc):
 
 
 if __name__ == '__main__':
-    res = send_wechat_notice("wo", '自己')
+    res = send_wechat_notice("wo", '自己\n换行')
     print(res.text)
