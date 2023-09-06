@@ -208,7 +208,6 @@ class McyYysScript:
 
 
 if __name__ == '__main__':
-    fight_setting_list = [fight_1, fight_2, fight_3, fight_4, fight_5, fight_6, fight_7, fight_8]
     f_ready = -1
     f_list = []
     f_type = -1
@@ -216,17 +215,17 @@ if __name__ == '__main__':
     f_times = -1
     f_sec = -1
     while f_ready not in ["0", "1", "2", "3", "4", "5", "6", "7"]:
-        f_ready = input("0: 组队-魂土-"+str(fight_setting_list[0]['times'])+"次\n"
-                        "1: 组队-日轮-"+str(fight_setting_list[1]['times'])+"次\n"
-                        "2: 双号-业原火-"+str(fight_setting_list[2]['times'])+"次\n"
-                        "3: 单刷-业原火-"+str(fight_setting_list[3]['times'])+"次\n"
-                        "4: 单刷-百鬼-"+str(fight_setting_list[4]['times'])+"次\n"
-                        "5: 单刷-主线-"+str(fight_setting_list[5]['times'])+"次\n"
-                        "6: 组队-觉醒-"+str(fight_setting_list[6]['times'])+"次\n"
-                        "7: 单刷-觉醒(随机)-"+str(fight_setting_list[7]['times'])+"次\n"
+        f_ready = input("0: 组队-魂土-"+str(runtime_setting.fight_setting_list[0]['times'])+"次\n"
+                        "1: 组队-日轮-"+str(runtime_setting.fight_setting_list[1]['times'])+"次\n"
+                        "2: 双号-业原火-"+str(runtime_setting.fight_setting_list[2]['times'])+"次\n"
+                        "3: 单刷-业原火-"+str(runtime_setting.fight_setting_list[3]['times'])+"次\n"
+                        "4: 单刷-百鬼-"+str(runtime_setting.fight_setting_list[4]['times'])+"次\n"
+                        "5: 单刷-主线-"+str(runtime_setting.fight_setting_list[5]['times'])+"次\n"
+                        "6: 组队-觉醒-"+str(runtime_setting.fight_setting_list[6]['times'])+"次\n"
+                        "7: 单刷-觉醒(随机)-"+str(runtime_setting.fight_setting_list[7]['times'])+"次\n"
                         "请选择: ")
 
-    fight = fight_setting_list[int(f_ready)]
+    fight = runtime_setting.fight_setting_list[int(f_ready)]
     f_list = fight["fight_list"]
     f_type = fight["fight_type"]
     f_to = fight["fight_to"]

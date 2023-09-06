@@ -38,3 +38,4 @@ fight_5 = {"times": 120, "fight_sec": 7, "fight_type": 1, "fight_to": 9, "fight_
 fight_6 = {"times": 120, "fight_sec": 7, "fight_type": 1, "fight_to": 7, "fight_list": []}  # 新号做主线任务
 fight_7 = {"times": 60, "fight_sec": 7, "fight_type": 3, "fight_to": 4, "fight_list": []}  # 组队-觉醒
 fight_8 = {"times": 40, "fight_sec": 7, "fight_type": 1, "fight_to": 4, "fight_list": [1, 2, 3, 4]}  # 单刷-觉醒，随机打四个
+fight_setting_list = [fight_1, fight_2, fight_3, fight_4, fight_5, fight_6, fight_7, fight_8]
