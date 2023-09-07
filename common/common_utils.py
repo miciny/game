@@ -57,17 +57,23 @@ def shutdown_pc(delay_time=99):
 def mcy_send_notice(content_str, status=1):
     if status == 2:
         pic_path = os.path.join(self_path, "Logs\\error.png")
+        pic_path_1 = os.path.join(self_path, "Logs\\error_1.png")
         title = "错误"
     elif status == 3:
         pic_path = os.path.join(self_path, "Logs\\progress.png")
+        pic_path_1 = os.path.join(self_path, "Logs\\progress_1.png")
         title = "过程中"
     elif status == 1:
         pic_path = os.path.join(self_path, "Logs\\done.png")
+        pic_path_1 = os.path.join(self_path, "Logs\\done_1.png")
         title = "成功"
     else:
         pic_path = os.path.join(self_path, "Logs\\notice.png")
+        pic_path_1 = os.path.join(self_path, "Logs\\notice_1.png")
         title = "通知"
     auto.screenshot(pic_path)
+    time.sleep(2)
+    auto.screenshot(pic_path_1)
     try:
         send_wechat_notice(title, content_str)
     except Exception as e:
