@@ -193,15 +193,7 @@ class McyYysScript:
         if self.windows_no == 1 and runtime_setting.fight_type in [3, 5]:
             raise RuntimeError("只检测到一个游戏窗口")
 
-        # 单刷觉醒，四个轮着来刷, fight_list=[1, 2, 3, 4]
-        if runtime_setting.fight_type == 1 and runtime_setting.fight_to == 4 and self.fight_list is not None:
-            for item in self.fight_list:
-                click_pos = fight_click_pos(item + 2)
-                click_screen(click_pos, "切换到第" + str(item) + "个觉醒！位置：", 1)
-                if not self.gan_begin():      # 其他的战斗开始入口
-                    return False
-            return True
-        elif runtime_setting.fight_to == 7:    # 主线
+        if runtime_setting.fight_to == 7:    # 主线
             return self.main_mission()
         else:
             return self.gan_begin()           # 其他的战斗开始入口
@@ -214,16 +206,16 @@ if __name__ == '__main__':
     f_to = -1
     f_times = -1
     f_sec = -1
-    while f_ready not in ["0", "1", "2", "3", "4", "5", "6", "7"]:
-        f_ready = input("0: 组队-魂土-"+str(runtime_setting.fight_setting_list[0]['times'])+"次\n"
-                        "1: 组队-日轮-"+str(runtime_setting.fight_setting_list[1]['times'])+"次\n"
-                        "2: 双号-业原火-"+str(runtime_setting.fight_setting_list[2]['times'])+"次\n"
-                        "3: 单刷-业原火-"+str(runtime_setting.fight_setting_list[3]['times'])+"次\n"
-                        "4: 单刷-百鬼-"+str(runtime_setting.fight_setting_list[4]['times'])+"次\n"
-                        "5: 单刷-主线-"+str(runtime_setting.fight_setting_list[5]['times'])+"次\n"
-                        "6: 组队-觉醒-"+str(runtime_setting.fight_setting_list[6]['times'])+"次\n"
-                        "7: 单刷-觉醒(随机)-"+str(runtime_setting.fight_setting_list[7]['times'])+"次\n"
-                        "请选择: ")
+    fight_list = runtime_setting.fight_setting_list
+    input_list = []
+    input_str = ''
+    for index, v in enumerate(fight_list):
+        input_list.append(str(index))
+        input_str += f'{index}: {v["desc"]}-{v["times"]}次-{v["fight_sec"]}s\n'
+    input_str += "请选择: "
+
+    while f_ready not in input_list:
+        f_ready = input(input_str)
 
     fight = runtime_setting.fight_setting_list[int(f_ready)]
     f_list = fight["fight_list"]

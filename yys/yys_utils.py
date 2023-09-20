@@ -24,7 +24,9 @@ def get_pic_list_pos(pic_name_list, center=True, dir_name='yys_images'):
 
 
 # 检测图片，返回中心点 或 None
-def get_pic_pos(pic_name, center=True):
+def get_pic_pos(pic_name, pic_name_list=None, center=True):
+    if pic_name_list is not None and len(pic_name_list) > 0:
+        return get_pic_list_pos(pic_name_list, center=center)
     return get_pic_list_pos([pic_name], center=center)
 
 
@@ -34,7 +36,8 @@ def find_windows():
     window_2_pos = get_pic_list_pos(["window_2", "window_22"])
 
     # 左上的标识，这个不能找不到，否则报错
-    main_pos = get_pic_list_pos(["mumu_main", "mumu_main_1"], center=False)
+    main_pos = get_pic_list_pos(["mumu_main", "mumu_main_1", "mumu_main_2", "mumu_main_3"],
+                                center=False)
     runtime_setting.screen_scan_one = (main_pos[0], main_pos[1]+main_pos[3])
     runtime_setting.screen_scan_two = (main_pos[0], main_pos[1]+main_pos[3])
 
@@ -74,16 +77,18 @@ def check_other_btn():
 
 # 返回是否在战斗结束界面，结束图片有两个，一个刚结束，一个结束了出现了奖励，底色不一样
 def check_is_finish_page():
-    res_pos = get_pic_list_pos(["finish_check_1", "finish_check_2", "finish_yl"])
+    res_pos = get_pic_list_pos(["finish_check_1", "finish_check_2", "finish_check_3", "finish_check_4", "finish_yl"])
     return res_pos is not None
 
 
 # 返回是否在准备战斗页的坐标，组队的话，只有一种图片group，个人的话，都用挑战检测single
 def check_back_main():
     pic_name = "group"
+    pic_name_list = ['group']
     if runtime_setting.fight_type == 1 or runtime_setting.fight_type == 5:
         pic_name = "single"
-    the_pos = get_pic_pos(pic_name)
+        pic_name_list = ["single", "single_1"]
+    the_pos = get_pic_pos(pic_name, pic_name_list=pic_name_list)
     return [the_pos[0] + random.randint(-10, 10), the_pos[1] + random.randint(-5, 10)] if the_pos else None
 
 
@@ -97,7 +102,7 @@ def final_click():
             break
 
 
-# 1战斗结束点击屏幕的位置, 2战斗中点击屏幕的位置，[3, 4, 5, 6]觉醒切换位置时点击屏幕的位置
+# 1战斗结束点击屏幕的位置, 2战斗中点击屏幕的位置
 def fight_click_pos(pos_type=1):
     if pos_type == 2:
         click_x = runtime_setting.yys_screen_width * 0.5 + \
@@ -106,10 +111,6 @@ def fight_click_pos(pos_type=1):
         click_y = runtime_setting.yys_screen_height * 0.5 + \
                   random.randint(-int(0.17 * runtime_setting.yys_screen_height),
                                  int(0.17 * runtime_setting.yys_screen_width))
-    elif pos_type in [3, 4, 5, 6]:
-        click_x = runtime_setting.yys_screen_width * 0.05769
-        click_y = runtime_setting.yys_screen_height * 0.29455 + \
-                  (runtime_setting.yys_screen_height * 0.17) * (pos_type - 3)
     else:
         click_x = runtime_setting.yys_screen_width * 0.83333 + random.randint(10, 10)
         click_y = runtime_setting.yys_screen_height * 0.6596 + random.randint(-10, 10)
