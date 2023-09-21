@@ -4,23 +4,40 @@ from yys import runtime_setting
 import random
 
 
+pic_base_dir = 'yys_images'
+
+
 # 检测图片, 有一个存在就返回，返回中心点 或 None
-def get_pic_list_pos(pic_name_list, center=True, dir_name='yys_images'):
+def get_pic_list_pos(pic_name_list, center=True, dir_name=pic_base_dir, without_tail=True):
     for pic_name in pic_name_list:
         if runtime_setting.current_screen == 1:
-            pic_region = runtime_setting.screen_scan_one + (runtime_setting.yys_screen_width, runtime_setting.yys_screen_height)
+            pic_region = runtime_setting.screen_scan_one + (runtime_setting.yys_screen_width,
+                                                            runtime_setting.yys_screen_height)
         elif runtime_setting.current_screen == 2:
-            pic_region = runtime_setting.screen_scan_two + (runtime_setting.yys_screen_width, runtime_setting.yys_screen_height)
+            pic_region = runtime_setting.screen_scan_two + (runtime_setting.yys_screen_width,
+                                                            runtime_setting.yys_screen_height)
         else:
             width, height = auto.size()
             pic_region = (0, 0, width, height)
         # print(f'pic_region: {pic_region}')
         # pic_path = os.path.join(self_path, "Logs\\temp.png")
         # auto.screenshot(pic_path, region=pic_region)
-        res = get_pic_position(pic_name, dir_name, pic_region, center=center)
+        res = get_pic_position(pic_name, dir_name, pic_region, center=center, without_tail=without_tail)
         if res:
             return res
     return None
+
+
+# dir_name: yys_images目录下的目录
+def get_pic_pos_dir(dir_name, center=True):
+    file_path = os.path.join(self_path, pic_base_dir, dir_name)
+    for dir_path, dir_names, file_names in os.walk(file_path):
+        base_path = pic_base_dir + "\\" + dir_name
+        return get_pic_list_pos(file_names, center=center, dir_name=base_path, without_tail=False)
+
+
+def get_finish_pic_pos():
+    return get_pic_pos_dir('finish_check')
 
 
 # 检测图片，返回中心点 或 None
@@ -32,11 +49,13 @@ def get_pic_pos(pic_name, pic_name_list=None, center=True):
 
 # 自动寻找两个窗口的左上标识
 def find_windows():
-    window_1_pos = get_pic_list_pos(["window_1", "window_11"])
-    window_2_pos = get_pic_list_pos(["window_2", "window_22"])
+    base_dir = "window_check\\"
+    window_1_pos = get_pic_list_pos([base_dir + "window_1", base_dir + "window_11"])
+    window_2_pos = get_pic_list_pos([base_dir + "window_2", base_dir + "window_22"])
 
     # 左上的标识，这个不能找不到，否则报错
-    main_pos = get_pic_list_pos(["mumu_main", "mumu_main_1", "mumu_main_2", "mumu_main_3"],
+    main_pos = get_pic_list_pos([base_dir + "mumu_main", base_dir + "mumu_main_1",
+                                 base_dir + "mumu_main_2", base_dir + "mumu_main_3"],
                                 center=False)
     runtime_setting.screen_scan_one = (main_pos[0], main_pos[1]+main_pos[3])
     runtime_setting.screen_scan_two = (main_pos[0], main_pos[1]+main_pos[3])
@@ -77,7 +96,7 @@ def check_other_btn():
 
 # 返回是否在战斗结束界面，结束图片有两个，一个刚结束，一个结束了出现了奖励，底色不一样
 def check_is_finish_page():
-    res_pos = get_pic_list_pos(["finish_check_1", "finish_check_2", "finish_check_3", "finish_check_4", "finish_yl"])
+    res_pos = get_finish_pic_pos()
     return res_pos is not None
 
 
@@ -126,39 +145,35 @@ def fight_click_pos(pos_type=1):
 # 主线任务的点击点
 def ghost_main_mission_pos(main_check=False):
     if not main_check:
-        for i in range(1, 7):
-            res_pos = get_pic_pos("mission_" + str(i))
-            if res_pos:
-                return res_pos
-        else:
-            return None
+        return get_pic_pos_dir('main_mission')
     else:
-        return get_pic_pos("main_plus")
+        return get_pic_pos("main_mission\\main_plus")
 
 
 # 百鬼的一些位置，1开始，2选择三个鬼王随机，3鬼王选择后的开始，4选择鬼王后，确保已选中，检测下，5结束检测图
 # 6如果在百鬼结束页，点击空白的位置，7豆的位置，把它拖到10个豆
 # 其他是砸豆的位置随机
 def ghost_hit_pos(pos_type=1):
+    base_dir = 'ghost_hit\\'
     if pos_type == 1:
-        return get_pic_pos("ghost_add")
+        return get_pic_pos(base_dir + "ghost_add")
     elif pos_type == 2:
         index = random.randint(-1, 1)
         click_x = runtime_setting.yys_screen_width / 2 + runtime_setting.yys_screen_width * 0.30873 * index
         click_y = runtime_setting.yys_screen_height * 0.677
     elif pos_type == 3:
-        return get_pic_pos("ghost_begin")
+        return get_pic_pos(base_dir + "ghost_begin")
     elif pos_type == 4:
-        return get_pic_pos("ghost_selected")
+        return get_pic_pos(base_dir + "ghost_selected")
     elif pos_type == 5:
-        return get_pic_pos("ghost_finish")
+        return get_pic_pos(base_dir + "ghost_finish")
     elif pos_type == 6:
         click_x = runtime_setting.yys_screen_width / 5
         click_y = 80
     elif pos_type == 7:
-        return get_pic_pos("ghost_bean_no")
+        return get_pic_pos(base_dir + "ghost_bean_no")
     elif pos_type == 8:
-        return get_pic_pos("frozen")
+        return get_pic_pos(base_dir + "ghost_frozen")
     else:
         wight = int(runtime_setting.yys_screen_width * 0.45)
         index = random.randint(-wight, wight)
@@ -244,3 +259,7 @@ def switch_and_finish(to_screen, finish_check=True):
     if finish_check:
         check_finish_false_operation()
     final_click()
+
+
+if __name__ == '__main__':
+    get_finish_pic_pos()

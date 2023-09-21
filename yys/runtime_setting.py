@@ -30,11 +30,11 @@ yys_screen_height = 585
 
 # fight_type    1个人 3组队 5两个号分开刷
 # fight_to      1魂土 2业原火 3日轮 4觉醒 7主线 9百鬼
-fight_1 = {"times": 120, "fight_sec": 15, "fight_type": 3, "fight_to": 1, "fight_list": [], 'desc': '组队-魂土'}
-fight_2 = {"times": 50, "fight_sec": 30, "fight_type": 3, "fight_to": 3, "fight_list": [], 'desc': '组队-日轮'}
-fight_3 = {"times": 120, "fight_sec": 1, "fight_type": 5, "fight_to": 2, "fight_list": [], 'desc': '双号-业原'}
-fight_4 = {"times": 120, "fight_sec": 30, "fight_type": 1, "fight_to": 2, "fight_list": [], 'desc': '单刷-业原'}
-fight_5 = {"times": 120, "fight_sec": 7, "fight_type": 1, "fight_to": 9, "fight_list": [], 'desc': '单刷-百鬼'}
-fight_6 = {"times": 120, "fight_sec": 7, "fight_type": 1, "fight_to": 7, "fight_list": [], 'desc': '单刷-主线'}
-fight_7 = {"times": 60, "fight_sec": 7, "fight_type": 3, "fight_to": 4, "fight_list": [], 'desc': '组队-觉醒'}
+fight_1 = {"fight_sec": 15, "fight_type": 3, "fight_to": 1, "fight_list": [], 'desc': '组队-魂土'}
+fight_2 = {"fight_sec": 30, "fight_type": 3, "fight_to": 3, "fight_list": [], 'desc': '组队-日轮'}
+fight_3 = {"fight_sec": 1, "fight_type": 5, "fight_to": 2, "fight_list": [], 'desc': '双号-业原'}
+fight_4 = {"fight_sec": 30, "fight_type": 1, "fight_to": 2, "fight_list": [], 'desc': '单刷-业原'}
+fight_5 = {"fight_sec": 7, "fight_type": 1, "fight_to": 9, "fight_list": [], 'desc': '单刷-百鬼'}
+fight_6 = {"fight_sec": 7, "fight_type": 1, "fight_to": 7, "fight_list": [], 'desc': '单刷-主线'}
+fight_7 = {"fight_sec": 7, "fight_type": 3, "fight_to": 4, "fight_list": [], 'desc': '组队-觉醒'}
 fight_setting_list = [fight_1, fight_2, fight_3, fight_4, fight_5, fight_6, fight_7]

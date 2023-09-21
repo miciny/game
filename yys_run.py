@@ -201,17 +201,12 @@ class McyYysScript:
 
 if __name__ == '__main__':
     f_ready = -1
-    f_list = []
-    f_type = -1
-    f_to = -1
-    f_times = -1
-    f_sec = -1
     fight_list = runtime_setting.fight_setting_list
     input_list = []
     input_str = ''
     for index, v in enumerate(fight_list):
         input_list.append(str(index))
-        input_str += f'{index}: {v["desc"]}-{v["times"]}次-{v["fight_sec"]}s\n'
+        input_str += f'{index}: {v["desc"]}-{v["fight_sec"]}s\n'
     input_str += "请选择: "
 
     while f_ready not in input_list:
@@ -221,13 +216,10 @@ if __name__ == '__main__':
     f_list = fight["fight_list"]
     f_type = fight["fight_type"]
     f_to = fight["fight_to"]
-    f_times = fight["times"]
     f_sec = fight["fight_sec"]
 
-    need_change_times = input("1-不修改次数 2-修改次数: ")
-    if need_change_times == "2":
-        change_times = input("请输入修改的次数: ")
-        f_times = int(change_times)
+    change_times = input("请输入修改的次数: ")
+    f_times = int(change_times)
 
     shutdown_flag = input("1-不关机 2-关机: ")
 
