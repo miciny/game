@@ -9,6 +9,12 @@ pic_base_dir = 'yys_images'
 
 # 检测图片, 有一个存在就返回，返回中心点 或 None
 def get_pic_list_pos(pic_name_list, center=True, dir_name=pic_base_dir, without_tail=True):
+    if pic_name_list is None:
+        return None
+
+    if isinstance(pic_name_list, str):
+        pic_name_list = [pic_name_list]
+
     for pic_name in pic_name_list:
         if runtime_setting.current_screen == 1:
             pic_region = runtime_setting.screen_scan_one + (runtime_setting.yys_screen_width,
@@ -20,7 +26,7 @@ def get_pic_list_pos(pic_name_list, center=True, dir_name=pic_base_dir, without_
             width, height = auto.size()
             pic_region = (0, 0, width, height)
         # print(f'pic_region: {pic_region}')
-        # pic_path = os.path.join(self_path, "Logs\\temp.png")
+        # pic_path = os.path.join(self_path, "Logs", "temp.png")
         # auto.screenshot(pic_path, region=pic_region)
         res = get_pic_position(pic_name, dir_name, pic_region, center=center, without_tail=without_tail)
         if res:
@@ -29,38 +35,43 @@ def get_pic_list_pos(pic_name_list, center=True, dir_name=pic_base_dir, without_
 
 
 # dir_name: yys_images目录下的目录
-def get_pic_pos_dir(dir_name, pic_name_list=None, center=True):
+def get_pic_pos_dir(dir_name='', pic_name_list=None, center=True):
+    if dir_name == '':
+        return get_pic_list_pos(pic_name_list, center=center)
+
     file_path = os.path.join(self_path, pic_base_dir, dir_name)
     for dir_path, dir_names, file_names in os.walk(file_path):
-        base_path = pic_base_dir + "\\" + dir_name
+        base_path = pic_base_dir + os.sep + dir_name
         if pic_name_list is not None:
-            if isinstance(pic_name_list, str):
-                pic_name_list = [pic_name_list]
             return get_pic_list_pos(pic_name_list, center=center, dir_name=base_path)
         return get_pic_list_pos(file_names, center=center, dir_name=base_path, without_tail=False)
 
 
 def get_finish_pic_pos():
-    return get_pic_pos_dir('finish_check')
+    return get_pic_pos_dir(dir_name='finish_check')
+
+
+def get_other_confirm_pic_pos():
+    return get_pic_pos_dir(dir_name='other_confirm')
 
 
 def get_window_pic_pos(pic_name_list, center=True):
-    return get_pic_pos_dir('window_check', pic_name_list=pic_name_list, center=center)
+    return get_pic_pos_dir(dir_name='window_check', pic_name_list=pic_name_list, center=center)
 
 
 def get_ghost_pic_pos(pic_name_list):
-    return get_pic_pos_dir('ghost_hit', pic_name_list=pic_name_list)
+    return get_pic_pos_dir(dir_name='ghost_hit', pic_name_list=pic_name_list)
 
 
 def get_mission_pic_pos(pic_name_list=None):
-    return get_pic_pos_dir('main_mission', pic_name_list=pic_name_list)
+    return get_pic_pos_dir(dir_name='main_mission', pic_name_list=pic_name_list)
 
 
 # 检测图片，返回中心点 或 None
 def get_pic_pos(pic_name, pic_name_list=None, center=True):
     if pic_name_list is not None and len(pic_name_list) > 0:
         return get_pic_list_pos(pic_name_list, center=center)
-    return get_pic_list_pos([pic_name], center=center)
+    return get_pic_list_pos(pic_name, center=center)
 
 
 # 自动寻找两个窗口的左上标识
@@ -104,7 +115,7 @@ def switch_screen_click(to_screen):
 
 # 检测是否出现了接收按钮 确认按钮，一般在结束后容易出现意外
 def check_other_btn():
-    click_screen(get_pic_pos("confirm_1"), "点击确认")
+    click_screen(get_other_confirm_pic_pos(), "点击确认")
 
 
 # 返回是否在战斗结束界面，结束图片有两个，一个刚结束，一个结束了出现了奖励，底色不一样
