@@ -3,7 +3,6 @@ from config import *
 from yys import runtime_setting
 import random
 
-
 pic_base_dir = 'yys_images'
 
 
@@ -80,9 +79,9 @@ def find_windows():
     window_2_pos = get_window_pic_pos(["window_2", "window_22"])
 
     # 左上的标识，这个不能找不到，否则报错
-    main_pos = get_window_pic_pos(["mumu_main", "mumu_main_1","mumu_main_2", "mumu_main_3"], center=False)
-    runtime_setting.screen_scan_one = (main_pos[0], main_pos[1]+main_pos[3])
-    runtime_setting.screen_scan_two = (main_pos[0], main_pos[1]+main_pos[3])
+    main_pos = get_window_pic_pos(["mumu_main", "mumu_main_1", "mumu_main_2", "mumu_main_3"], center=False)
+    runtime_setting.screen_scan_one = (main_pos[0], main_pos[1] + main_pos[3])
+    runtime_setting.screen_scan_two = (main_pos[0], main_pos[1] + main_pos[3])
 
     if window_1_pos is None and window_2_pos is None:
         print("请不要遮挡左上角logo")
@@ -153,7 +152,7 @@ def fight_click_pos(pos_type=1):
                                  int(0.1 * runtime_setting.yys_screen_width))
         click_y = runtime_setting.yys_screen_height * 0.5 + \
                   random.randint(-int(0.17 * runtime_setting.yys_screen_height),
-                                 int(0.17 * runtime_setting.yys_screen_width))
+                                 int(0.17 * runtime_setting.yys_screen_height))
     else:
         click_x = runtime_setting.yys_screen_width * 0.83333 + random.randint(10, 10)
         click_y = runtime_setting.yys_screen_height * 0.6596 + random.randint(-10, 10)

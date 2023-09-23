@@ -1,0 +1,5 @@
+PyAutoGUI~=0.9.54
+requests~=2.25.1
+urllib3~=1.26.4
+Pillow~=10.0.1
+PyScreeze~=0.1.29
