@@ -130,11 +130,7 @@ def check_back_main():
     if runtime_setting.fight_type == 1 or runtime_setting.fight_type == 5:
         pic_name = "single"
         pic_name_list = ["single", "single_1"]
-    the_pos = get_pic_pos(pic_name, pic_name_list=pic_name_list)
-    # 开始按钮的点击做随机处理
-    w = the_pos[2] / 2 - 5
-    h = the_pos[3] / 2 - 5
-    return [the_pos[0] + random.randint(-w, w), the_pos[1] + random.randint(-h, h)] if the_pos else None
+    return get_pic_pos(pic_name, pic_name_list=pic_name_list)
 
 
 # 结束时的点击，检测不到结束图片，就结束
