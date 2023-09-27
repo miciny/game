@@ -14,8 +14,8 @@ def click_screen(click_pos, des=None, delay_sec=None):
         y = click_pos[1]
         # 如果带了长宽，就随机
         if len(click_pos) == 4:
-            w = click_pos[2] / 2 - 5
-            h = click_pos[3] / 2 - 5
+            w = int(click_pos[2] / 2) - 5
+            h = int(click_pos[3] / 2) - 5
             x += random.randint(-w, w)
             y += random.randint(-h, h)
         auto.click(x=x, y=y, clicks=1, interval=1.0, button="left")
