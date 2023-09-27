@@ -131,7 +131,10 @@ def check_back_main():
         pic_name = "single"
         pic_name_list = ["single", "single_1"]
     the_pos = get_pic_pos(pic_name, pic_name_list=pic_name_list)
-    return [the_pos[0] + random.randint(-10, 10), the_pos[1] + random.randint(-5, 10)] if the_pos else None
+    # 开始按钮的点击做随机处理
+    w = the_pos[2] / 2 - 5
+    h = the_pos[3] / 2 - 5
+    return [the_pos[0] + random.randint(-w, w), the_pos[1] + random.randint(-h, h)] if the_pos else None
 
 
 # 结束时的点击，检测不到结束图片，就结束
