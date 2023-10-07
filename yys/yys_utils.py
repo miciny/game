@@ -79,7 +79,7 @@ def find_windows():
     window_2_pos = get_window_pic_pos(["window_2", "window_22"])
 
     # 左上的标识，这个不能找不到，否则报错
-    main_pos = get_window_pic_pos(["mumu_main", "mumu_main_1", "mumu_main_2", "mumu_main_3"], center=False)
+    main_pos = get_window_pic_pos(["mumu_main_1", "mumu_main_11", "mumu_main_2", "mumu_main_22"], center=False)
     runtime_setting.screen_scan_one = (main_pos[0], main_pos[1] + main_pos[3])
     runtime_setting.screen_scan_two = (main_pos[0], main_pos[1] + main_pos[3])
 
