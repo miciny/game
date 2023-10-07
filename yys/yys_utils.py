@@ -54,6 +54,14 @@ def get_other_confirm_pic_pos():
     return get_pic_pos_dir(dir_name='other_confirm')
 
 
+def get_fight_begin_pic_pos():
+    return get_pic_pos_dir(dir_name='fight_begin')
+
+
+def get_prepare_fight_pic_pos():
+    return get_pic_pos_dir(dir_name='prepare_fight')
+
+
 def get_window_pic_pos(pic_name_list, center=True):
     return get_pic_pos_dir(dir_name='window_check', pic_name_list=pic_name_list, center=center)
 
@@ -125,12 +133,7 @@ def check_is_finish_page():
 
 # 返回是否在准备战斗页的坐标，组队的话，只有一种图片group，个人的话，都用挑战检测single
 def check_back_main():
-    pic_name = "group"
-    pic_name_list = ['group']
-    if runtime_setting.fight_type == 1 or runtime_setting.fight_type == 5:
-        pic_name = "single"
-        pic_name_list = ["single", "single_1"]
-    return get_pic_pos(pic_name, pic_name_list=pic_name_list)
+    return get_fight_begin_pic_pos()
 
 
 # 结束时的点击，检测不到结束图片，就结束
@@ -231,7 +234,7 @@ def check_main_false():
 def check_main_true_operation(start_pos):
     click_screen(start_pos, "点击开始战斗！位置：")
     print_wait(3, "等待检测是否真的开始")
-    click_screen(get_pic_pos('prepare_fight'), '点击准备')
+    click_screen(get_prepare_fight_pic_pos(), '点击准备')
     for i in range(3):
         print("检测是否真的开始！第", i, "次")
         start_pos = check_back_main()
