@@ -34,7 +34,7 @@ fight_setting_list = [
     {"fight_sec": 15, "fight_type": 3, "fight_to": 1, "fight_list": [], 'desc': '组队-魂土'},
     {"fight_sec": 20, "fight_type": 3, "fight_to": 3, "fight_list": [], 'desc': '组队-日轮'},
     {"fight_sec": 25, "fight_type": 5, "fight_to": 2, "fight_list": [], 'desc': '双号-业原'},
-    {"fight_sec": 18, "fight_type": 5, "fight_to": 2, "fight_list": [], 'desc': '双号-活动'},
+    {"fight_sec": 1, "fight_type": 5, "fight_to": 2, "fight_list": [], 'desc': '双号-活动'},
     {"fight_sec": 25, "fight_type": 1, "fight_to": 2, "fight_list": [], 'desc': '单刷-业原'},
     {"fight_sec": 7, "fight_type": 1, "fight_to": 9, "fight_list": [], 'desc': '单刷-百鬼'},
     {"fight_sec": 7, "fight_type": 1, "fight_to": 7, "fight_list": [], 'desc': '单刷-主线'},
