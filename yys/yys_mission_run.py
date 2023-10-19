@@ -1,4 +1,5 @@
-from yys.yys_utils import ghost_main_mission_pos
+from common.common_utils import print_wait
+from yys.yys_utils import ghost_main_mission_pos, fight_click_pos
 from common.gui_utils import click_screen
 
 

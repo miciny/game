@@ -1,9 +1,12 @@
 # -*- coding: UTF-8 -*-
+import sys
+import time
 from yys import runtime_setting
 from yys.yys_mission_run import main_mission
 from yys.yys_ghost_run import ghost_hit
 from yys.yys_fight_run import one_fight, two_fight
-from common.common_utils import mcy_send_notice
+from common.common_utils import mcy_send_notice, get_average, time_format, shutdown_pc
+from yys.yys_utils import find_windows
 
 
 class McyYysScript:
@@ -11,11 +14,9 @@ class McyYysScript:
         runtime_setting.fight_type = fight_type
         runtime_setting.fight_to = fight_to
         runtime_setting.fight_sec = fight_sec
-
         self.count = count          # 战斗总轮数
         self.content_str = ""       # 日志记录
         self.windows_no = find_windows()        # 窗口总数 == 0 说明有问题
-    
 
     def fight_begin(self):
         # 主线
@@ -35,7 +36,6 @@ class McyYysScript:
             return two_fight()
         
         return False
-
 
     # 开始刷
     def gan_begin(self):
