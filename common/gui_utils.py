@@ -1,5 +1,4 @@
 import random
-
 import pyautogui as auto
 from common.common_utils import print_wait
 from config import self_path, confidence_setting
@@ -18,12 +17,14 @@ def click_screen(click_pos, des=None, delay_sec=None):
             h = int(click_pos[3] / 2) - 5
             x += random.randint(-w, w)
             y += random.randint(-h, h)
+
+        print(des + '。点击具体位置：', x, y)
         auto.click(x=x, y=y, clicks=1, interval=1.0, button="left")
         if delay_sec:
             print_wait(delay_sec)
 
 
-# 检测图片，返回中心点 或 None
+# 检测图片，返回【x, y, width, height】 或 None
 def get_pic_position(pic_name, dir_name, pic_region, center=True, without_tail=True):
     pic_path = os.path.join(self_path, dir_name, pic_name + (".png" if without_tail else ''))
     res = auto.locateOnScreen(pic_path, region=pic_region, confidence=confidence_setting, grayscale=True)

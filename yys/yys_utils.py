@@ -217,7 +217,7 @@ def check_main_false():
         if not main_check:
             print("没有回到主页")
             check_other_btn()
-            print_wait(3, "等待")
+            print_wait(2, "等待")
             final_click()
             if runtime_setting.fight_type == 3:
                 switch_screen_click(to_screen=2)
@@ -233,7 +233,7 @@ def check_main_false():
 # 检测主页面，主要用在点击开始后，实际没开始的情况
 def check_main_true_operation(start_pos):
     click_screen(start_pos, "点击开始战斗！位置：")
-    print_wait(3, "等待检测是否真的开始")
+    print_wait(1, "等待检测是否真的开始")
     click_screen(get_prepare_fight_pic_pos(), '点击准备')
     for i in range(3):
         print("检测是否真的开始！第", i, "次")
@@ -249,7 +249,7 @@ def check_main_true_operation(start_pos):
                 check_other_btn()
                 switch_screen_click(to_screen=1)
             click_screen(start_pos, "点击开始战斗！位置：")
-            print_wait(3, "等待")
+            print_wait(2, "等待")
     return False
 
 
@@ -268,7 +268,7 @@ def check_finish_false_operation():
                 else:
                     print("已在主页")
                     return True
-            print_wait(3, "等待检测是否结束：")
+            print_wait(2, "等待检测是否结束：")
         else:
             print("已结束")
             return True
