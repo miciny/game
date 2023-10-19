@@ -109,7 +109,7 @@ if __name__ == '__main__':
     f_sec_temp = input(f"战斗时间(默认{f_sec}s): ")
     f_sec = int(f_sec_temp) if f_sec_temp != '' and f_sec_temp.isdigit() else f_sec
 
-    shutdown_flag = input("1-不关机 2-关机: ")
+    shutdown_flag = input("1-不关机(默认) 2-关机: ")
 
     try:
         all_start_time = time.time()
