@@ -6,7 +6,7 @@ import os
 
 
 # 点击屏幕， delay_sec 点击完成后等待时常
-def click_screen(click_pos, des=None, delay_sec=None):
+def click_screen(click_pos, des="", delay_sec=None):
     if click_pos:
         print(des, click_pos)
         x = click_pos[0]
@@ -33,3 +33,11 @@ def get_pic_position(pic_name, dir_name, pic_region, center=True, without_tail=T
         res = res_center + res[-2:]
     print(f'屏幕，检测图片: {pic_path}, 结果： {res}')
     return res
+
+
+def auto_input(input_str, delay=0.5):
+    auto.typewrite(input_str, delay)
+
+
+def auto_key(key_str):
+    auto.keyDown(key_str)

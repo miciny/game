@@ -78,3 +78,9 @@ def mcy_send_notice(content_str, status=1):
         send_wechat_notice(title, content_str)
     except Exception as e:
         print(e)
+
+
+def screen_shot():
+    pic_path = os.path.join(self_path, "Logs", "smoke_pay_info.png")
+    auto.screenshot(pic_path)
+    return pic_path
