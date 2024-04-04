@@ -80,7 +80,7 @@ def mcy_send_notice(content_str, status=1):
         print(e)
 
 
-def screen_shot():
-    pic_path = os.path.join(self_path, "Logs", "smoke_pay_info.png")
-    auto.screenshot(pic_path)
+def screen_shot(region, name):
+    pic_path = os.path.join(self_path, "Logs", name + ".png")
+    auto.screenshot(pic_path, region=region)
     return pic_path
