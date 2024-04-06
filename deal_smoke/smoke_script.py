@@ -1,4 +1,5 @@
 import time
+import requests
 from common.common_utils import screen_shot
 from common.gui_utils import *
 
@@ -56,23 +57,23 @@ def get_pay_info():
     click_screen(pay_info_page, delay_sec=1)
 
     # 微信 支付宝 现金收款的信息
+    pic_path_1 = ""
     cash_pay_info_page = get_pic_position("cash_pay_info", 'deal_smoke/pic', pic_region, center=False)
-    if not cash_pay_info_page:
-        return 9
-    cash_pay_info_page = (cash_pay_info_page[0],
-                          cash_pay_info_page[1],
-                          cash_pay_info_page[2] + 380,
-                          cash_pay_info_page[3],)
-    pic_path_1 = screen_shot(cash_pay_info_page, 'cash_pay_info')
+    if cash_pay_info_page:
+        cash_pay_info_page = (cash_pay_info_page[0],
+                              cash_pay_info_page[1],
+                              cash_pay_info_page[2] + 380,
+                              cash_pay_info_page[3],)
+        pic_path_1 = screen_shot(cash_pay_info_page, 'cash_pay_info')
 
+    pic_path_2 = ""
     wx_pay_info_page = get_pic_position("wx_pay_info", 'deal_smoke/pic', pic_region, center=False)
-    if not wx_pay_info_page:
-        return 10
-    wx_pay_info_page = (wx_pay_info_page[0],
-                        wx_pay_info_page[1],
-                        wx_pay_info_page[2] + 380,
-                        wx_pay_info_page[3],)
-    pic_path_2 = screen_shot(wx_pay_info_page, 'wx_pay_info')
+    if wx_pay_info_page:
+        wx_pay_info_page = (wx_pay_info_page[0],
+                            wx_pay_info_page[1],
+                            wx_pay_info_page[2] + 380,
+                            wx_pay_info_page[3],)
+        pic_path_2 = screen_shot(wx_pay_info_page, 'wx_pay_info')
 
     # 点击返回
     pay_info_back_page = get_pic_position("pay_info_back", 'deal_smoke/pic', pic_region)
@@ -87,3 +88,28 @@ def get_pay_info():
         return 8
 
     return pic_path_1, pic_path_2
+
+
+def get_this_time_info():
+    url = 'https://www.xlovem.club/v1/smoke/run'
+    para_data = {
+        'type': '1'
+    }
+    res = requests.post(url, json=para_data)
+    print(res)
+    if res.status_code == 200:
+        return res.json()
+    return None
+
+
+def set_this_time_stock(item_id):
+    url = 'https://www.xlovem.club/v1/smoke/run'
+    para_data = {
+        'type': '2',
+        'id': item_id
+    }
+    res = requests.post(url, json=para_data)
+    print(res)
+    if res.status_code == 200:
+        return res.json()
+    return None
