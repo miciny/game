@@ -1,6 +1,8 @@
 import random
 import time
 import easyocr
+
+from common.common_utils import print_wait
 from common.wechat_services import send_wechat_notice
 from deal_smoke.smoke_script import single_run, get_pay_info, get_this_time_info, set_this_time_stock
 
@@ -23,8 +25,8 @@ def run():
     item_id = ""
     err_msg = ""
     item_stock = 0
-    gap_min_range = (10, 30)
-    all_times = random.randint(25, 30)
+    gap_min_range = (5, 18)
+    all_times = random.randint(30, 40)
     while flag and all_times > 0:
         try:
             smoke_map = get_this_time_info()
@@ -59,7 +61,7 @@ def run():
                     all_times -= 1
                     pay_info_str += f"今日剩余刷单次数：{all_times}"
                     send_wechat_notice("刷单成功了", pay_info_str, user_name='ZhangGongZhu|LengYueHanShuang')
-                    time.sleep(gap_min * 60)
+                    print_wait(gap_min * 60, "刷单成功等待：")
                     continue
 
             send_wechat_notice("刷单报错了",
@@ -82,11 +84,9 @@ if __name__ == '__main__':
 
     # pic_path = 'D:\Project\game\Logs\wx_pay_info.png'
     # reader = easyocr.Reader(['ch_sim', 'en'])
-    # reader_info = reader.readtext(pic_path)
+    # reader_info = reader.readtext(pic_path, low_text=0.0001)
     # for item in reader_info:
     #     print(item)
-    #     pay_info_str += item[1] + " "
-    # print(pay_info_str)
 
     # smoke_map = get_this_time_info()
     # print(smoke_map)
