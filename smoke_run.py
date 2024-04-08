@@ -1,5 +1,4 @@
 import random
-import time
 import easyocr
 from common.common_utils import print_wait
 from common.wechat_services import send_wechat_notice
@@ -47,7 +46,6 @@ def run():
         except Exception as e:
             send_wechat_notice("刷单报错了", f"请检查: {e}", user_name='MaoCaiYuan')
             print_wait(5 * 60, "刷单成功等待：")
-            
 
 
 if __name__ == '__main__':
