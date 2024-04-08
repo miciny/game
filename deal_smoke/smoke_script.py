@@ -51,45 +51,6 @@ def single_run(smoke_id, pay_type=1):
         input_page = get_pic_position("input_1", 'deal_smoke/pic', pic_region)
         if not input_page:
             raise Exception("现金收款完成，但不在首页")
-    
-    # 微信
-    else:
-        pay_no = ""
-        for i in range(300):
-            res = get_pay_no()
-            if res and res['code'] == 0:
-                pay_no = res['data']
-                if pay_no and str(pay_no) == 18:
-                    break
-            time.sleep(1)
-
-        if not pay_no:
-            raise Exception("没找到微信收款码")
-
-        auto_input(pay_no)
-        time.sleep(1)
-
-        # 收款确认
-        cash_confirm_page = get_pic_position("cash_confirm", 'deal_smoke/pic', pic_region)
-        if not cash_confirm_page:
-            raise Exception("没找到现金确认")
-        click_screen(cash_confirm_page, delay_sec=1)
-        time.sleep(5)
-
-        not_found = 0
-        for i in range(30):
-            pay_check_page = get_pic_position("pay_check", 'deal_smoke/pic', pic_region)
-            if pay_check_page:
-                click_screen(pay_check_page, delay_sec=1)
-                not_found = 0
-            else:
-                # 检查输入框，是不是在首页
-                input_page = get_pic_position("input_1", 'deal_smoke/pic', pic_region)
-                if not input_page:
-                    not_found += 1
-                if not_found > 2:
-                    raise Exception("微信收款可能出现问题")
-            time.sleep(5)
 
 
 def get_pay_info():
@@ -156,20 +117,3 @@ def set_this_time_stock(item_id):
     if res.status_code == 200:
         return res.json()
     return None
-
-
-def get_pay_no():
-    url = 'https://www.xlovem.club/v1/smoke/run'
-    para_data = {
-        'type': '3'
-    }
-    res = requests.post(url, json=para_data)
-    print(res)
-    if res.status_code == 200:
-        return res.json()
-    return None
-
-
-if __name__ == '__main__':
-    ret = get_this_time_info()
-    print(ret)
