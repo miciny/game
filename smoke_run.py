@@ -16,12 +16,14 @@ def run():
             item_id = smoke_map['data']['id']
             item_stock = smoke_map['data']['stock']
             item_name = smoke_map['data']['name']
+            pay_type = smoke_map['data']['pay_type']
             if "run_flag" in smoke_map['data'].keys() and smoke_map['data']['run_flag'] == 0:
                 flag = False
                 continue
             
             # 刷单
-            single_run(item_id)  
+            pay_type = 2 if pay_type == 2 else 1
+            single_run(item_id, pay_type)  
 
             # 更新库存
             set_this_time_stock(item_id)  

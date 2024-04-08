@@ -7,7 +7,8 @@ width, height = auto.size()
 pic_region = (0, 0, width, height)
 
 
-def single_run(smoke_id):
+# pay_type = 1 现金支付， 2 微信支付
+def single_run(smoke_id, pay_type=1):
     if not smoke_id:
         raise Exception("没有找到可刷的商品")
 
@@ -31,18 +32,35 @@ def single_run(smoke_id):
         raise Exception("收银按钮没找到")
     click_screen(get_pay_page, delay_sec=1)
 
-    # 选择现金
-    cash_page = get_pic_position("cash", 'deal_smoke/pic', pic_region)
-    if not cash_page:
-        raise Exception("没找到现金选择按钮")
-    click_screen(cash_page, delay_sec=1)
+    # 现金
+    if pay_type == 1:
+        # 选择现金
+        cash_page = get_pic_position("cash", 'deal_smoke/pic', pic_region)
+        if not cash_page:
+            raise Exception("没找到现金选择按钮")
+        click_screen(cash_page, delay_sec=1)
 
-    # 现金确认
-    cash_confirm_page = get_pic_position("cash_confirm", 'deal_smoke/pic', pic_region)
-    if not cash_confirm_page:
-        raise Exception("没找到现金确认")
-    click_screen(cash_confirm_page, delay_sec=1)
-    time.sleep(1)
+        # 现金确认
+        cash_confirm_page = get_pic_position("cash_confirm", 'deal_smoke/pic', pic_region)
+        if not cash_confirm_page:
+            raise Exception("没找到现金确认")
+        click_screen(cash_confirm_page, delay_sec=1)
+        time.sleep(1)
+    
+    # 微信
+    else:
+        # 选择现金
+        cash_page = get_pic_position("cash", 'deal_smoke/pic', pic_region)
+        if not cash_page:
+            raise Exception("没找到现金选择按钮")
+        click_screen(cash_page, delay_sec=1)
+
+        # 现金确认
+        cash_confirm_page = get_pic_position("cash_confirm", 'deal_smoke/pic', pic_region)
+        if not cash_confirm_page:
+            raise Exception("没找到现金确认")
+        click_screen(cash_confirm_page, delay_sec=1)
+        time.sleep(1)
 
     # 检查输入框，是不是在首页
     input_page = get_pic_position("input_1", 'deal_smoke/pic', pic_region)
@@ -108,6 +126,18 @@ def set_this_time_stock(item_id):
     para_data = {
         'type': '2',
         'id': item_id
+    }
+    res = requests.post(url, json=para_data)
+    print(res)
+    if res.status_code == 200:
+        return res.json()
+    return None
+
+
+def get_pay_no():
+    url = 'https://www.xlovem.club/v1/smoke/run'
+    para_data = {
+        'type': '3'
     }
     res = requests.post(url, json=para_data)
     print(res)
