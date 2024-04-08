@@ -41,7 +41,7 @@ def run():
             
             # 下次时间
             gap_min = random.randint(gap_min_range[0], gap_min_range[1])
-            pay_info_str += f'\n下次刷单是{gap_min}分钟后'
+            pay_info_str += f'\n下次刷单是{gap_min}分钟后\n停止刷单请回复【停止刷单】'
             send_wechat_notice("刷单成功了", pay_info_str, user_name='ZhangGongZhu|LengYueHanShuang')
             print_wait(gap_min * 60, "刷单成功等待：")
         except Exception as e:
