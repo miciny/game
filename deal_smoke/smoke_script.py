@@ -1,6 +1,6 @@
 import time
 import requests
-from common.wechat_services import send_wechat_notice
+from common.wechat_services import send_wechat_notice, send_wechat_iamge
 from common.common_utils import screen_shot
 from common.gui_utils import *
 
@@ -149,6 +149,13 @@ def get_pay_info():
     return pic_path_1, pic_path_2
 
 
+def send_pay_info_image(user_name):
+    pic_path = ""
+    image_id = wx_upload_pic(pic_path)
+    if image_id:
+        send_wechat_iamge(image_id, user_name=user_name)
+
+
 def get_this_time_info():
     url = 'https://www.xlovem.club/v1/smoke/run'
     para_data = {
@@ -174,13 +181,29 @@ def set_this_time_stock(item_id):
     return None
 
 
-def get_pay_no():
+def get_pay_no(get_type="3"):
     url = 'https://www.xlovem.club/v1/smoke/run'
     para_data = {
-        'type': '3'
+        'type': get_type
     }
     res = requests.post(url, json=para_data)
     print(res)
     if res.status_code == 200:
         return res.json()
     return None
+
+
+
+def wx_upload_pic(pic_path):
+    try:
+        access_token = get_pay_no(get_type="4")['data']
+        url = f'https://qyapi.weixin.qq.com/cgi-bin/media/upload?access_token={access_token}&type=image'
+        with open(pic_path, 'rb') as file:
+            res = requests.post(url, files={'image': file})
+            print(res)
+            if res.status_code == 200:
+                return res.json()
+        return None
+    except Exception as e:
+        print(e)
+        return None

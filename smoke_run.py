@@ -2,7 +2,7 @@ import random
 import easyocr
 from common.common_utils import print_wait
 from common.wechat_services import send_wechat_notice
-from deal_smoke.smoke_script import single_run, get_pay_info, get_this_time_info, set_this_time_stock
+from deal_smoke.smoke_script import single_run, get_pay_info, get_this_time_info, set_this_time_stock, send_pay_info_image
 
 
 def run():
@@ -41,6 +41,7 @@ def run():
                         for item in reader_info:
                             pay_info_str += item[1] + " "
                 title = "现金刷单成功"
+                send_pay_info_image(user_name='ZhangGongZhu|LengYueHanShuang')
 
             # 微信收款的提醒
             else:
