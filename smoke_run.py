@@ -1,8 +1,8 @@
-import random
 import easyocr
 from common.common_utils import print_wait
 from common.wechat_services import send_wechat_notice
-from deal_smoke.smoke_script import single_run, get_pay_info, get_this_time_info, set_this_time_stock, send_pay_info_image
+from deal_smoke.smoke_script import single_run, get_pay_info, get_this_time_info, set_this_time_stock, \
+    send_pay_info_image
 
 
 def run():
@@ -29,7 +29,7 @@ def run():
             if pay_flag:
                 set_this_time_stock(item_id)
 
-            # 下次时间
+            # 现金支付的
             if pay_type == 1:
                 # 获取支付信息
                 flag_info_index = get_pay_info()
