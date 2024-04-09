@@ -7,7 +7,6 @@ from deal_smoke.smoke_script import single_run, get_pay_info, get_this_time_info
 
 def run():
     flag = True
-    gap_min_range = (5, 18)
     while flag:
         try:
             # 从接口获取刷单信息
@@ -16,18 +15,21 @@ def run():
             item_stock = smoke_map['data']['stock']
             item_name = smoke_map['data']['name']
             pay_type = smoke_map['data']['pay_type']
+            next_gap = int(smoke_map['data']['next_gap'])
             if "run_flag" in smoke_map['data'].keys() and smoke_map['data']['run_flag'] == 0:
                 flag = False
                 continue
             
             # 刷单
             pay_type = 2 if pay_type == 2 else 1
-            single_run(item_id, pay_type)
+            pay_flag = single_run(item_id, pay_type)
             pay_info_str = ""
 
-            # 更新库存 微信支付的默认成功
-            set_this_time_stock(item_id)
+            # 更新库存
+            if pay_flag:
+                set_this_time_stock(item_id)
 
+            # 下次时间
             if pay_type == 1:
                 # 获取支付信息
                 flag_info_index = get_pay_info()
@@ -38,19 +40,20 @@ def run():
                         reader_info = reader.readtext(pic)
                         for item in reader_info:
                             pay_info_str += item[1] + " "
-                        pay_info_str += "\n"
-            
-                # 下次时间
-                gap_min = random.randint(gap_min_range[0], gap_min_range[1])
-                pay_info_str += f'\n下次刷单是{gap_min}分钟后\n停止刷单请回复【停止刷单】'
-                send_wechat_notice("现金刷单成功了", pay_info_str, user_name='ZhangGongZhu|LengYueHanShuang')
-                print_wait(gap_min * 60, "刷单成功等待：")
+                title = "现金刷单成功"
 
+            # 微信收款的提醒
             else:
-                gap_min = random.randint(gap_min_range[0], gap_min_range[1])
-                pay_info_str += f'请连接向日葵完成微信支付\n下次刷单是{gap_min}分钟后\n停止刷单请回复【停止刷单】'
-                send_wechat_notice("支付提醒", pay_info_str, user_name='ZhangGongZhu|LengYueHanShuang')
-                print_wait(gap_min * 60, "刷单成功等待：")
+                if pay_flag:
+                    title = "微信刷单成功"
+                    pay_info_str += '微信收款成功'
+                else:
+                    title = "微信支付提醒"
+                    pay_info_str += '微信收款失败，请手动查看和收款'
+
+            pay_info_str += f'\n下次刷单是{next_gap}分钟后\n停止刷单请回复【停止刷单】'
+            send_wechat_notice(title, pay_info_str, user_name='ZhangGongZhu|LengYueHanShuang')
+            print_wait(next_gap * 60, "刷单成功等待：")
 
         except Exception as e:
             send_wechat_notice("刷单报错了", f"请检查: {e}", user_name='MaoCaiYuan')
