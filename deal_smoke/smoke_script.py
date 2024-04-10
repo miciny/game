@@ -1,11 +1,11 @@
 import time
 from common.wechat_services import send_wechat_notice, send_image
-from common.common_utils import api_request, upload_file
+from common.common_utils import api_request
 from common.gui_utils import *
 
 
 # pay_type = 1 现金支付， 2 微信支付
-def single_run(smoke_id, pay_type=1):
+def single_run(smoke_id, item_name, pay_type=1):
     if not smoke_id:
         raise Exception("没有找到可刷的商品")
 
@@ -60,15 +60,13 @@ def single_run(smoke_id, pay_type=1):
                 return True
 
             # 没在首页，则请求支付码，有支付码了，就走后面的自动填写流程
-            # res = get_pay_no()
-            # if res and res['code'] == 0:
-            #     pay_no = res['data']
-            #     if pay_no and str(pay_no) == 18:
-            #         break
+            # pay_no = get_pay_no()
+            # if pay_no:
+            #    break
                 
-            # 如果一直没人理，发消息
+            # 如果一直没人理，3分钟发消息
             if int(i % 60) == 0 and int(i / 60) % 3 == 0:
-                send_wechat_notice("支付提醒", "请手动完成微信支付, 支付后返回到首页", user_name='ZhangGongZhu|LengYueHanShuang')
+                send_wechat_notice("支付提醒", f"{item_name} 请求支付中！\n请手动完成微信支付, 支付后返回到首页", user_name='ZhangGongZhu|LengYueHanShuang')
             time.sleep(1)
         return False
 
@@ -151,7 +149,7 @@ def get_pay_info():
     # 检查输入框，是不是在首页
     input_page = get_pic_position("input_1", 'deal_smoke/pic')
     if not input_page:
-        raise Exception("获取收款信息完成，但没返回首页")
+        raise Exception("获取收款信息完成，但没返回到首页")
 
     return pic_path_1, pic_path_2
 
@@ -171,12 +169,11 @@ def get_this_time_info():
     raise Exception("获取刷单信息失败")
 
 
-# 2成功更新商品 5上传的支付图片发送给用户 item_id是服务器图片地址
-def set_this_time_stock(item_id, get_type="2", user_name=""):
+# 2成功更新商品
+def set_this_time_stock(item_id, get_type="2"):
     url = 'https://www.xlovem.club/v1/smoke/run'
     para_data = {
         'type': get_type,
-        'user_name': user_name,
         'id': item_id
     }
     ref, resp = api_request(url, data=para_data)
@@ -185,22 +182,17 @@ def set_this_time_stock(item_id, get_type="2", user_name=""):
     return None
 
 
-# 3获取支付码 4获取token
+# 3获取支付码
 def get_pay_no(get_type="3"):
     url = 'https://www.xlovem.club/v1/smoke/run'
     para_data = {
         'type': get_type
     }
+    pay_no = "0"
     ref, resp = api_request(url, data=para_data)
-    if ref:
-        return resp
-    return None
-
-
-def wx_upload_pic(pic_path):
-    url = "https://www.xlovem.club/v1/file/upload"
-    ref, resp = upload_file(url, pic_path)
-    return resp if ref else None
+    if ref and 'code' in resp:
+        pay_no = resp['code']
+    return str(pay_no) if pay_no and len(str(pay_no)) == 18 and str(pay_no).isdigit() else None
 
 
 def screen_shot_error():

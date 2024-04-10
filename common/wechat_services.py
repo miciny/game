@@ -1,5 +1,5 @@
 from common.gui_utils import screen_shot
-from common.common_utils import api_request
+from common.common_utils import api_request, upload_file
 import urllib3
 urllib3.disable_warnings()
 
@@ -16,10 +16,10 @@ def send_wechat_notice(title, desc, user_name='MaoCaiYuan', bot_name='yuan_qi'):
     return api_request(url, data=para_data)
 
 
-def send_wechat_iamge(image_id, user_name='MaoCaiYuan', bot_name='yuan_qi'):
+def send_wechat_iamge(server_pic_path, user_name='MaoCaiYuan', bot_name='yuan_qi'):
     url = 'https://www.xlovem.club/v1/notice/wechat'
     para_data = {
-        'title': image_id,
+        'title': server_pic_path,
         'desc': "",
         "msg_type": "iamge",
         'user_name': user_name,
@@ -31,10 +31,16 @@ def send_wechat_iamge(image_id, user_name='MaoCaiYuan', bot_name='yuan_qi'):
 def send_image(user_name, pic_path):
     if not os.path.exists(pic_path) or not user_name:
         return
-    server_pic_path = wx_upload_pic(pic_path)
+    ref, server_pic_path = wx_upload_pic(pic_path)
     print("server_pic_path", server_pic_path)
-    if server_pic_path:
-        set_this_time_stock(server_pic_path, get_type="5", user_name=user_name)
+    if ref and server_pic_path:
+        send_wechat_iamge(server_pic_path, user_name=user_name)
+
+
+def wx_upload_pic(pic_path):
+    url = "https://www.xlovem.club/v1/file/upload"
+    ref, resp = upload_file(url, pic_path)
+    return resp if ref else None
 
 
 # yys刷的时候的通知 1成功 2失败 3过程中 4通知
