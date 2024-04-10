@@ -53,7 +53,7 @@ def single_run(smoke_id, item_name, pay_type=1):
     # 微信
     else:
         # pay_no = ""
-        for i in range(30 * 60):
+        for i in range(32 * 60):
             # 检查输入框，是不是在首页,在首页，说明有人支付了
             input_page = get_pic_position("input_1", 'deal_smoke/pic')
             if input_page:
