@@ -2,10 +2,10 @@ import time
 import os
 import sys
 import requests
-from config import self_path
+import json
 
 
-def api_request(url, method="post", headers={}, data=None):
+def api_request(url, method="post", headers=None, data=None):
     print(f"request url: {method} {url}; data: {data}; headers: {headers}")
     timeout_sec = 60
     try:
@@ -19,7 +19,7 @@ def api_request(url, method="post", headers={}, data=None):
         return True, res_j
     except Exception as e:
         print(e)
-        return False, result_res.text
+        return False, str(e)
     
 
 def upload_file(url, file_path):

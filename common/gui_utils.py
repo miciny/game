@@ -47,9 +47,9 @@ def auto_key(key_str):
     auto.keyDown(key_str)
 
 
-def screen_shot(pic_name):
+def screen_shot(pic_name, regine=pic_region_full):
     pic_path = os.path.join(self_path, "Logs", pic_name + ".png")
-    auto.screenshot(pic_path)
+    auto.screenshot(pic_path, region=regine)
     return pic_path
 
 
@@ -57,5 +57,5 @@ def move_to(x, y, duration=0.2):
     auto.moveTo(x, y, duration=duration)
 
 
-def darg_to(x, y, duration=1):
+def drag_to(x, y, duration=1):
     auto.dragTo(x, y, duration=duration)

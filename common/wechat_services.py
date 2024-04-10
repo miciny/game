@@ -1,3 +1,5 @@
+import os
+import time
 from common.gui_utils import screen_shot
 from common.common_utils import api_request, upload_file
 import urllib3

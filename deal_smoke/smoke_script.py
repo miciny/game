@@ -119,7 +119,7 @@ def get_pay_info():
                               cash_pay_info_page[1],
                               cash_pay_info_page[2] + 380,
                               cash_pay_info_page[3],)
-        pic_path_1 = screen_shot(cash_pay_info_page, 'cash_pay_info')
+        pic_path_1 = screen_shot('cash_pay_info', regine=cash_pay_info_page)
 
     pic_path_2 = ""
     wx_pay_info_page = get_pic_position("wx_pay_info", 'deal_smoke/pic', center=False)
@@ -128,7 +128,7 @@ def get_pay_info():
                             wx_pay_info_page[1],
                             wx_pay_info_page[2] + 380,
                             wx_pay_info_page[3],)
-        pic_path_2 = screen_shot(wx_pay_info_page, 'wx_pay_info')
+        pic_path_2 = screen_shot('wx_pay_info', regine=wx_pay_info_page)
 
     # 总的收款图
     pay_total_page = get_pic_position("pay_total", 'deal_smoke/pic')
@@ -137,7 +137,7 @@ def get_pay_info():
                           pay_total_page[1] - 24,
                           pay_total_page[2] + 370 * 2,
                           pay_total_page[3] + 650,)
-        screen_shot(pay_total_page, 'pay_total_info')
+        screen_shot('pay_total_info', regine=pay_total_page)
 
     # 点击返回
     pay_info_back_page = get_pic_position("pay_info_back", 'deal_smoke/pic')
@@ -196,7 +196,7 @@ def get_pay_no(get_type="3"):
 
 
 def screen_shot_error():
-    screen_shot(pic_region, 'smoke_error_run')
+    screen_shot('smoke_error_run')
 
 
 if __name__ == '__main__':

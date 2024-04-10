@@ -128,5 +128,6 @@ if __name__ == '__main__':
         mcy_send_notice("出错了：" + str(e), 2)
     finally:
         if shutdown_flag == "2":
+            delay_time = 600
             mcy_send_notice(str(delay_time) + "秒倒计时关机！", 4)
-            shutdown_pc()
+            shutdown_pc(delay_time)
