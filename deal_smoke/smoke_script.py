@@ -57,7 +57,7 @@ def single_run(smoke_id, pay_type=1):
     # 微信
     else:
         # pay_no = ""
-        for i in range(15 * 60):
+        for i in range(30 * 60):
             # 检查输入框，是不是在首页,在首页，说明有人支付了
             input_page = get_pic_position("input_1", 'deal_smoke/pic', pic_region)
             if input_page:
@@ -72,7 +72,7 @@ def single_run(smoke_id, pay_type=1):
                 
             # 如果一直没人理，发消息
             if int(i % 60) == 0 and int(i / 60) % 3 == 0:
-                send_wechat_notice("支付提醒", "请手动完成微信支付", user_name='ZhangGongZhu|LengYueHanShuang')
+                send_wechat_notice("支付提醒", "请手动完成微信支付, 支付后返回到首页", user_name='ZhangGongZhu|LengYueHanShuang')
             time.sleep(1)
         return False
 

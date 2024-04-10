@@ -47,10 +47,9 @@ def run():
             else:
                 if pay_flag:
                     title = "微信刷单成功"
-                    pay_info_str += '微信收款成功'
                 else:
                     title = "微信支付提醒"
-                    pay_info_str += '微信收款失败，请手动查看和收款'
+                    pay_info_str += '微信收款失败，请手动查看和收款，收款后返回到首页'
 
             pay_info_str += f'\n下次刷单是{next_gap}分钟后\n停止刷单请回复【停止刷单】'
             send_wechat_notice(title, pay_info_str, user_name='ZhangGongZhu|LengYueHanShuang')
@@ -58,8 +57,8 @@ def run():
 
         except Exception as e:
             screen_shot_error()
-            send_pay_info_image("MaoCaiYuan", pic_path="D:\Project\game\Logs\psmoke_error_run.png")
             send_wechat_notice("刷单报错了", f"请检查: {e}", user_name='MaoCaiYuan')
+            send_pay_info_image("MaoCaiYuan", pic_path="D:\Project\game\Logs\psmoke_error_run.png")
             print_wait(5 * 60, "刷单成功等待：")
 
 
