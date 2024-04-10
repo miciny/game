@@ -71,7 +71,7 @@ def single_run(smoke_id, pay_type=1):
             #         break
                 
             # 如果一直没人理，发消息
-            if int(i / 60) > 0 and int(i % 60) == 0 and int(i / 60) % 3 == 0:
+            if int(i % 60) == 0 and int(i / 60) % 3 == 0:
                 send_wechat_notice("支付提醒", "请手动完成微信支付", user_name='ZhangGongZhu|LengYueHanShuang')
             time.sleep(1)
         return False
@@ -160,8 +160,7 @@ def get_pay_info():
     return pic_path_1, pic_path_2
 
 
-def send_pay_info_image(user_name):
-    pic_path = "D:\Project\game\Logs\pay_total_info.png"
+def send_pay_info_image(user_name, pic_path="D:\Project\game\Logs\pay_total_info.png"):
     if os.path.exists(pic_path):
         server_pic_path = wx_upload_pic(pic_path)
         print("server_pic_path", server_pic_path)
@@ -222,6 +221,10 @@ def wx_upload_pic(pic_path):
     except Exception as e:
         print(e)
         return None
+
+
+def screen_shot_error():
+    screen_shot(pic_region, 'smoke_error_run')
 
 
 if __name__ == '__main__':

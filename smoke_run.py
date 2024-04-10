@@ -2,7 +2,7 @@ import easyocr
 from common.common_utils import print_wait
 from common.wechat_services import send_wechat_notice
 from deal_smoke.smoke_script import single_run, get_pay_info, get_this_time_info, set_this_time_stock, \
-    send_pay_info_image
+    send_pay_info_image, screen_shot_error
 
 
 def run():
@@ -57,6 +57,8 @@ def run():
             print_wait(next_gap * 60, "刷单成功等待：")
 
         except Exception as e:
+            screen_shot_error()
+            send_pay_info_image("MaoCaiYuan", pic_path="D:\Project\game\Logs\psmoke_error_run.png")
             send_wechat_notice("刷单报错了", f"请检查: {e}", user_name='MaoCaiYuan')
             print_wait(5 * 60, "刷单成功等待：")
 
