@@ -40,6 +40,7 @@ def run():
                         reader_info = reader.readtext(pic)
                         for item in reader_info:
                             pay_info_str += item[1] + " "
+                        pay_info_str += "\n"
                 title = "现金刷单成功"
                 send_pay_info_image(user_name='ZhangGongZhu|LengYueHanShuang')
 
@@ -49,9 +50,9 @@ def run():
                     title = "微信刷单成功"
                 else:
                     title = "微信支付提醒"
-                    pay_info_str += '微信收款失败，请手动查看和收款，收款后返回到首页'
+                    pay_info_str += '微信收款失败，请手动查看和收款，收款后返回到首页\n'
 
-            pay_info_str += f'\n下次刷单是{next_gap}分钟后\n停止刷单请回复【停止刷单】'
+            pay_info_str += f'下次刷单是{next_gap}分钟后\n停止刷单请回复【停止刷单】'
             send_wechat_notice(title, pay_info_str, user_name='ZhangGongZhu|LengYueHanShuang')
             print_wait(next_gap * 60, "刷单成功等待：")
 
