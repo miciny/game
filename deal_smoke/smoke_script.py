@@ -196,7 +196,7 @@ def get_pay_no(get_type="3"):
 
 
 def screen_shot_error():
-    screen_shot('smoke_error_run')
+    return screen_shot('smoke_error_run')
 
 
 if __name__ == '__main__':

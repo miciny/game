@@ -55,10 +55,11 @@ def run():
             print_wait(next_gap * 60, "刷单成功等待：")
 
         except Exception as e:
-            screen_shot_error()
+            error_pic = screen_shot_error()
+            print(error_pic)
             time_gap = 3
             send_wechat_notice("刷单报错了", f"请检查: {e} \n将在{time_gap}分钟后重试", user_name='ZhangGongZhu|LengYueHanShuang')
-            send_pay_info_image(user_name="MaoCaiYuan", pic_path="D:\Project\game\Logs\smoke_error_run.png")
+            send_pay_info_image(user_name="MaoCaiYuan", pic_path=error_pic)
             print_wait(time_gap * 60, "刷单成功等待：")
 
 

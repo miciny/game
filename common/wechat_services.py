@@ -23,7 +23,7 @@ def send_wechat_iamge(server_pic_path, user_name='MaoCaiYuan', bot_name='yuan_qi
     para_data = {
         'title': server_pic_path,
         'desc': "",
-        "msg_type": "iamge",
+        "msg_type": "image",
         'user_name': user_name,
         'bot_name': bot_name
     }
@@ -33,9 +33,9 @@ def send_wechat_iamge(server_pic_path, user_name='MaoCaiYuan', bot_name='yuan_qi
 def send_image(user_name, pic_path):
     if not os.path.exists(pic_path) or not user_name:
         return
-    ref, server_pic_path = wx_upload_pic(pic_path)
+    server_pic_path = wx_upload_pic(pic_path)
     print("server_pic_path", server_pic_path)
-    if ref and server_pic_path:
+    if server_pic_path:
         send_wechat_iamge(server_pic_path, user_name=user_name)
 
 

@@ -26,10 +26,12 @@ def upload_file(url, file_path):
     try:
         with open(file_path, 'rb') as file:
             res = requests.post(url, files={'file': file})
+            print(res.text)
             j_data = res.json()
             print('upload_file', j_data)
             if j_data['code'] == 0:
                 return True, j_data['data']
+            return False, res.text
     except Exception as e:
         print(e)
         return False, str(e)
