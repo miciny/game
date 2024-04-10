@@ -42,7 +42,7 @@ def run():
                             pay_info_str += item[1] + " "
                         pay_info_str += "\n"
                 title = "现金刷单成功"
-                send_pay_info_image(user_name='ZhangGongZhu|LengYueHanShuang')
+                send_pay_info_image()
 
             # 微信收款的提醒
             else:
@@ -58,8 +58,8 @@ def run():
 
         except Exception as e:
             screen_shot_error()
-            send_wechat_notice("刷单报错了", f"请检查: {e}", user_name='MaoCaiYuan')
-            send_pay_info_image("MaoCaiYuan", pic_path="D:\Project\game\Logs\psmoke_error_run.png")
+            send_wechat_notice("刷单报错了", f"请检查: {e}")
+            send_pay_info_image(user_name="MaoCaiYuan", pic_path="D:\Project\game\Logs\psmoke_error_run.png")
             print_wait(5 * 60, "刷单成功等待：")
 
 

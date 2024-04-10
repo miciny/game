@@ -160,7 +160,7 @@ def get_pay_info():
     return pic_path_1, pic_path_2
 
 
-def send_pay_info_image(user_name, pic_path="D:\Project\game\Logs\pay_total_info.png"):
+def send_pay_info_image(user_name="ZhangGongZhu|LengYueHanShuang", pic_path="D:\Project\game\Logs\pay_total_info.png"):
     if os.path.exists(pic_path):
         server_pic_path = wx_upload_pic(pic_path)
         print("server_pic_path", server_pic_path)
