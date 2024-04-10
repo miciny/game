@@ -3,6 +3,7 @@ from config import *
 from yys import runtime_setting
 import random
 
+
 pic_base_dir = 'yys_images'
 
 

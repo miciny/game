@@ -1,4 +1,5 @@
-from common.common_utils import mcy_send_notice, print_wait
+from common.common_utils import print_wait
+from common.wechat_services import mcy_send_notice
 from yys import runtime_setting
 from yys.yys_utils import switch_screen_click, check_main_false, check_main_true_operation, switch_and_finish
 

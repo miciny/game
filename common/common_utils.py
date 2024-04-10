@@ -1,9 +1,38 @@
 import time
 import os
 import sys
+import requests
 from config import self_path
-import pyautogui as auto
-from common.wechat_services import send_wechat_notice
+
+
+def api_request(url, method="post", headers={}, data=None):
+    print(f"request url: {method} {url}; data: {data}; headers: {headers}")
+    timeout_sec = 60
+    try:
+        if method.lower() == "get":
+            result_res = requests.request(method=method, url=url, headers=headers, timeout=timeout_sec)
+        else:
+            result_res = requests.request(method=method, url=url, json=data, headers=headers, timeout=timeout_sec)
+        # 打印返回
+        print(f"{url} result_res: {result_res.text}")
+        res_j = json.loads(result_res.text)
+        return True, res_j
+    except Exception as e:
+        print(e)
+        return False, result_res.text
+    
+
+def upload_file(url, file_path):
+    try:
+        with open(file_path, 'rb') as file:
+            res = requests.post(url, files={'file': file})
+            j_data = res.json()
+            print('upload_file', j_data)
+            if j_data['code'] == 0:
+                return True, j_data['data']
+    except Exception as e:
+        print(e)
+        return False, str(e)
 
 
 # 平均值
@@ -48,39 +77,5 @@ def print_wait(time_sec, des=None):
 
 # 关机
 def shutdown_pc(delay_time=99):
-    mcy_send_notice(str(delay_time) + "秒倒计时关机！", 4)
     print_wait(delay_time, "自动关机倒计时：")
     os.system("shutdown /s")
-
-
-# 1成功 2失败 3过程中 4通知
-def mcy_send_notice(content_str, status=1):
-    if status == 2:
-        pic_path = os.path.join(self_path, "Logs", "error.png")
-        pic_path_1 = os.path.join(self_path, "Logs", "error_1.png")
-        title = "错误"
-    elif status == 3:
-        pic_path = os.path.join(self_path, "Logs", "progress.png")
-        pic_path_1 = os.path.join(self_path, "Logs", "progress_1.png")
-        title = "过程中"
-    elif status == 1:
-        pic_path = os.path.join(self_path, "Logs", "done.png")
-        pic_path_1 = os.path.join(self_path, "Logs", "done_1.png")
-        title = "成功"
-    else:
-        pic_path = os.path.join(self_path, "Logs", "notice.png")
-        pic_path_1 = os.path.join(self_path, "Logs", "notice_1.png")
-        title = "通知"
-    auto.screenshot(pic_path)
-    time.sleep(2)
-    auto.screenshot(pic_path_1)
-    try:
-        send_wechat_notice(title, content_str)
-    except Exception as e:
-        print(e)
-
-
-def screen_shot(region, name):
-    pic_path = os.path.join(self_path, "Logs", name + ".png")
-    auto.screenshot(pic_path, region=region)
-    return pic_path

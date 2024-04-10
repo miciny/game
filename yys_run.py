@@ -5,7 +5,8 @@ from yys import runtime_setting
 from yys.yys_mission_run import main_mission
 from yys.yys_ghost_run import ghost_hit
 from yys.yys_fight_run import one_fight, two_fight
-from common.common_utils import mcy_send_notice, get_average, time_format, shutdown_pc
+from common.wechat_services import mcy_send_notice
+from common.common_utils import get_average, time_format, shutdown_pc
 from yys.yys_utils import find_windows
 
 
@@ -127,4 +128,5 @@ if __name__ == '__main__':
         mcy_send_notice("出错了：" + str(e), 2)
     finally:
         if shutdown_flag == "2":
+            mcy_send_notice(str(delay_time) + "秒倒计时关机！", 4)
             shutdown_pc()

@@ -5,6 +5,10 @@ from config import self_path, confidence_setting
 import os
 
 
+width, height = auto.size()
+pic_region_full = (0, 0, width, height)
+
+
 # 点击屏幕， delay_sec 点击完成后等待时常
 def click_screen(click_pos, des="", delay_sec=None):
     if click_pos:
@@ -25,7 +29,7 @@ def click_screen(click_pos, des="", delay_sec=None):
 
 
 # 检测图片，返回【x, y, width, height】 或 None
-def get_pic_position(pic_name, dir_name, pic_region, center=True, without_tail=True):
+def get_pic_position(pic_name, dir_name, pic_region=pic_region_full, center=True, without_tail=True):
     pic_path = os.path.join(self_path, dir_name, pic_name + (".png" if without_tail else ''))
     res = auto.locateOnScreen(pic_path, region=pic_region, confidence=confidence_setting, grayscale=True)
     if res is not None and center:
@@ -41,3 +45,17 @@ def auto_input(input_str, delay=0.5):
 
 def auto_key(key_str):
     auto.keyDown(key_str)
+
+
+def screen_shot(pic_name):
+    pic_path = os.path.join(self_path, "Logs", pic_name + ".png")
+    auto.screenshot(pic_path)
+    return pic_path
+
+
+def move_to(x, y, duration=0.2):
+    auto.moveTo(x, y, duration=duration)
+
+
+def darg_to(x, y, duration=1):
+    auto.dragTo(x, y, duration=duration)

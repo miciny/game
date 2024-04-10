@@ -23,17 +23,15 @@ def run():
             # 刷单
             pay_type = 2 if pay_type == 2 else 1
             pay_flag = single_run(item_id, pay_type)
-            pay_info_str = ""
+            pay_info_str = f"{item_name} 剩余：{int(item_stock) - 1} \n"
 
-            # 更新库存
-            if pay_flag:
-                set_this_time_stock(item_id)
+            # 更新库存 都默认成功，比如微信，最后必须手动成功
+            set_this_time_stock(item_id)
 
             # 现金支付的
             if pay_type == 1:
                 # 获取支付信息
                 flag_info_index = get_pay_info()
-                pay_info_str += f"{item_name} 库存：{item_stock} \n"
                 for pic in flag_info_index:
                     if pic:
                         reader = easyocr.Reader(['ch_sim', 'en'])

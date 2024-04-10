@@ -1,7 +1,7 @@
 from yys.yys_utils import ghost_hit_pos, check_other_btn, switch_screen_click
-from common.common_utils import print_wait, mcy_send_notice
-import pyautogui as auto
-from common.gui_utils import click_screen
+from common.common_utils import print_wait
+from common.wechat_services import mcy_send_notice
+from common.gui_utils import click_screen, move_to, drag_to
 from yys import runtime_setting
 
 
@@ -38,8 +38,8 @@ def ghost_hit():
         # 拖动将豆拖到10
         bean_pos = ghost_hit_pos(7)
         if bean_pos:
-            auto.moveTo(bean_pos[0], bean_pos[1])
-            auto.dragTo(bean_pos[0] + 230, bean_pos[1], duration=1)
+            move_to(bean_pos[0], bean_pos[1])
+            drag_to(bean_pos[0] + 230, bean_pos[1])
 
         hit_times = 200
         for i in range(hit_times):
