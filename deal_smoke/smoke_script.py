@@ -52,7 +52,7 @@ def single_run(smoke_id, item_name, pay_type=1):
 
     # 微信
     else:
-        # pay_no = ""
+        pay_no = ""
         for i in range(32 * 60):
             # 检查输入框，是不是在首页,在首页，说明有人支付了
             input_page = get_pic_position("input_1", 'deal_smoke/pic')
@@ -62,7 +62,7 @@ def single_run(smoke_id, item_name, pay_type=1):
             # 没在首页，则请求支付码，有支付码了，就走后面的自动填写流程
             pay_no = get_pay_no()
             if pay_no:
-               break
+                break
                 
             # 如果一直没人理，3分钟发消息
             if int(i % 60) == 0 and int(i / 60) % 3 == 0:
