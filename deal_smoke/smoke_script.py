@@ -60,48 +60,46 @@ def single_run(smoke_id, item_name, pay_type=1):
                 return True
 
             # 没在首页，则请求支付码，有支付码了，就走后面的自动填写流程
-            # pay_no = get_pay_no()
-            # if pay_no:
-            #    break
+            pay_no = get_pay_no()
+            if pay_no:
+               break
                 
             # 如果一直没人理，3分钟发消息
             if int(i % 60) == 0 and int(i / 60) % 3 == 0:
                 send_wechat_notice("支付提醒", f"{item_name} 请求支付中！\n请手动完成微信支付, 支付后返回到首页", user_name='ZhangGongZhu|LengYueHanShuang')
             time.sleep(1)
-        return False
 
-        # if not pay_no:
-        #     send_wechat_notice("支付提醒", "请手动完成微信支付", user_name='ZhangGongZhu|LengYueHanShuang')
-        #     return False
+        if not pay_no:
+            return False
 
-        # auto_input(pay_no)
-        # time.sleep(1)
+        auto_input(pay_no)
+        time.sleep(1)
 
         # 收款确认
-        # cash_confirm_page = get_pic_position("cash_confirm", 'deal_smoke/pic')
-        # if not cash_confirm_page:
-        #     raise Exception("微信支付，没找到收款确认")
-        # click_screen(cash_confirm_page, delay_sec=1)
-        # time.sleep(5)
-        #
-        # not_found = 0
-        # for i in range(30):
-        #     # 有个收款查询，需要点击，不成功的情况下，会一直有这个按钮
-        #     pay_check_page = get_pic_position("pay_check", 'deal_smoke/pic')
-        #     if pay_check_page:
-        #         click_screen(pay_check_page, delay_sec=1)
-        #         not_found = 0
-        #     else:
-        #         # 如果没有查询按钮，检查是不是在首页，在首页说明成功了
-        #         input_page = get_pic_position("input_1", 'deal_smoke/pic')
-        #         if input_page:
-        #             return True
-        #
-        #         # 也不在首页，那就试四次
-        #         not_found += 1
-        #         if not_found > 2:
-        #             return False
-        #     time.sleep(5)
+        cash_confirm_page = get_pic_position("cash_confirm", 'deal_smoke/pic')
+        if not cash_confirm_page:
+            raise Exception("微信支付，没找到收款确认")
+        click_screen(cash_confirm_page, delay_sec=1)
+        time.sleep(5)
+        
+        not_found = 0
+        for i in range(30):
+            # 有个收款查询，需要点击，不成功的情况下，会一直有这个按钮
+            pay_check_page = get_pic_position("pay_check", 'deal_smoke/pic')
+            if pay_check_page:
+                click_screen(pay_check_page, delay_sec=1)
+                not_found = 0
+            else:
+                # 如果没有查询按钮，检查是不是在首页，在首页说明成功了
+                input_page = get_pic_position("input_1", 'deal_smoke/pic')
+                if input_page:
+                    return True
+        
+                # 也不在首页，那就试四次
+                not_found += 1
+                if not_found > 2:
+                    return False
+            time.sleep(5)
 
 
 def get_pay_info():
