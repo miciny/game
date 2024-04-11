@@ -72,6 +72,7 @@ def single_run(smoke_id, item_name, pay_type=1):
         if not pay_no:
             return False
 
+        send_wechat_notice("支付提醒", f"{item_name} 自动微信支付中，请勿手动操作", user_name='ZhangGongZhu|LengYueHanShuang')
         auto_input(pay_no)
         time.sleep(1)
 
