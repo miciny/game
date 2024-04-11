@@ -189,8 +189,8 @@ def get_pay_no(get_type="3"):
     }
     pay_no = "0"
     ref, resp = api_request(url, data=para_data)
-    if ref and 'code' in resp:
-        pay_no = resp['code']
+    if ref and 'data' in resp:
+        pay_no = resp['data']
     return str(pay_no) if pay_no and len(str(pay_no)) == 18 and str(pay_no).isdigit() else None
 
 
