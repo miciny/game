@@ -6,7 +6,7 @@ from common.gui_utils import *
 
 
 # pay_type = 1 现金支付， 2 微信支付
-def single_run(smoke_id, item_name, item_stock, pay_type=1):
+def single_run(smoke_id, item_name, run_count, pay_type=1):
     if not smoke_id:
         raise Exception("没有找到可刷的商品")
 
@@ -16,23 +16,14 @@ def single_run(smoke_id, item_name, item_stock, pay_type=1):
         raise Exception("不在首页")
     click_screen(input_page, delay_sec=1)
 
-    # 输入编码
-    auto_input(smoke_id)
-    time.sleep(1)
-    # 按回车，进到收银
-    auto_key("enter")
-    time.sleep(1)
-
     # 如果是微信 剩余库存大于2，则刷两个
-    run_count = 1
-    if pay_type == 2 and int(item_stock) >= 2:
+    for _ in range(run_count):
         # 输入编码
         auto_input(smoke_id)
         time.sleep(1)
         # 按回车，进到收银
         auto_key("enter")
         time.sleep(1)
-        run_count = 2
 
     # 点击收银
     get_pay_page = get_pic_position("get_pay", 'deal_smoke/pic')
@@ -59,7 +50,7 @@ def single_run(smoke_id, item_name, item_stock, pay_type=1):
         input_page = get_pic_position("input_1", 'deal_smoke/pic')
         if not input_page:
             raise Exception("现金收款完成，但不在首页")
-        return True, run_count
+        return True
 
     # 微信
     else:
@@ -68,7 +59,7 @@ def single_run(smoke_id, item_name, item_stock, pay_type=1):
             # 检查输入框，是不是在首页,在首页，说明有人支付了
             input_page = get_pic_position("input_1", 'deal_smoke/pic')
             if input_page:
-                return True, run_count
+                return True
 
             # 没在首页，则请求支付码，有支付码了，就走后面的自动填写流程
             pay_no = get_pay_no()
@@ -81,7 +72,7 @@ def single_run(smoke_id, item_name, item_stock, pay_type=1):
             time.sleep(1)
 
         if not pay_no:
-            return False, run_count
+            return False
 
         send_wechat_notice("支付提醒", f"{item_name} 自动微信支付中，请勿手动操作", user_name='ZhangGongZhu|LengYueHanShuang')
         auto_input(pay_no)
@@ -105,12 +96,12 @@ def single_run(smoke_id, item_name, item_stock, pay_type=1):
                 # 如果没有查询按钮，检查是不是在首页，在首页说明成功了
                 input_page = get_pic_position("input_1", 'deal_smoke/pic')
                 if input_page:
-                    return True, run_count
+                    return True
         
                 # 也不在首页，那就试四次
                 not_found += 1
                 if not_found > 2:
-                    return False, run_count
+                    return False
             time.sleep(5)
 
 

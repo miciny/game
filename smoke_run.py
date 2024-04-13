@@ -15,6 +15,7 @@ def run():
             item_stock = smoke_map['data']['stock']
             item_name = smoke_map['data']['name']
             pay_type = smoke_map['data']['pay_type']
+            run_count = smoke_map['data']['run_count']
             next_gap = int(smoke_map['data']['next_gap'])
             if "run_flag" in smoke_map['data'].keys() and smoke_map['data']['run_flag'] == 0:
                 flag = False
@@ -22,7 +23,7 @@ def run():
             
             # 刷单
             pay_type = 2 if pay_type == 2 else 1
-            pay_flag, run_count = single_run(item_id, item_name, item_stock, pay_type)
+            pay_flag = single_run(item_id, item_name, run_count, pay_type)
             pay_info_str = f"{item_name} 剩余：{int(item_stock) - 1} \n"
 
             # 更新库存 都默认成功，比如微信，最后必须手动成功
