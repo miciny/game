@@ -1,4 +1,5 @@
 import time
+import easyocr
 from common.wechat_services import send_wechat_notice, send_image
 from common.common_utils import api_request
 from common.gui_utils import *
@@ -53,7 +54,7 @@ def single_run(smoke_id, item_name, pay_type=1):
     # 微信
     else:
         pay_no = ""
-        for i in range(32 * 60):
+        for i in range(50 * 60):
             # 检查输入框，是不是在首页,在首页，说明有人支付了
             input_page = get_pic_position("input_1", 'deal_smoke/pic')
             if input_page:
@@ -160,6 +161,34 @@ def get_pay_info():
         raise Exception("获取收款信息完成，但没返回到首页")
 
     return pic_path_1, pic_path_2, pic_path_3
+
+
+def get_pay_information():
+    pay_info_str = ""
+    # 获取支付信息
+    flag_info_index = get_pay_info()
+    cash_all = 0
+    online_all = 0
+    for pic in flag_info_index:
+        if pic:
+            reader = easyocr.Reader(['ch_sim', 'en'])
+            reader_info = reader.readtext(pic)
+            if len(reader_info) > 0:
+                pay_name = reader_info[0][1]
+                pay_num = reader_info[-1][1].split(".")[0]
+                if pay_name == "现金" and pay_num.isdigit():
+                    cash_all += float(reader_info[-1][1])
+                if pay_name != "现金" and pay_num.isdigit():
+                    online_all += float(reader_info[-1][1])
+            for item in reader_info:
+                pay_info_str += item[1] + " "
+            pay_info_str += "\n"
+    if cash_all + online_all > 0:
+        pay_info_str += f"主扫比例:{round(cash_all / (cash_all + online_all), 2) * 100}%\n"
+    else:
+        pay_info_str += f"主扫比例: 计算失败 {cash_all}, {online_all}\n"
+    send_pay_info_image()
+    return pay_info_str
 
 
 def send_pay_info_image(user_name="ZhangGongZhu|LengYueHanShuang", pic_path="D:\Project\game\Logs\pay_total_info.png"):

@@ -1,8 +1,10 @@
+import time
+
 import easyocr
 from common.common_utils import print_wait
 from common.wechat_services import send_wechat_notice
 from deal_smoke.smoke_script import single_run, get_pay_info, get_this_time_info, set_this_time_stock, \
-    send_pay_info_image, screen_shot_error
+    send_pay_info_image, screen_shot_error, get_pay_information
 
 
 def run():
@@ -31,34 +33,14 @@ def run():
             # 现金支付的
             if pay_type == 1:
                 # 获取支付信息
-                flag_info_index = get_pay_info()
-                cash_all = 0
-                online_all = 0
-                for pic in flag_info_index:
-                    if pic:
-                        reader = easyocr.Reader(['ch_sim', 'en'])
-                        reader_info = reader.readtext(pic)
-                        if len(reader_info) > 0:
-                            pay_name = reader_info[0][1]
-                            pay_num = reader_info[-1][1].split(".")[0]
-                            if pay_name == "现金" and pay_num.isdigit():
-                                cash_all += float(reader_info[-1][1])
-                            if pay_name != "现金" and pay_num.isdigit():
-                                online_all += float(reader_info[-1][1])
-                        for item in reader_info:
-                            pay_info_str += item[1] + " "
-                        pay_info_str += "\n"
-                if cash_all + online_all > 0:
-                    pay_info_str += f"主扫比例:{round(cash_all / (cash_all + online_all), 2) * 100}%\n"
-                else:
-                    pay_info_str += f"主扫比例: 计算失败 {cash_all}, {online_all}\n"
+                pay_info_str += get_pay_information()
                 title = "现金刷单成功"
-                send_pay_info_image()
-
             # 微信收款的提醒
             else:
                 if pay_flag:
+                    time.sleep(3)
                     title = "微信刷单成功"
+                    pay_info_str += get_pay_information()
                 else:
                     title = "微信支付提醒"
                     pay_info_str += '微信收款失败，请手动查看和收款，收款后返回到首页\n'
