@@ -38,11 +38,12 @@ def run():
                     if pic:
                         reader = easyocr.Reader(['ch_sim', 'en'])
                         reader_info = reader.readtext(pic)
-                        if len(reader_info) > 0 and reader_info[0][1] == "现金":
-                            if reader_info[-1][1].isdigit():
+                        if len(reader_info) > 0:
+                            pay_name = reader_info[0][1]
+                            pay_num = reader_info[-1][1].split(".")[0]
+                            if pay_name == "现金" and pay_num.isdigit():
                                 cash_all += float(reader_info[-1][1])
-                        if len(reader_info) > 0 and reader_info[0][1] != "现金":
-                            if reader_info[-1][1].isdigit():
+                            if pay_name != "现金" and pay_num.isdigit():
                                 online_all += float(reader_info[-1][1])
                         for item in reader_info:
                             pay_info_str += item[1] + " "
@@ -50,7 +51,7 @@ def run():
                 if cash_all + online_all > 0:
                     pay_info_str += f"主扫比例:{round(cash_all / (cash_all + online_all), 2) * 100}%\n"
                 else:
-                    pay_info_str += f"主扫比例: 计算失败 {cash_all}, {online_all}"
+                    pay_info_str += f"主扫比例: 计算失败 {cash_all}, {online_all}\n"
                 title = "现金刷单成功"
                 send_pay_info_image()
 
@@ -78,9 +79,16 @@ def run():
 if __name__ == '__main__':
     run()
 
+    # online_all = 0
     # pic_path = 'D:\Project\game\Logs\wx_pay_info.png'
     # reader = easyocr.Reader(['ch_sim', 'en'])
-    # reader_info = reader.readtext(pic_path, low_text=0.0001)
+    # reader_info = reader.readtext(pic_path)
+    # print(reader_info[0][1], reader_info[-1][1])
+    # pay_name = reader_info[0][1]
+    # pay_num = reader_info[-1][1].split(".")[0]
+    # if pay_name != "现金" and pay_num.isdigit():
+    #     online_all += float(pay_num)
+    # print(online_all)
     # for item in reader_info:
     #     print(item)
 
