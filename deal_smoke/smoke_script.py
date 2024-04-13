@@ -184,7 +184,7 @@ def get_pay_information():
                 pay_info_str += item[1] + " "
             pay_info_str += "\n"
     if cash_all + online_all > 0:
-        pay_info_str += f"主扫比例:{round(cash_all / (cash_all + online_all), 2) * 100}%\n"
+        pay_info_str += f"主扫比例:{round(online_all / (cash_all + online_all), 2) * 100}%\n"
     else:
         pay_info_str += f"主扫比例: 计算失败 {cash_all}, {online_all}\n"
     send_pay_info_image()
