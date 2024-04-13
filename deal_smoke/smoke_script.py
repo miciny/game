@@ -129,6 +129,15 @@ def get_pay_info():
                             wx_pay_info_page[3],)
         pic_path_2 = screen_shot('wx_pay_info', regine=wx_pay_info_page)
 
+    pic_path_3 = ""
+    ali_pay_info_page = get_pic_position("ali_pay_info", 'deal_smoke/pic', center=False)
+    if ali_pay_info_page:
+        ali_pay_info_page = (ali_pay_info_page[0],
+                             ali_pay_info_page[1],
+                             ali_pay_info_page[2] + 380,
+                             ali_pay_info_page[3],)
+        pic_path_3 = screen_shot('ali_pay_info', regine=ali_pay_info_page)
+
     # 总的收款图
     pay_total_page = get_pic_position("pay_total", 'deal_smoke/pic')
     if pay_total_page:
@@ -150,7 +159,7 @@ def get_pay_info():
     if not input_page:
         raise Exception("获取收款信息完成，但没返回到首页")
 
-    return pic_path_1, pic_path_2
+    return pic_path_1, pic_path_2, pic_path_3
 
 
 def send_pay_info_image(user_name="ZhangGongZhu|LengYueHanShuang", pic_path="D:\Project\game\Logs\pay_total_info.png"):
