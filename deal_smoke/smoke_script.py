@@ -223,7 +223,7 @@ def set_this_time_stock(item_id, get_type="2", run_count=1):
     url = 'https://www.xlovem.club/v1/smoke/run'
     para_data = {
         'type': get_type,
-        'run_count': run_count,
+        'run_count': int(run_count),
         'id': item_id
     }
     ref, resp = api_request(url, data=para_data)
