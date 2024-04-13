@@ -11,10 +11,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
         raise Exception("没有找到可刷的商品")
 
     # 检查输入框，是不是在首页，在首页就点击
-    input_page = get_pic_position("input_1", 'deal_smoke/pic')
-    if not input_page:
-        raise Exception("不在首页")
-    click_screen(input_page, delay_sec=1)
+    smoke_pic_operation("input_1", error_msg="不在首页")
 
     # 如果是微信 剩余库存大于2，则刷两个
     for _ in range(run_count):
@@ -26,30 +23,19 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
         time.sleep(1)
 
     # 点击收银
-    get_pay_page = get_pic_position("get_pay", 'deal_smoke/pic')
-    if not get_pay_page:
-        raise Exception("收银按钮没找到")
-    click_screen(get_pay_page, delay_sec=1)
+    smoke_pic_operation("get_pay", error_msg="收银按钮没找到")
 
     # 现金
     if pay_type == 1:
         # 选择现金
-        cash_page = get_pic_position("cash", 'deal_smoke/pic')
-        if not cash_page:
-            raise Exception("没找到现金选择按钮")
-        click_screen(cash_page, delay_sec=1)
+        smoke_pic_operation("cash", error_msg="没找到现金选择按钮")
 
         # 收款确认
-        cash_confirm_page = get_pic_position("cash_confirm", 'deal_smoke/pic')
-        if not cash_confirm_page:
-            raise Exception("现金支付，没找到收款确认")
-        click_screen(cash_confirm_page, delay_sec=1)
+        smoke_pic_operation("cash_confirm", error_msg="现金支付，没找到收款确认")
         time.sleep(1)
 
         # 检查输入框，是不是在首页
-        input_page = get_pic_position("input_1", 'deal_smoke/pic')
-        if not input_page:
-            raise Exception("现金收款完成，但不在首页")
+        smoke_pic_operation("input_1", error_msg="现金收款完成，但不在首页", click_flag=False)
         return True
 
     # 微信
@@ -57,7 +43,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
         pay_no = ""
         for i in range(50 * 60):
             # 检查输入框，是不是在首页,在首页，说明有人支付了
-            input_page = get_pic_position("input_1", 'deal_smoke/pic')
+            input_page = smoke_pic_operation("input_1", click_flag=False, raise_error=False)
             if input_page:
                 return True
 
@@ -79,22 +65,19 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
         time.sleep(1)
 
         # 收款确认
-        cash_confirm_page = get_pic_position("cash_confirm", 'deal_smoke/pic')
-        if not cash_confirm_page:
-            raise Exception("微信支付，没找到收款确认")
-        click_screen(cash_confirm_page, delay_sec=1)
+        smoke_pic_operation("cash_confirm", error_msg="微信支付，没找到收款确认")
         time.sleep(5)
         
         not_found = 0
         for i in range(30):
             # 有个收款查询，需要点击，不成功的情况下，会一直有这个按钮
-            pay_check_page = get_pic_position("pay_check", 'deal_smoke/pic')
+            pay_check_page = smoke_pic_operation("pay_check", raise_error=False, click_flag=False)
             if pay_check_page:
                 click_screen(pay_check_page, delay_sec=1)
                 not_found = 0
             else:
                 # 如果没有查询按钮，检查是不是在首页，在首页说明成功了
-                input_page = get_pic_position("input_1", 'deal_smoke/pic')
+                input_page = smoke_pic_operation("input_1", click_flag=False, raise_error=False)
                 if input_page:
                     return True
         
@@ -107,10 +90,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
 
 def get_pay_info():
     # 点击收款信息按钮
-    pay_info_page = get_pic_position("pay_info", 'deal_smoke/pic')
-    if not pay_info_page:
-        raise Exception("没找到收款信息按钮")
-    click_screen(pay_info_page, delay_sec=1)
+    smoke_pic_operation("pay_info", error_msg="没找到收款信息按钮")
 
     # 微信 支付宝 现金收款的信息
     pic_path_1 = ""
@@ -150,17 +130,11 @@ def get_pay_info():
         screen_shot('pay_total_info', regine=pay_total_page)
 
     # 点击返回
-    pay_info_back_page = get_pic_position("pay_info_back", 'deal_smoke/pic')
-    if not pay_info_back_page:
-        raise Exception("没找到收款信息的返回按钮")
-    click_screen(pay_info_back_page, delay_sec=1)
+    smoke_pic_operation("pay_info_back", error_msg="没找到收款信息的返回按钮")
     time.sleep(1)
 
     # 检查输入框，是不是在首页
-    input_page = get_pic_position("input_1", 'deal_smoke/pic')
-    if not input_page:
-        raise Exception("获取收款信息完成，但没返回到首页")
-
+    smoke_pic_operation("input_1", error_msg="获取收款信息完成，但没返回到首页", click_flag=False)
     return pic_path_1, pic_path_2, pic_path_3
 
 
@@ -196,6 +170,15 @@ def get_pay_information():
 
 def send_pay_info_image(user_name="ZhangGongZhu|LengYueHanShuang", pic_path="D:\Project\game\Logs\pay_total_info.png"):
     send_image(user_name, pic_path)
+
+
+def smoke_pic_operation(pic_name, raise_error=True, click_flag=True, error_msg=""):
+    search_page = get_pic_position(pic_name, 'deal_smoke/pic')
+    if raise_error and not search_page:
+        raise Exception(error_msg)
+    if click_flag and search_page:
+        click_screen(search_page, delay_sec=1)
+    return search_page
 
 
 def get_this_time_info():
