@@ -169,6 +169,7 @@ def get_pay_information():
     flag_info_index = get_pay_info()
     cash_all = 0
     online_all = 0
+    rate = 0
     for pic in flag_info_index:
         if pic:
             reader = easyocr.Reader(['ch_sim', 'en'])
@@ -184,11 +185,12 @@ def get_pay_information():
                 pay_info_str += item[1] + " "
             pay_info_str += "\n"
     if cash_all + online_all > 0:
-        pay_info_str += f"主扫比例:{round(online_all / (cash_all + online_all), 2) * 100}%\n"
+        rate = round(online_all / (cash_all + online_all), 2)
+        pay_info_str += f"主扫比例:{rate * 100}%\n"
     else:
         pay_info_str += f"主扫比例: 计算失败 {cash_all}, {online_all}\n"
     send_pay_info_image()
-    return pay_info_str
+    return pay_info_str, rate
 
 
 def send_pay_info_image(user_name="ZhangGongZhu|LengYueHanShuang", pic_path="D:\Project\game\Logs\pay_total_info.png"):
@@ -206,7 +208,7 @@ def get_this_time_info():
     raise Exception("获取刷单信息失败")
 
 
-# 2成功更新商品
+# 2成功更新商品  4根据当前的主扫比例，给出下次的支付类型
 def set_this_time_stock(item_id, get_type="2"):
     url = 'https://www.xlovem.club/v1/smoke/run'
     para_data = {

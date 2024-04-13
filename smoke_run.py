@@ -1,9 +1,7 @@
 import time
-
-import easyocr
 from common.common_utils import print_wait
 from common.wechat_services import send_wechat_notice
-from deal_smoke.smoke_script import single_run, get_pay_info, get_this_time_info, set_this_time_stock, \
+from deal_smoke.smoke_script import single_run, get_this_time_info, set_this_time_stock, \
     send_pay_info_image, screen_shot_error, get_pay_information
 
 
@@ -33,14 +31,18 @@ def run():
             # 现金支付的
             if pay_type == 1:
                 # 获取支付信息
-                pay_info_str += get_pay_information()
+                info_str, rate = get_pay_information()
+                pay_info_str += info_str
+                set_this_time_stock(rate, get_type="4")
                 title = "现金刷单成功"
             # 微信收款的提醒
             else:
                 if pay_flag:
                     time.sleep(3)
                     title = "微信刷单成功"
-                    pay_info_str += get_pay_information()
+                    info_str, rate = get_pay_information()
+                    pay_info_str += info_str
+                    set_this_time_stock(rate, get_type="4")
                 else:
                     title = "微信支付提醒"
                     pay_info_str += '微信收款失败，请手动查看和收款，收款后返回到首页\n'
@@ -51,7 +53,6 @@ def run():
 
         except Exception as e:
             error_pic = screen_shot_error()
-            print(error_pic)
             time_gap = 3
             send_wechat_notice("刷单报错了", f"请检查: {e} \n将在{time_gap}分钟后重试", user_name='ZhangGongZhu|LengYueHanShuang')
             send_pay_info_image(user_name="MaoCaiYuan", pic_path=error_pic)
@@ -78,3 +79,5 @@ if __name__ == '__main__':
     # print(smoke_map)
 
     # send_wechat_notice("刷单成功了", "haha", user_name='ZhangGongZhu')
+    # time.sleep(10)
+    # screen_shot_error()
