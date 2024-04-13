@@ -32,13 +32,25 @@ def run():
             if pay_type == 1:
                 # 获取支付信息
                 flag_info_index = get_pay_info()
+                cash_all = 0
+                online_all = 0
                 for pic in flag_info_index:
                     if pic:
                         reader = easyocr.Reader(['ch_sim', 'en'])
                         reader_info = reader.readtext(pic)
+                        if len(reader_info) > 0 and reader_info[0][1] == "现金":
+                            if reader_info[-1][1].isdigit():
+                                cash_all += float(reader_info[-1][1])
+                        if len(reader_info) > 0 and reader_info[0][1] != "现金":
+                            if reader_info[-1][1].isdigit():
+                                online_all += float(reader_info[-1][1])
                         for item in reader_info:
                             pay_info_str += item[1] + " "
                         pay_info_str += "\n"
+                if cash_all + online_all > 0:
+                    pay_info_str += f"主扫比例:{round(cash_all / (cash_all + online_all), 2) * 100}%\n"
+                else:
+                    pay_info_str += f"主扫比例: 计算失败 {cash_all}, {online_all}"
                 title = "现金刷单成功"
                 send_pay_info_image()
 
