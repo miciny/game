@@ -1,4 +1,3 @@
-import os
 import re
 import time
 import easyocr
@@ -23,7 +22,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
         # 按回车，进到收银
         auto_key("enter")
         time.sleep(1)
-
+    ctx = dict()
     # 截图，准备后续得到库存
     smoke_no_page = smoke_pic_operation("smoke_no", click_flag=False, raise_error=False)
     if smoke_no_page:
@@ -32,6 +31,9 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
                          smoke_no_page[2],
                          smoke_no_page[3] + smoke_no_page[3] - 12,)
         screen_shot('smoke_no_info', regine=smoke_no_page)
+        now_info_no, all_info_no = stock_check(run_count)
+        if all_info_no:
+            ctx["all_info_no"] = all_info_no
 
     # 点击收银
     smoke_pic_operation("get_pay", error_msg="收银按钮没找到")
@@ -47,7 +49,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
 
         # 检查输入框，是不是在首页
         smoke_pic_operation("input_1", error_msg="现金收款完成，但不在首页", click_flag=False)
-        return True
+        return True, ctx
 
     # 微信
     else:
@@ -56,7 +58,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
             # 检查输入框，是不是在首页,在首页，说明有人支付了
             input_page = smoke_pic_operation("input_1", click_flag=False, raise_error=False)
             if input_page:
-                return True
+                return True, ctx
 
             # 没在首页，则请求支付码，有支付码了，就走后面的自动填写流程
             pay_no = get_pay_no()
@@ -69,7 +71,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
             time.sleep(1)
 
         if not pay_no:
-            return False
+            return False, ctx
 
         send_wechat_notice("支付提醒", f"{item_name} 自动微信支付中，请勿手动操作", user_name='ZhangGongZhu|LengYueHanShuang')
         auto_input(pay_no)
@@ -90,12 +92,12 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
                 # 如果没有查询按钮，检查是不是在首页，在首页说明成功了
                 input_page = smoke_pic_operation("input_1", click_flag=False, raise_error=False)
                 if input_page:
-                    return True
+                    return True, ctx
         
                 # 也不在首页，那就试四次
                 not_found += 1
                 if not_found > 2:
-                    return False
+                    return False, ctx
             time.sleep(5)
 
 
@@ -177,6 +179,14 @@ def get_pay_information():
         pay_info_str += f"主扫比例: 计算失败 {cash_all}, {online_all}\n"
     send_pay_info_image()
     return pay_info_str, rate
+
+
+def stock_check(run_count):
+    now_info_no, all_info_no = get_smoke_stock()
+    if all_info_no:
+        if all_info_no < float(run_count):
+            raise Exception("剩余库存小于刷单数量了，请检查！")
+    return now_info_no, all_info_no
 
 
 def get_smoke_stock():

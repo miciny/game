@@ -2,7 +2,7 @@ import time
 from common.common_utils import print_wait
 from common.wechat_services import send_wechat_notice
 from deal_smoke.smoke_script import single_run, get_this_time_info, set_this_time_stock, \
-    send_pay_info_image, screen_shot_error, get_pay_information, get_smoke_stock
+    send_pay_info_image, screen_shot_error, get_pay_information
 
 
 def run():
@@ -23,11 +23,11 @@ def run():
             
             # 刷单
             pay_type = 2 if pay_type == 2 else 1
-            pay_flag = single_run(item_id, item_name, run_count, pay_type)
+            pay_flag, ctx = single_run(item_id, item_name, run_count, pay_type)
             pay_info_str = f"{item_name} 剩余：{int(item_stock) - run_count} \n"
 
             # 更新库存 都默认成功，比如微信，最后必须手动成功
-            now_info_no, all_info_no = get_smoke_stock()
+            all_info_no = ctx['all_info_no'] if "all_info_no" in ctx.keys() else None
             set_this_time_stock(item_id, run_count=run_count, smoke_stock_temp=all_info_no)
 
             # 现金支付的
