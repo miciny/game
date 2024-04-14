@@ -2,7 +2,7 @@ import time
 from common.common_utils import print_wait
 from common.wechat_services import send_wechat_notice
 from deal_smoke.smoke_script import single_run, get_this_time_info, set_this_time_stock, \
-    send_pay_info_image, screen_shot_error, get_pay_information
+    send_pay_info_image, screen_shot_error, get_pay_information, get_smoke_stock
 
 
 def run():
@@ -27,7 +27,8 @@ def run():
             pay_info_str = f"{item_name} 剩余：{int(item_stock) - run_count} \n"
 
             # 更新库存 都默认成功，比如微信，最后必须手动成功
-            set_this_time_stock(item_id, run_count=run_count)
+            now_info_no, all_info_no = get_smoke_stock()
+            set_this_time_stock(item_id, run_count=run_count, smoke_stock_temp=all_info_no)
 
             # 现金支付的
             if pay_type == 1:
@@ -49,13 +50,13 @@ def run():
                     pay_info_str += '微信收款失败，请手动查看和收款，收款后返回到首页\n'
 
             pay_info_str += f'下次刷单是{next_gap}分钟后\n停止刷单请回复【停止刷单】'
-            send_wechat_notice(title, pay_info_str, user_name='ZhangGongZhu|LengYueHanShuang')
+            send_wechat_notice(title, pay_info_str, user_name='')
             print_wait(next_gap * 60, "刷单成功等待：")
 
         except Exception as e:
             error_pic = screen_shot_error()
             time_gap = 3
-            send_wechat_notice("刷单报错了", f"请检查: {e} \n将在{time_gap}分钟后重试", user_name='ZhangGongZhu|LengYueHanShuang')
+            send_wechat_notice("刷单报错了", f"请检查: {e} \n将在{time_gap}分钟后重试", user_name='')
             send_pay_info_image(user_name="MaoCaiYuan", pic_path=error_pic)
             print_wait(time_gap * 60, "刷单成功等待：")
 

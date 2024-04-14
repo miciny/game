@@ -1,3 +1,5 @@
+import os
+import re
 import time
 import easyocr
 from common.wechat_services import send_wechat_notice, send_image
@@ -21,6 +23,15 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
         # 按回车，进到收银
         auto_key("enter")
         time.sleep(1)
+
+    # 截图，准备后续得到库存
+    smoke_no_page = smoke_pic_operation("smoke_no", click_flag=False, raise_error=False)
+    if smoke_no_page:
+        smoke_no_page = (smoke_no_page[0] - smoke_no_page[2] / 2,
+                         smoke_no_page[1] + smoke_no_page[3] / 2,
+                         smoke_no_page[2],
+                         smoke_no_page[3] + smoke_no_page[3] - 12,)
+        screen_shot('smoke_no_info', regine=smoke_no_page)
 
     # 点击收银
     smoke_pic_operation("get_pay", error_msg="收银按钮没找到")
@@ -168,7 +179,26 @@ def get_pay_information():
     return pay_info_str, rate
 
 
-def send_pay_info_image(user_name="ZhangGongZhu|LengYueHanShuang", pic_path="D:\Project\game\Logs\pay_total_info.png"):
+def get_smoke_stock():
+    pic = "D:\Project\game\Logs\smoke_no_info.png"
+    if os.path.exists(pic):
+        reader = easyocr.Reader(['ch_sim', 'en'])
+        reader_info = reader.readtext(pic)
+        if len(reader_info) == 2:
+            now_info = reader_info[0][1]
+            all_info = reader_info[1][1]
+            float_re = r'\d+\.?\d*'
+            try:
+                now_info_nos = re.findall(float_re, now_info)
+                all_info_nos = re.findall(float_re, all_info)
+                if now_info_nos and len(now_info_nos) > 0 and all_info_nos and len(all_info_nos) > 0:
+                    return float(now_info_nos[0]), float(all_info_nos[0])
+            except Exception as e:
+                print(e)
+    return None, None
+
+
+def send_pay_info_image(user_name="", pic_path="D:\Project\game\Logs\pay_total_info.png"):
     send_image(user_name, pic_path)
 
 
@@ -193,11 +223,12 @@ def get_this_time_info():
 
 
 # 2成功更新商品  4根据当前的主扫比例，给出下次的支付类型
-def set_this_time_stock(item_id, get_type="2", run_count=1):
+def set_this_time_stock(item_id, get_type="2", run_count=1, smoke_stock_temp=None):
     url = 'https://www.xlovem.club/v1/smoke/run'
     para_data = {
         'type': get_type,
         'run_count': int(run_count),
+        'smoke_stock_temp': smoke_stock_temp,
         'id': item_id
     }
     ref, resp = api_request(url, data=para_data)
@@ -224,4 +255,4 @@ def screen_shot_error():
 
 
 if __name__ == '__main__':
-    send_pay_info_image("MaoCaiYuan")
+    print(get_smoke_stock())
