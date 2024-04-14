@@ -24,7 +24,7 @@ def run():
             # 刷单
             pay_type = 2 if pay_type == 2 else 1
             pay_flag = single_run(item_id, item_name, run_count, pay_type)
-            pay_info_str = f"{item_name} 剩余：{int(item_stock) - 1} \n"
+            pay_info_str = f"{item_name} 剩余：{int(item_stock) - run_count} \n"
 
             # 更新库存 都默认成功，比如微信，最后必须手动成功
             set_this_time_stock(item_id, run_count=run_count)
