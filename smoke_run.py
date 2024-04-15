@@ -1,5 +1,5 @@
 import time
-from common.common_utils import print_wait
+from common.common_utils import print_wait, shutdown_pc
 from common.wechat_services import send_wechat_notice
 from deal_smoke.smoke_script import single_run, get_this_time_info, set_this_time_stock, \
     send_pay_info_image, screen_shot_error, get_pay_information
@@ -60,6 +60,10 @@ def run():
             send_wechat_notice("刷单报错了", f"请检查: {e} \n将在{time_gap}分钟后重试", user_name='')
             send_pay_info_image(user_name="MaoCaiYuan", pic_path=error_pic)
             print_wait(time_gap * 60, "刷单成功等待：")
+    
+    delay_time = 120
+    send_wechat_notice("关机执行中", str(delay_time) + "秒倒计时关机！", user_name='')
+    shutdown_pc(delay_time)
 
 
 if __name__ == '__main__':
