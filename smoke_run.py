@@ -7,6 +7,7 @@ from deal_smoke.smoke_script import single_run, get_this_time_info, set_this_tim
 
 def run():
     flag = True
+    next_type = ""
     while flag:
         try:
             # 从接口获取刷单信息
@@ -46,7 +47,6 @@ def run():
                     pay_info_str += info_str
                     next_type = set_this_time_stock(rate, get_type="4", cash_all=cash_all, online_all=online_all)
                 else:
-                    next_type = "随机"
                     title = "微信支付提醒"
                     pay_info_str += '微信收款失败，请手动查看和收款，收款后返回到首页\n'
 
