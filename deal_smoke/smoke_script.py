@@ -208,7 +208,7 @@ def get_smoke_stock():
     return None, None
 
 
-def send_pay_info_image(user_name="", pic_path="D:\Project\game\Logs\pay_total_info.png"):
+def send_pay_info_image(user_name="MaoCaiYuan", pic_path="D:\Project\game\Logs\pay_total_info.png"):
     send_image(user_name, pic_path)
 
 
