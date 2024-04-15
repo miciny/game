@@ -35,7 +35,7 @@ def run():
                 # 获取支付信息
                 info_str, rate, cash_all, online_all = get_pay_information()
                 pay_info_str += info_str
-                set_this_time_stock(rate, get_type="4", cash_all=cash_all, online_all=online_all)
+                next_type = set_this_time_stock(rate, get_type="4", cash_all=cash_all, online_all=online_all)
                 title = "现金刷单成功"
             # 微信收款的提醒
             else:
@@ -44,12 +44,13 @@ def run():
                     title = "微信刷单成功"
                     info_str, rate, cash_all, online_all = get_pay_information()
                     pay_info_str += info_str
-                    set_this_time_stock(rate, get_type="4", cash_all=cash_all, online_all=online_all)
+                    next_type = set_this_time_stock(rate, get_type="4", cash_all=cash_all, online_all=online_all)
                 else:
+                    next_type = "随机"
                     title = "微信支付提醒"
                     pay_info_str += '微信收款失败，请手动查看和收款，收款后返回到首页\n'
 
-            pay_info_str += f'下次刷单是{next_gap}分钟后\n停止刷单请回复【停止刷单】'
+            pay_info_str += f'下次刷单为{next_type}, {next_gap}分钟后\n停止刷单请回复【停止刷单】'
             send_wechat_notice(title, pay_info_str, user_name='')
             print_wait(next_gap * 60, "刷单成功等待：")
 

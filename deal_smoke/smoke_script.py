@@ -245,7 +245,7 @@ def set_this_time_stock(item_id, get_type="2", run_count=1, smoke_stock_temp=Non
     }
     ref, resp = api_request(url, data=para_data)
     if ref:
-        return resp
+        return resp['data']
     return None
 
 
