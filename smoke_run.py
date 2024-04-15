@@ -33,18 +33,18 @@ def run():
             # 现金支付的
             if pay_type == 1:
                 # 获取支付信息
-                info_str, rate = get_pay_information()
+                info_str, rate, cash_all, online_all = get_pay_information()
                 pay_info_str += info_str
-                set_this_time_stock(rate, get_type="4")
+                set_this_time_stock(rate, get_type="4", cash_all=cash_all, online_all=online_all)
                 title = "现金刷单成功"
             # 微信收款的提醒
             else:
                 if pay_flag:
                     time.sleep(3)
                     title = "微信刷单成功"
-                    info_str, rate = get_pay_information()
+                    info_str, rate, cash_all, online_all = get_pay_information()
                     pay_info_str += info_str
-                    set_this_time_stock(rate, get_type="4")
+                    set_this_time_stock(rate, get_type="4", cash_all=cash_all, online_all=online_all)
                 else:
                     title = "微信支付提醒"
                     pay_info_str += '微信收款失败，请手动查看和收款，收款后返回到首页\n'
