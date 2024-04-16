@@ -47,7 +47,8 @@ def run():
                     pay_info_str += info_str
                     next_type = set_this_time_stock(rate, get_type="4", cash_all=cash_all, online_all=online_all)
                 else:
-                    raise Exception('微信收款失败，请手动查看和收款，收款后返回到首页')
+                    title = "微信支付失败"
+                    pay_info_str += '微信收款失败，请手动查看和收款，收款后返回到首页\n'
 
             pay_info_str += f'下次刷单为{next_type}, {next_gap}分钟后\n停止刷单请回复【停止刷单】'
             send_wechat_notice(title, pay_info_str, user_name='')
