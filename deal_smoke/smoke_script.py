@@ -106,6 +106,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
 def get_pay_info():
     # 点击收款信息按钮
     smoke_pic_operation("pay_info", error_msg="没找到收款信息按钮")
+    time.sleep(2)
 
     # 微信 支付宝 现金收款的信息
     pic_path_1 = ""
@@ -146,7 +147,7 @@ def get_pay_info():
 
     # 点击返回
     smoke_pic_operation("pay_info_back", error_msg="没找到收款信息的返回按钮")
-    time.sleep(1)
+    time.sleep(2)
 
     # 检查输入框，是不是在首页
     smoke_pic_operation("input_1", error_msg="获取收款信息完成，但没返回到首页", click_flag=False)
