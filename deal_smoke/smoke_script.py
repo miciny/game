@@ -18,6 +18,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
     for _ in range(run_count):
         # 输入编码
         auto_input(smoke_id)
+        # paste_to(smoke_id)
         time.sleep(1)
         # 按回车，进到收银
         auto_key("enter")
@@ -75,6 +76,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
 
         send_wechat_notice("支付提醒", f"{item_name} 自动微信支付中，请勿手动操作", user_name='ZhangGongZhu|LengYueHanShuang')
         auto_input(pay_no)
+        # paste_to(smoke_id)
         time.sleep(1)
 
         # 收款确认

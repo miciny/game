@@ -3,6 +3,7 @@ import pyautogui as auto
 from common.common_utils import print_wait
 from config import self_path, confidence_setting
 import os
+import pyperclip as clip
 
 
 width, height = auto.size()
@@ -59,3 +60,7 @@ def move_to(x, y, duration=0.2):
 
 def drag_to(x, y, duration=1):
     auto.dragTo(x, y, duration=duration)
+
+def paste_to(o_str):
+    clip.copy(str(o_str))
+    auto.hotkey("ctrl", "v")
