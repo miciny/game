@@ -56,7 +56,7 @@ def run():
 
         except Exception as e:
             error_pic = screen_shot_error()
-            time_gap = 3
+            time_gap = 2
             send_wechat_notice("刷单报错了", f"请检查: {e} \n将在{time_gap}分钟后重试", user_name='')
             send_pay_info_image(user_name="MaoCaiYuan", pic_path=error_pic)
             print_wait(time_gap * 60, "刷单成功等待：")
