@@ -4,3 +4,4 @@ urllib3~=1.26.4
 Pillow~=10.0.1
 PyScreeze~=0.1.29
 easyocr~=1.7.1
+pyperclip~=1.8.2
