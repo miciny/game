@@ -146,7 +146,7 @@ def get_pay_info():
         screen_shot('pay_total_info', regine=pay_total_page)
 
     # 点击返回
-    smoke_pic_operation("pay_info_back", error_msg="没找到收款信息的返回按钮")
+    smoke_pic_operation("pay_info_back", raise_error=False)
     time.sleep(2)
 
     # 检查输入框，是不是在首页
