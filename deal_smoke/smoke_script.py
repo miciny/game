@@ -103,6 +103,42 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
             time.sleep(5)
 
 
+# 刷库存用
+def stock_run(smoke_id):
+    if not smoke_id:
+        raise Exception("商品id有误")
+
+    # 检查输入框，是不是在首页，在首页就点击
+    smoke_pic_operation("input_1", error_msg="不在首页")
+
+    # 输入编码
+    auto_input(smoke_id)
+    # 按回车，进到收银
+    auto_key("enter")
+
+    flag = False
+    # 截图，准备后续得到库存
+    smoke_no_page = smoke_pic_operation("smoke_no", click_flag=False, raise_error=False)
+    if smoke_no_page:
+        smoke_no_page = (smoke_no_page[0] - smoke_no_page[2] / 2,
+                         smoke_no_page[1] + smoke_no_page[3] / 2,
+                         smoke_no_page[2],
+                         smoke_no_page[3] + smoke_no_page[3] - 12,)
+        screen_shot('smoke_no_info', regine=smoke_no_page)
+        now_info_no, all_info_no = stock_check(run_count)
+        if all_info_no:
+            # 更新库存
+            set_this_time_stock(item_id, run_count=0, smoke_stock_temp=all_info_no)
+            flag = True
+    
+    smoke_pic_operation("clear", error_msg="没找到清除按钮")
+
+    smoke_pic_operation("clear_all", error_msg="没找到清除确认按钮")
+
+    if not flag:
+        raise Exception("未识别到存款")
+
+
 def get_pay_info():
     # 点击收款信息按钮
     smoke_pic_operation("pay_info", error_msg="没找到收款信息按钮")
@@ -224,10 +260,11 @@ def smoke_pic_operation(pic_name, raise_error=True, click_flag=True, error_msg="
     return search_page
 
 
-def get_this_time_info():
+# 1获取这次刷单信息 5获取所有刷单map
+def get_this_time_info(get_type="1"):
     url = 'https://www.xlovem.club/v1/smoke/run'
     para_data = {
-        'type': '1'
+        'type': get_type
     }
     ref, resp = api_request(url, data=para_data)
     if ref:
