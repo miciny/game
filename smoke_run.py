@@ -72,7 +72,7 @@ def run():
             send_pay_info_image(user_name="MaoCaiYuan", pic_path=error_pic)
             print_wait(time_gap * 60, "刷单成功等待：")
     
-    delay_time = 600
+    delay_time = 300
     send_wechat_notice("关机执行中", str(delay_time) + "秒倒计时关机！", user_name='')
     shutdown_pc(delay_time)
 
