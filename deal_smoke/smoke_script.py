@@ -125,10 +125,10 @@ def stock_run(smoke_id):
                          smoke_no_page[2],
                          smoke_no_page[3] + smoke_no_page[3] - 12,)
         screen_shot('smoke_no_info', regine=smoke_no_page)
-        now_info_no, all_info_no = stock_check(run_count)
+        now_info_no, all_info_no = stock_check(0)
         if all_info_no:
             # 更新库存
-            set_this_time_stock(item_id, run_count=0, smoke_stock_temp=all_info_no)
+            set_this_time_stock(smoke_id, run_count=0, smoke_stock_temp=all_info_no)
             flag = True
     
     smoke_pic_operation("clear", error_msg="没找到清除按钮")
