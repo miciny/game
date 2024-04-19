@@ -319,4 +319,5 @@ def screen_shot_error():
 
 
 if __name__ == '__main__':
-    print(get_smoke_stock())
+    get_pay_info()
+    # print(get_smoke_stock())
