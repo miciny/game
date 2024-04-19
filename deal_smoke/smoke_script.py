@@ -133,8 +133,6 @@ def stock_run(smoke_id):
     
     smoke_pic_operation("clear", error_msg="没找到清除按钮")
 
-    smoke_pic_operation("clear_all", error_msg="没找到清除确认按钮")
-
     if not flag:
         raise Exception("未识别到存款")
 
