@@ -228,7 +228,8 @@ def get_pay_information():
     else:
         pay_info_str += f"主扫比例: 计算失败 {cash_all}, {online_all}\n"
     send_pay_info_image()
-    send_pay_info_image(pic_path="D:\Project\game\Logs\pay_all_info.png", send=False)
+    send_pay_info_image(pic_path="pay_all_info", send=False)
+    send_pay_info_image(pic_path="smoke_no_info", send=False)
     return pay_info_str, rate, cash_all, online_all
 
 
@@ -259,8 +260,9 @@ def get_smoke_stock():
     return None, None
 
 
-def send_pay_info_image(user_name="MaoCaiYuan", pic_path="D:\Project\game\Logs\pay_total_info.png", send=True):
-    send_image(user_name, pic_path, send=send)
+def send_pay_info_image(user_name="MaoCaiYuan", pic_path="pay_total_info", send=True):
+    pic_path_real = f"D:\Project\game\Logs\{pic_path}.png"
+    send_image(user_name, pic_path_real, send=send)
 
 
 def smoke_pic_operation(pic_name, raise_error=True, click_flag=True, error_msg=""):
