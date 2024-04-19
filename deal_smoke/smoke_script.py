@@ -186,10 +186,10 @@ def get_pay_info():
     # 总的收款简图，发送到服务器，chatGPT识别
     pay_all_page = get_pic_position("pay_total", 'deal_smoke/pic')
     if pay_all_page:
-        pay_all_page = (pay_all_page[0] - 380,
+        pay_all_page = (pay_all_page[0] - 350,
                         pay_all_page[1] + 225,
                         pay_all_page[2] + 380,
-                        pay_all_page[3] + 300)
+                        pay_all_page[3] + 240)
         screen_shot('all_pay_info', regine=pay_all_page)
 
     # 点击返回
