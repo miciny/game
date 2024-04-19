@@ -79,6 +79,7 @@ def run():
 
 if __name__ == '__main__':
     run()
+    # run_stock()
 
     # online_all = 0
     # pic_path = 'D:\Project\game\Logs\wx_pay_info.png'

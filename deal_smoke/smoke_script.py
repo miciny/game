@@ -116,6 +116,7 @@ def stock_run(smoke_id):
     # 按回车，进到收银
     auto_key("enter")
 
+    time.sleep(1)
     flag = False
     # 截图，准备后续得到库存
     smoke_no_page = smoke_pic_operation("smoke_no", click_flag=False, raise_error=False)
@@ -125,8 +126,9 @@ def stock_run(smoke_id):
                          smoke_no_page[2],
                          smoke_no_page[3] + smoke_no_page[3] - 12)
         screen_shot('smoke_no_info', regine=smoke_no_page)
-        now_info_no, all_info_no = stock_check(0)
-        if all_info_no:
+        print("截图成功")
+        now_info_no, all_info_no = stock_check(-1)
+        if all_info_no is not None:
             # 更新库存
             set_this_time_stock(smoke_id, run_count=0, smoke_stock_temp=all_info_no)
             flag = True
@@ -134,7 +136,7 @@ def stock_run(smoke_id):
     smoke_pic_operation("clear", error_msg="没找到清除按钮")
 
     if not flag:
-        raise Exception("未识别到存款")
+        raise Exception("未识别到库存")
 
 
 def get_pay_info():
@@ -233,7 +235,8 @@ def get_pay_information():
 
 def stock_check(run_count):
     now_info_no, all_info_no = get_smoke_stock()
-    if all_info_no:
+    print("now_info_no, all_info_no: ", now_info_no, all_info_no)
+    if all_info_no is not None:
         if all_info_no < float(run_count):
             raise Exception("剩余库存小于刷单数量了，请检查！")
     return now_info_no, all_info_no
