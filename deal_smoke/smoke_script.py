@@ -30,7 +30,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
         smoke_no_page = (smoke_no_page[0] - smoke_no_page[2] / 2,
                          smoke_no_page[1] + smoke_no_page[3] / 2,
                          smoke_no_page[2],
-                         smoke_no_page[3] + smoke_no_page[3] - 12,)
+                         smoke_no_page[3] + smoke_no_page[3] - 12)
         screen_shot('smoke_no_info', regine=smoke_no_page)
         now_info_no, all_info_no = stock_check(run_count)
         if all_info_no:
@@ -123,7 +123,7 @@ def stock_run(smoke_id):
         smoke_no_page = (smoke_no_page[0] - smoke_no_page[2] / 2,
                          smoke_no_page[1] + smoke_no_page[3] / 2,
                          smoke_no_page[2],
-                         smoke_no_page[3] + smoke_no_page[3] - 12,)
+                         smoke_no_page[3] + smoke_no_page[3] - 12)
         screen_shot('smoke_no_info', regine=smoke_no_page)
         now_info_no, all_info_no = stock_check(0)
         if all_info_no:
@@ -144,42 +144,53 @@ def get_pay_info():
     smoke_pic_operation("pay_info", error_msg="没找到收款信息按钮")
     time.sleep(2)
 
-    # 微信 支付宝 现金收款的信息
+    # 现金收款的信息，本地识别
     pic_path_1 = ""
     cash_pay_info_page = get_pic_position("cash_pay_info", 'deal_smoke/pic', center=False)
     if cash_pay_info_page:
         cash_pay_info_page = (cash_pay_info_page[0],
                               cash_pay_info_page[1],
                               cash_pay_info_page[2] + 380,
-                              cash_pay_info_page[3],)
+                              cash_pay_info_page[3])
         pic_path_1 = screen_shot('cash_pay_info', regine=cash_pay_info_page)
 
+    # 微信收款的信息，本地识别
     pic_path_2 = ""
     wx_pay_info_page = get_pic_position("wx_pay_info", 'deal_smoke/pic', center=False)
     if wx_pay_info_page:
         wx_pay_info_page = (wx_pay_info_page[0],
                             wx_pay_info_page[1],
                             wx_pay_info_page[2] + 380,
-                            wx_pay_info_page[3],)
+                            wx_pay_info_page[3])
         pic_path_2 = screen_shot('wx_pay_info', regine=wx_pay_info_page)
 
+    # 支付宝收款的信息，本地识别
     pic_path_3 = ""
     ali_pay_info_page = get_pic_position("ali_pay_info", 'deal_smoke/pic', center=False)
     if ali_pay_info_page:
         ali_pay_info_page = (ali_pay_info_page[0],
                              ali_pay_info_page[1],
                              ali_pay_info_page[2] + 380,
-                             ali_pay_info_page[3],)
+                             ali_pay_info_page[3])
         pic_path_3 = screen_shot('ali_pay_info', regine=ali_pay_info_page)
 
-    # 总的收款图
+    # 总的收款图，不识别，发送通知用
     pay_total_page = get_pic_position("pay_total", 'deal_smoke/pic')
     if pay_total_page:
         pay_total_page = (pay_total_page[0] - 480,
                           pay_total_page[1] - 24,
                           pay_total_page[2] + 370 * 2,
-                          pay_total_page[3] + 650,)
+                          pay_total_page[3] + 650)
         screen_shot('pay_total_info', regine=pay_total_page)
+
+    # 总的收款简图，发送到服务器，chatGPT识别
+    pay_all_page = get_pic_position("pay_total", 'deal_smoke/pic')
+    if pay_all_page:
+        pay_all_page = (pay_all_page[0] - 380,
+                        pay_all_page[1] + 225,
+                        pay_all_page[2] + 380,
+                        pay_all_page[3] + 300)
+        screen_shot('all_pay_info', regine=pay_all_page)
 
     # 点击返回
     smoke_pic_operation("pay_info_back", raise_error=False)
@@ -217,6 +228,7 @@ def get_pay_information():
     else:
         pay_info_str += f"主扫比例: 计算失败 {cash_all}, {online_all}\n"
     send_pay_info_image()
+    send_pay_info_image(pic_path="D:\Project\game\Logs\all_pay_info.png")
     return pay_info_str, rate, cash_all, online_all
 
 
