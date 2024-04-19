@@ -190,7 +190,7 @@ def get_pay_info():
                         pay_all_page[1] + 225,
                         pay_all_page[2] + 380,
                         pay_all_page[3] + 240)
-        screen_shot('all_pay_info', regine=pay_all_page)
+        screen_shot('pay_all_info', regine=pay_all_page)
 
     # 点击返回
     smoke_pic_operation("pay_info_back", raise_error=False)
@@ -228,7 +228,7 @@ def get_pay_information():
     else:
         pay_info_str += f"主扫比例: 计算失败 {cash_all}, {online_all}\n"
     send_pay_info_image()
-    send_pay_info_image(pic_path="D:\Project\game\Logs\all_pay_info.png")
+    send_pay_info_image(pic_path="D:\Project\game\Logs\pay_all_info.png")
     return pay_info_str, rate, cash_all, online_all
 
 
