@@ -188,7 +188,7 @@ def get_pay_info():
     if pay_all_page:
         pay_all_page = (pay_all_page[0] - 350,
                         pay_all_page[1] + 225,
-                        pay_all_page[2] + 380,
+                        pay_all_page[2] + 350,
                         pay_all_page[3] + 240)
         screen_shot('pay_all_info', regine=pay_all_page)
 
