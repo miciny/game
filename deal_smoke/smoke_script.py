@@ -55,11 +55,15 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
     # 微信
     else:
         pay_no = ""
-        for i in range(50 * 60):
+        for i in range(60 * 60):
             # 检查输入框，是不是在首页,在首页，说明有人支付了
             input_page = smoke_pic_operation("input_1", click_flag=False, raise_error=False)
             if input_page:
                 return True, ctx
+
+            # # 看是不是有人手动支付中, 没人支付，就请求准备自动支付，有人支付时就等
+            # online_pay_not_input_page = smoke_pic_operation("online_pay_not_input", click_flag=False, raise_error=False)
+            # if online_pay_not_input_page:
 
             # 没在首页，则请求支付码，有支付码了，就走后面的自动填写流程
             pay_no = get_pay_no()
