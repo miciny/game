@@ -55,20 +55,26 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
     # 微信
     else:
         pay_no = ""
+        send_flag = True
         for i in range(60 * 60):
             # 检查输入框，是不是在首页,在首页，说明有人支付了
             input_page = smoke_pic_operation("input_1", click_flag=False, raise_error=False)
             if input_page:
                 return True, ctx
 
-            # # 看是不是有人手动支付中, 没人支付，就请求准备自动支付，有人支付时就等
-            # online_pay_not_input_page = smoke_pic_operation("online_pay_not_input", click_flag=False, raise_error=False)
-            # if online_pay_not_input_page:
-
-            # 没在首页，则请求支付码，有支付码了，就走后面的自动填写流程
-            pay_no = get_pay_no()
-            if pay_no:
-                break
+            # 看是不是有人手动支付中, 没人支付，就请求准备自动支付，有人支付时就等
+            online_pay_not_input_page = smoke_pic_operation("online_pay_not_input", click_flag=False, raise_error=False)
+            online_pay_not_input_page_1 = smoke_pic_operation("online_pay_not_input_1", click_flag=False, raise_error=False)
+            if online_pay_not_input_page or online_pay_not_input_page_1:
+                # 没在首页，则请求支付码，有支付码了，就走后面的自动填写流程
+                pay_no = get_pay_no()
+                if pay_no:
+                    break
+            else:
+                if send_flag:
+                    send_flag = False
+                    send_wechat_notice("支付提醒", f"{item_name} 疑似有人在手动支付，请注意！",
+                                       user_name='ZhangGongZhu|LengYueHanShuang')
                 
             # 如果一直没人理，2分钟发消息
             if int(i % 60) == 0 and int(i / 60) % 2 == 0:
@@ -328,3 +334,4 @@ def screen_shot_error():
 if __name__ == '__main__':
     get_pay_info()
     # print(get_smoke_stock())
+
