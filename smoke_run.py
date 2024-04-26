@@ -41,6 +41,7 @@ def run():
             # 更新库存 都默认成功，比如微信，最后必须手动成功
             all_info_no = ctx['all_info_no'] if "all_info_no" in ctx.keys() else None
             set_this_time_stock(item_id, run_count=run_count, smoke_stock_temp=all_info_no)
+            pay_info_str += f"参考库存 {all_info_no}, 刷单数量 {run_count}"
 
             # 刷完单后的间隔，以服务端的为主
             next_gap = int(smoke_map['data']['next_gap'])
