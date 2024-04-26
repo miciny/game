@@ -73,7 +73,8 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
                 
                 # 如果一直没人理，3分钟发消息
                 if int(i % 60) == 0 and int(i / 60) % 3 == 0:
-                    send_wechat_notice("支付提醒", f"{item_name} 请求支付中！\n请手动完成微信支付, 支付后返回到首页", user_name='ZhangGongZhu|LengYueHanShuang')
+                    # 前两次发群里的，后面的通知，在群里、微信机器人、飞书机器人都会发
+                    send_wechat_notice("支付提醒", f"{item_name} 请求支付中！\n请手动完成微信支付, 支付后返回到首页", user_name='ZhangGongZhu')
             else:
                 # 有个收款查询，需要点击
                 pay_check_page = smoke_pic_operation("pay_check", raise_error=False, click_flag=False)
@@ -82,13 +83,15 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
 
                 if send_flag:
                     send_flag = False
+                    # 仅发给需要关注的人
                     send_wechat_notice("手动支付提醒", f"{item_name} 疑似有人在手动支付，请注意！", user_name='ZhangGongZhu')
             time.sleep(1)
 
         if not pay_no:
             return False, ctx
 
-        send_wechat_notice("支付提醒", f"{item_name} 自动微信支付中，请勿手动操作", user_name='ZhangGongZhu|LengYueHanShuang')
+        # 自动支付的话，发群里，也可能发给个人
+        send_wechat_notice("支付提醒", f"{item_name} 自动微信支付中，请勿手动操作", user_name='ZhangGongZhu')
         auto_input(pay_no)
         # paste_to(pay_no)
         time.sleep(1)
