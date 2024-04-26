@@ -19,8 +19,8 @@ def run_stock():
 def run():
     flag = True
     next_type = ""
-    next_gap = 2
     while flag:
+        next_gap = 2
         try:
             # 从接口获取刷单信息
             smoke_map = get_this_time_info()
