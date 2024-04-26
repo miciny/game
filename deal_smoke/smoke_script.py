@@ -82,7 +82,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
 
                 if send_flag:
                     send_flag = False
-                    send_wechat_notice("支付提醒", f"{item_name} 疑似有人在手动支付，请注意！", user_name='')
+                    send_wechat_notice("手动支付提醒", f"{item_name} 疑似有人在手动支付，请注意！", user_name='ZhangGongZhu')
             time.sleep(1)
 
         if not pay_no:
