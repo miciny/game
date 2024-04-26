@@ -19,6 +19,7 @@ def run_stock():
 def run():
     flag = True
     next_type = ""
+    next_gap = 2
     while flag:
         try:
             # 从接口获取刷单信息
@@ -28,7 +29,6 @@ def run():
             item_name = smoke_map['data']['name']
             pay_type = smoke_map['data']['pay_type']
             run_count = smoke_map['data']['run_count']
-            next_gap = int(smoke_map['data']['next_gap'])
             if "run_flag" in smoke_map['data'].keys() and smoke_map['data']['run_flag'] == 0:
                 flag = False
                 continue
@@ -42,6 +42,8 @@ def run():
             all_info_no = ctx['all_info_no'] if "all_info_no" in ctx.keys() else None
             set_this_time_stock(item_id, run_count=run_count, smoke_stock_temp=all_info_no)
 
+            # 刷完单后的间隔，以服务端的为主
+            next_gap = int(smoke_map['data']['next_gap'])
             # 现金支付的
             if pay_type == 1:
                 # 获取支付信息
@@ -67,10 +69,9 @@ def run():
 
         except Exception as e:
             error_pic = screen_shot_error()
-            time_gap = 2
-            send_wechat_notice("刷单报错了", f"请检查: {e} \n将在{time_gap}分钟后重试", user_name='')
+            send_wechat_notice("刷单报错了", f"请检查: {e} \n将在{next_gap}分钟后重试", user_name='')
             send_pay_info_image(user_name="MaoCaiYuan", pic_path=error_pic)
-            print_wait(time_gap * 60, "刷单成功等待：")
+            print_wait(next_gap * 60, "刷单成功等待：")
     
     delay_time = 300
     send_wechat_notice("关机执行中", str(delay_time) + "秒倒计时关机！", user_name='')
