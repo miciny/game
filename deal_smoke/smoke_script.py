@@ -72,7 +72,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
                     break
                 
                 # 如果一直没人理，2分钟发消息
-                if int(i % 60) == 0 and int(i / 60) % 2 == 0:
+                if int(i % 60) == 0 and int(i / 60) % 3 == 0:
                     send_wechat_notice("支付提醒", f"{item_name} 请求支付中！\n请手动完成微信支付, 支付后返回到首页", user_name='ZhangGongZhu|LengYueHanShuang')
             else:
                 # 有个收款查询，需要点击
@@ -82,8 +82,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
 
                 if send_flag:
                     send_flag = False
-                    send_wechat_notice("支付提醒", f"{item_name} 疑似有人在手动支付，请注意！",
-                                       user_name='ZhangGongZhu|LengYueHanShuang')
+                    send_wechat_notice("支付提醒", f"{item_name} 疑似有人在手动支付，请注意！", user_name='')
             time.sleep(1)
 
         if not pay_no:
