@@ -77,9 +77,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
                     send_wechat_notice("支付提醒", f"{item_name} 请求支付中！\n请手动完成微信支付, 支付后返回到首页", user_name='ZhangGongZhu')
             else:
                 # 有个收款查询，需要点击
-                pay_check_page = smoke_pic_operation("pay_check", raise_error=False, click_flag=False)
-                if pay_check_page:
-                    click_screen(pay_check_page, delay_sec=1)
+                smoke_pic_operation("pay_check", raise_error=False)
 
                 if send_flag:
                     send_flag = False
