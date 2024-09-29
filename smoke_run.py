@@ -2,7 +2,7 @@ import time
 from common.common_utils import print_wait, shutdown_pc
 from common.wechat_services import send_wechat_notice
 from deal_smoke.smoke_script import single_run, get_this_time_info, set_this_time_stock, \
-    send_pay_info_image, screen_shot_error, get_pay_information, stock_run
+    send_pay_info_image, screen_shot_error, get_pay_information, stock_run, prepare_smoke
 
 
 # 刷库存
@@ -16,7 +16,14 @@ def run_stock():
             send_wechat_notice("库存获取错误", value["name"] + f"{e}", user_name='')
 
 
+def prepare():
+    # 准备工作
+    print_wait(10, des="开始准备")
+    prepare_smoke()
+
+
 def run():
+    prepare()
     flag = True
     next_type = ""
     while flag:

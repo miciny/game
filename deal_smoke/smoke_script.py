@@ -6,6 +6,15 @@ from common.common_utils import api_request
 from common.gui_utils import *
 
 
+def prepare_smoke():
+    c_pos = smoke_pic_operation("connect_2", random_flag=False, error_msg="连接connect_2按钮没找到")
+    if c_pos:
+        c_pos = (c_pos[0] + 20, c_pos[1] + 20)
+        click_screen(c_pos, delay_sec=1)
+    time.sleep(10)
+    smoke_pic_operation("out_full", random_flag=False, error_msg="连接out_full按钮没找到")
+
+
 # pay_type = 1 现金支付， 2 微信支付
 def single_run(smoke_id, item_name, run_count, pay_type=1):
     if not smoke_id:
@@ -281,12 +290,12 @@ def send_pay_info_image(user_name="MaoCaiYuan", pic_path="pay_total_info", send=
     send_image(user_name, pic_path_real, send=send)
 
 
-def smoke_pic_operation(pic_name, raise_error=True, click_flag=True, error_msg=""):
+def smoke_pic_operation(pic_name, raise_error=True, click_flag=True, error_msg="", random_flag=True):
     search_page = get_pic_position(pic_name, 'deal_smoke/pic')
     if raise_error and not search_page:
         raise Exception(error_msg)
     if click_flag and search_page:
-        click_screen(search_page, delay_sec=1)
+        click_screen(search_page, delay_sec=1, random_flag=random_flag)
     return search_page
 
 

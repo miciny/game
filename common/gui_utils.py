@@ -11,13 +11,13 @@ pic_region_full = (0, 0, width, height)
 
 
 # 点击屏幕， delay_sec 点击完成后等待时常
-def click_screen(click_pos, des="", delay_sec=None):
+def click_screen(click_pos, des="", delay_sec=None, random_flag=True):
     if click_pos:
         print(des, click_pos)
         x = click_pos[0]
         y = click_pos[1]
         # 如果带了长宽，就随机
-        if len(click_pos) == 4:
+        if len(click_pos) == 4 and random_flag:
             w = int(click_pos[2] / 2) - 5
             h = int(click_pos[3] / 2) - 5
             x += random.randint(-w, w)
