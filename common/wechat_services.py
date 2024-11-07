@@ -32,6 +32,7 @@ def send_wechat_iamge(server_pic_path, user_name='MaoCaiYuan', bot_name='yuan_qi
 
 def send_image(user_name, pic_path, send=True):
     if not os.path.exists(pic_path) or not user_name:
+        print("图片不存在或者用户名为空", pic_path, user_name)
         return
     server_pic_path = wx_upload_pic(pic_path)
     print("server_pic_path", server_pic_path)

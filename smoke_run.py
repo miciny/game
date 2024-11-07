@@ -23,7 +23,6 @@ def prepare():
 
 
 def run():
-    prepare()
     flag = True
     next_type = ""
     while flag:
@@ -78,7 +77,7 @@ def run():
         except Exception as e:
             error_pic = screen_shot_error()
             send_wechat_notice("刷单报错了", f"请检查: {e} \n将在{next_gap}分钟后重试", user_name='')
-            send_pay_info_image(user_name="MaoCaiYuan", pic_path=error_pic)
+            send_pay_info_image(user_name="MaoCaiYuan", pic_path=error_pic, full_path=True)
             print_wait(next_gap * 60, "刷单成功等待：")
     
     delay_time = 300
@@ -87,25 +86,9 @@ def run():
 
 
 if __name__ == '__main__':
+    f_ready = input("请输入是否在首页了（1是，0否: ")
+    f_ready = int(f_ready)
+    if 0 == f_ready:
+        prepare()
+
     run()
-    # run_stock()
-
-    # online_all = 0
-    # pic_path = 'D:\Project\game\Logs\wx_pay_info.png'
-    # reader = easyocr.Reader(['ch_sim', 'en'])
-    # reader_info = reader.readtext(pic_path)
-    # print(reader_info[0][1], reader_info[-1][1])
-    # pay_name = reader_info[0][1]
-    # pay_num = reader_info[-1][1].split(".")[0]
-    # if pay_name != "现金" and pay_num.isdigit():
-    #     online_all += float(pay_num)
-    # print(online_all)
-    # for item in reader_info:
-    #     print(item)
-
-    # smoke_map = get_this_time_info()
-    # print(smoke_map)
-
-    # send_wechat_notice("刷单成功了", "haha", user_name='ZhangGongZhu')
-    # time.sleep(10)
-    # screen_shot_error()

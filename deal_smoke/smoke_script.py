@@ -285,8 +285,8 @@ def get_smoke_stock():
     return None, None
 
 
-def send_pay_info_image(user_name="MaoCaiYuan", pic_path="pay_total_info", send=True):
-    pic_path_real = f"D:\Project\game\Logs\{pic_path}.png"
+def send_pay_info_image(user_name="MaoCaiYuan", pic_path="pay_total_info", send=True, full_path=False):
+    pic_path_real = f"D:\Project\game\Logs\{pic_path}.png" if not full_path else pic_path
     send_image(user_name, pic_path_real, send=send)
 
 

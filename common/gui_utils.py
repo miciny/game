@@ -51,6 +51,15 @@ def auto_key(key_str):
 def screen_shot(pic_name, regine=pic_region_full):
     pic_path = os.path.join(self_path, "Logs", pic_name + ".png")
     auto.screenshot(pic_path, region=regine)
+
+    # 需要压缩图片
+    if regine == pic_region_full:
+        from PIL import Image
+        # 打开截图图像
+        screenshot_image = Image.open(pic_path)
+        # 压缩图像，设置压缩质量为 75%
+        screenshot_image.convert('RGB').save(pic_path, quality=75)
+
     return pic_path
 
 
