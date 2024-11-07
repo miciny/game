@@ -86,9 +86,7 @@ def run():
 
 
 if __name__ == '__main__':
-    f_ready = input("请输入是否在首页了（1是，0否: ")
-    f_ready = int(f_ready)
-    if 0 == f_ready:
+    f_ready = input("请输入是否在首页了（0否: ")
+    if f_ready and 0 == int(f_ready):
         prepare()
-
     run()
