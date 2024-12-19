@@ -1,166 +1,61 @@
 import re
 import time
 import easyocr
-from common.wechat_services import send_wechat_notice, send_image
-from common.common_utils import api_request
+from common.wechat_services import send_image
 from common.gui_utils import *
 
 
+def check_have(pic_name):
+    return smoke_pic_operation(pic_name, raise_error=False, click_flag=False)
+
+
+# 判断需不需要从连接开始
+def connect_check():
+    return check_have("connect_3")
+
+
+# 判断是不是锁了
+def locked_check():
+    return check_have("locked")
+
+
+# 判断是不是首页
+def main_page_check():
+    return check_have("input_1")
+
+
+# 判断是不是在支付了
+def online_pay_check():
+    return check_have("online_pay_not_input") or check_have("online_pay_not_input_1")
+
+
+# 如果锁了，解锁
+def locked_and_enter():
+    if locked_check():
+        click_screen([500, 500])
+        auto_key("enter")
+        print_wait(5, des="等待解锁完成")
+
+
+# 不在首页，异常处理
+def not_main_page_deal():
+    times = 5
+    index = 0
+    while not main_page_check() and index < times:
+        index += 1
+        for i in range(20):
+            time.sleep(0.1)
+            auto_key("backspace")
+
+
+# 点击连接 + 确认
 def prepare_smoke():
-    c_pos = smoke_pic_operation("connect_2", random_flag=False, error_msg="连接connect_2按钮没找到")
+    c_pos = smoke_pic_operation("connect_3", random_flag=False, error_msg="连接connect_2按钮没找到")
     if c_pos:
         c_pos = (c_pos[0] + 20, c_pos[1] + 20)
         click_screen(c_pos, delay_sec=1)
     time.sleep(10)
     smoke_pic_operation("out_full", random_flag=False, error_msg="连接out_full按钮没找到")
-
-
-# pay_type = 1 现金支付， 2 微信支付
-def single_run(smoke_id, item_name, run_count, pay_type=1):
-    if not smoke_id:
-        raise Exception("没有找到可刷的商品")
-
-    # 检查输入框，是不是在首页，在首页就点击
-    smoke_pic_operation("input_1", error_msg="不在首页")
-
-    # 如果是微信 剩余库存大于2，则刷两个
-    for _ in range(run_count):
-        # 输入编码
-        auto_input(smoke_id)
-        # paste_to(smoke_id)
-        time.sleep(1)
-        # 按回车，进到收银
-        auto_key("enter")
-        time.sleep(1)
-    ctx = dict()
-    # 截图，准备后续得到库存
-    smoke_no_page = smoke_pic_operation("smoke_no", click_flag=False, raise_error=False)
-    if smoke_no_page:
-        smoke_no_page = (smoke_no_page[0] - smoke_no_page[2] / 2,
-                         smoke_no_page[1] + smoke_no_page[3] / 2,
-                         smoke_no_page[2],
-                         smoke_no_page[3] + smoke_no_page[3] - 12)
-        screen_shot('smoke_no_info', regine=smoke_no_page)
-        now_info_no, all_info_no = stock_check(run_count)
-        if all_info_no:
-            ctx["all_info_no"] = all_info_no
-
-    # 点击收银
-    smoke_pic_operation("get_pay", error_msg="收银按钮没找到")
-
-    # 现金
-    if pay_type == 1:
-        # 选择现金
-        smoke_pic_operation("cash", error_msg="没找到现金选择按钮")
-
-        # 收款确认
-        smoke_pic_operation("cash_confirm", error_msg="现金支付，没找到收款确认")
-        time.sleep(1)
-
-        # 检查输入框，是不是在首页
-        smoke_pic_operation("input_1", error_msg="现金收款完成，但不在首页", click_flag=False)
-        return True, ctx
-
-    # 微信
-    else:
-        pay_no = ""
-        send_flag = True
-        for i in range(60 * 60):
-            # 检查输入框，是不是在首页,在首页，说明有人支付了
-            input_page = smoke_pic_operation("input_1", click_flag=False, raise_error=False)
-            if input_page:
-                return True, ctx
-
-            # 看是不是有人手动支付中, 没人支付，就请求准备自动支付，有人支付时就等
-            online_pay_not_input_page = smoke_pic_operation("online_pay_not_input", click_flag=False, raise_error=False)
-            online_pay_not_input_page_1 = smoke_pic_operation("online_pay_not_input_1", click_flag=False, raise_error=False)
-            if online_pay_not_input_page or online_pay_not_input_page_1:
-                # 没在首页，则请求支付码，有支付码了，就走后面的自动填写流程
-                pay_no = get_pay_no()
-                if pay_no:
-                    break
-                
-                # 如果一直没人理，3分钟发消息
-                if int(i % 60) == 0 and int(i / 60) % 3 == 0:
-                    # 前两次发群里的，后面的通知，在群里、微信机器人、飞书机器人都会发
-                    send_wechat_notice("支付提醒", f"{item_name} 请求支付中！\n请手动完成微信支付, 支付后返回到首页", user_name='ZhangGongZhu')
-            else:
-                # 有个收款查询，需要点击
-                smoke_pic_operation("pay_check", raise_error=False)
-
-                if send_flag:
-                    send_flag = False
-                    # 仅发给需要关注的人
-                    send_wechat_notice("手动支付提醒", f"{item_name} 疑似有人在手动支付，请注意！", user_name='ZhangGongZhu')
-            time.sleep(1)
-
-        if not pay_no:
-            return False, ctx
-
-        # 自动支付的话，发群里，也可能发给个人
-        send_wechat_notice("支付提醒", f"{item_name} 自动微信支付中，请勿手动操作", user_name='ZhangGongZhu')
-        auto_input(pay_no)
-        # paste_to(pay_no)
-        time.sleep(1)
-
-        # 收款确认
-        smoke_pic_operation("cash_confirm", error_msg="微信支付，没找到收款确认")
-        time.sleep(5)
-        
-        not_found = 0
-        for i in range(30):
-            # 有个收款查询，需要点击，不成功的情况下，会一直有这个按钮
-            pay_check_page = smoke_pic_operation("pay_check", raise_error=False, click_flag=False)
-            if pay_check_page:
-                click_screen(pay_check_page, delay_sec=1)
-                not_found = 0
-            else:
-                # 如果没有查询按钮，检查是不是在首页，在首页说明成功了
-                input_page = smoke_pic_operation("input_1", click_flag=False, raise_error=False)
-                if input_page:
-                    return True, ctx
-        
-                # 也不在首页，那就试四次
-                not_found += 1
-                if not_found > 2:
-                    return False, ctx
-            time.sleep(5)
-
-
-# 刷库存用
-def stock_run(smoke_id):
-    if not smoke_id:
-        raise Exception("商品id有误")
-
-    # 检查输入框，是不是在首页，在首页就点击
-    smoke_pic_operation("input_1", error_msg="不在首页")
-
-    # 输入编码
-    auto_input(smoke_id)
-    # 按回车，进到收银
-    auto_key("enter")
-
-    time.sleep(1)
-    flag = False
-    # 截图，准备后续得到库存
-    smoke_no_page = smoke_pic_operation("smoke_no", click_flag=False, raise_error=False)
-    if smoke_no_page:
-        smoke_no_page = (smoke_no_page[0] - smoke_no_page[2] / 2,
-                         smoke_no_page[1] + smoke_no_page[3] / 2,
-                         smoke_no_page[2],
-                         smoke_no_page[3] + smoke_no_page[3] - 12)
-        screen_shot('smoke_no_info', regine=smoke_no_page)
-        print("截图成功")
-        now_info_no, all_info_no = stock_check(-1)
-        if all_info_no is not None:
-            # 更新库存
-            set_this_time_stock(smoke_id, run_count=0, smoke_stock_temp=all_info_no)
-            flag = True
-    
-    smoke_pic_operation("clear", error_msg="没找到清除按钮")
-
-    if not flag:
-        raise Exception("未识别到库存")
 
 
 def get_pay_info():
@@ -299,48 +194,6 @@ def smoke_pic_operation(pic_name, raise_error=True, click_flag=True, error_msg="
     return search_page
 
 
-# 1获取这次刷单信息 5获取所有刷单map
-def get_this_time_info(get_type="1"):
-    url = 'https://www.xlovem.club/v1/smoke/run'
-    para_data = {
-        'type': get_type
-    }
-    ref, resp = api_request(url, data=para_data)
-    if ref:
-        return resp
-    raise Exception("获取刷单信息失败")
-
-
-# 2成功更新商品  4根据当前的主扫比例，给出下次的支付类型
-def set_this_time_stock(item_id, get_type="2", run_count=1, smoke_stock_temp=None, cash_all=0, online_all=0):
-    url = 'https://www.xlovem.club/v1/smoke/run'
-    para_data = {
-        'type': get_type,
-        'run_count': int(run_count),
-        'smoke_stock_temp': smoke_stock_temp,
-        'cash_all': cash_all,
-        'online_all': online_all,
-        'id': item_id
-    }
-    ref, resp = api_request(url, data=para_data)
-    if ref and "data" in resp:
-        return resp['data']
-    return None
-
-
-# 3获取支付码
-def get_pay_no(get_type="3"):
-    url = 'https://www.xlovem.club/v1/smoke/run'
-    para_data = {
-        'type': get_type
-    }
-    pay_no = "0"
-    ref, resp = api_request(url, data=para_data)
-    if ref and 'data' in resp:
-        pay_no = resp['data']
-    return str(pay_no) if pay_no and len(str(pay_no)) == 18 and str(pay_no).isdigit() else None
-
-
 def screen_shot_error():
     return screen_shot('smoke_error_run')
 
@@ -348,4 +201,3 @@ def screen_shot_error():
 if __name__ == '__main__':
     get_pay_info()
     # print(get_smoke_stock())
-

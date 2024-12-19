@@ -1,8 +1,11 @@
 import time
 from common.common_utils import print_wait, shutdown_pc
 from common.wechat_services import send_wechat_notice
-from deal_smoke.smoke_script import single_run, get_this_time_info, set_this_time_stock, \
-    send_pay_info_image, screen_shot_error, get_pay_information, stock_run, prepare_smoke
+from deal_smoke.smoke_api import get_this_time_info, set_this_time_stock
+from deal_smoke.smoke_order import single_run
+from deal_smoke.smoke_stock import stock_run
+from deal_smoke.smoke_script import send_pay_info_image, screen_shot_error, get_pay_information, prepare_smoke, \
+    connect_check, locked_and_enter
 
 
 # 刷库存
@@ -17,9 +20,12 @@ def run_stock():
 
 
 def prepare():
-    # 准备工作
-    print_wait(10, des="开始准备")
-    prepare_smoke()
+    if connect_check():
+        # 准备工作
+        print_wait(10, des="开始准备")
+        prepare_smoke()
+        print_wait(5, des="准备解锁")
+        locked_and_enter()
 
 
 def run():
@@ -86,7 +92,5 @@ def run():
 
 
 if __name__ == '__main__':
-    f_ready = input("请输入是否在首页了（0否: ")
-    if f_ready and 0 == int(f_ready):
-        prepare()
+    prepare()
     run()
