@@ -55,7 +55,7 @@ def prepare_smoke():
         c_pos = (c_pos[0] + 20, c_pos[1] + 20)
         click_screen(c_pos, delay_sec=1)
     time.sleep(10)
-    smoke_pic_operation("out_full", random_flag=False, error_msg="连接out_full按钮没找到")
+    # smoke_pic_operation("out_full", random_flag=False, error_msg="连接out_full按钮没找到")
 
 
 def get_pay_info():

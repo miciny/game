@@ -94,3 +94,4 @@ def run():
 if __name__ == '__main__':
     prepare()
     run()
+    # run_stock()
