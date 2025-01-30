@@ -11,6 +11,8 @@ def get_this_time_info():
         return resp
     raise Exception("获取刷单信息失败")
 
+# pyinstaller --onefile --add-data "deal_smoke/pic/*;deal_smoke/pic" --add-data "Logs/*;Logs" smoke_run.py
+
 
 if __name__ == '__main__':
     get_this_time_info()

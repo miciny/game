@@ -40,7 +40,6 @@ def run():
             item_id = smoke_map['data']['id']
             item_stock = smoke_map['data']['stock']
             item_name = smoke_map['data']['name']
-            # pay_type = smoke_map['data']['pay_type']
             run_count = smoke_map['data']['run_count']
             if "run_flag" in smoke_map['data'].keys() and smoke_map['data']['run_flag'] == 0:
                 flag = False
