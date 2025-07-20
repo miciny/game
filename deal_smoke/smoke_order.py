@@ -42,7 +42,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
             ctx["all_info_no"] = all_info_no
 
     # 点击收银
-    smoke_pic_operation("get_pay", error_msg="收银按钮没找到")
+    smoke_pic_operation("get_pay_1", error_msg="收银按钮没找到")
 
     # 现金
     if pay_type == 1:
