@@ -1,3 +1,4 @@
+import datetime
 import time
 from common.common_utils import print_wait, shutdown_pc
 from common.wechat_services import send_wechat_notice
@@ -86,6 +87,11 @@ def run():
             send_wechat_notice("刷单报错了", f"请检查: {e} \n将在{next_gap}分钟后重试", user_name='')
             send_pay_info_image(user_name="MaoCaiYuan", pic_path=error_pic, full_path=True)
             print_wait(next_gap * 60, "刷单成功等待：")
+
+        # 判断当前是不是晚上7点半了，如果超过这个时间，发生通知，同时开始执行shutdown_pc
+        now_h = datetime.datetime.now()
+        if now_h.hour > 19 and now_h.minute > 30:
+            flag = False
     
     delay_time = 300
     send_wechat_notice("关机执行中", str(delay_time) + "秒倒计时关机！", user_name='')
