@@ -186,7 +186,15 @@ def send_pay_info_image(user_name="MaoCaiYuan", pic_path="pay_total_info", send=
 
 
 def smoke_pic_operation(pic_name, raise_error=True, click_flag=True, error_msg="", random_flag=True):
-    search_page = get_pic_position(pic_name, 'deal_smoke/pic')
+    search_page = None
+    if isinstance(pic_name, str):
+        search_page = get_pic_position(pic_name, 'deal_smoke/pic')
+    if isinstance(pic_name, list):
+        for pic in pic_name:
+            search_page = get_pic_position(pic, 'deal_smoke/pic')
+            if search_page:
+                break
+
     if raise_error and not search_page:
         raise Exception(error_msg)
     if click_flag and search_page:

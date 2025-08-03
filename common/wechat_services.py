@@ -6,13 +6,14 @@ import urllib3
 urllib3.disable_warnings()
 
 
-def send_wechat_notice(title, desc, user_name='MaoCaiYuan', bot_name='yuan_qi'):
+def send_wechat_notice(title, desc, user_name='MaoCaiYuan', bot_name='yuan_qi', to_group='0'):
     url = 'https://www.xlovem.club/v1/notice/wechat'
     para_data = {
         'title': title,
         'desc': desc,
         "msg_type": "text",
         'user_name': user_name,
+        'to_group': to_group,
         'bot_name': bot_name
     }
     return api_request(url, data=para_data)
