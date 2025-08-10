@@ -31,7 +31,7 @@ def online_pay_check():
 
 # 判断是不是非商品 或 新商品
 def not_or_new_product_check():
-    return check_have("not_product") or check_have("new_product")
+    return check_have("not_product") or check_have("new_product") or check_have("error_product")
 
 
 # 判断是不是負數了
