@@ -29,6 +29,11 @@ def online_pay_check():
     return check_have("online_pay_not_input") or check_have("online_pay_not_input_1")
 
 
+# 判断是不是非商品 或 新商品
+def not_or_new_product_check():
+    return check_have("not_product") or check_have("new_product")
+
+
 # 如果锁了，解锁
 def locked_and_enter():
     if locked_check():
@@ -43,6 +48,9 @@ def not_main_page_deal():
     index = 0
     while not main_page_check() and index < times:
         index += 1
+        if not_or_new_product_check():
+            smoke_pic_operation(["confirm"], raise_error=False)
+            continue
         for i in range(20):
             time.sleep(0.1)
             auto_key("backspace")
