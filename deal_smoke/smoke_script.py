@@ -34,6 +34,11 @@ def not_or_new_product_check():
     return check_have("not_product") or check_have("new_product")
 
 
+# 判断是不是負數了
+def negative_product_check():
+    return check_have("negative_product")
+
+
 # 如果锁了，解锁
 def locked_and_enter():
     if locked_check():
@@ -50,6 +55,10 @@ def not_main_page_deal():
         index += 1
         if not_or_new_product_check():
             smoke_pic_operation(["confirm"], raise_error=False)
+            continue
+        if negative_product_check():
+            smoke_pic_operation(["confirm"], raise_error=False)
+            smoke_pic_operation("clear", raise_error=False)
             continue
         for i in range(20):
             time.sleep(0.1)
