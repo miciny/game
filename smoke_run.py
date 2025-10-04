@@ -6,7 +6,7 @@ from deal_smoke.smoke_api import get_this_time_info, set_this_time_stock
 from deal_smoke.smoke_order import single_run
 from deal_smoke.smoke_stock import stock_run
 from deal_smoke.smoke_script import send_pay_info_image, screen_shot_error, get_pay_information, prepare_smoke, \
-    connect_check, locked_and_enter
+    connect_check, locked_and_enter, clear_all
 
 
 # 刷库存
@@ -83,14 +83,17 @@ def run():
             print_wait(next_gap * 60, "刷单成功等待：")
 
         except Exception as e:
-            error_pic = screen_shot_error()
-            send_wechat_notice("刷单报错了", f"请检查: {e} \n将在{next_gap}分钟后重试", user_name='', to_group='1')
-            send_pay_info_image(user_name="MaoCaiYuan", pic_path=error_pic, full_path=True)
-            print_wait(next_gap * 60, "刷单成功等待：")
+            if '剩余库存小于刷单数量了，请检查！' in str(e):
+                clear_all()
+            else:
+                error_pic = screen_shot_error()
+                send_wechat_notice("刷单报错了", f"请检查: {e} \n将在{next_gap}分钟后重试", user_name='', to_group='1')
+                send_pay_info_image(user_name="MaoCaiYuan", pic_path=error_pic, full_path=True)
+            print_wait(next_gap * 60, "刷单失败等待：")
 
         # 判断当前是不是晚上7点半了，如果超过这个时间，发生通知，同时开始执行shutdown_pc
         now_h = datetime.datetime.now()
-        if now_h.hour > 19 and now_h.minute > 30:
+        if now_h.hour > 18 and now_h.minute > 30:
             flag = False
     
     delay_time = 300

@@ -47,18 +47,25 @@ def locked_and_enter():
         print_wait(5, des="等待解锁完成")
 
 
+def clear_all():
+    smoke_pic_operation(["confirm"], raise_error=False)
+    time.sleep(3)
+    smoke_pic_operation("clear_all", raise_error=False)
+    time.sleep(3)
+    smoke_pic_operation("clear_confirm", raise_error=False)
+
+
 # 不在首页，异常处理
 def not_main_page_deal():
     times = 5
     index = 0
-    while not main_page_check() and index < times:
+    while ((not_or_new_product_check() or negative_product_check()) or (not main_page_check())) and index < times:
         index += 1
         if not_or_new_product_check():
             smoke_pic_operation(["confirm"], raise_error=False)
             continue
         if negative_product_check():
-            smoke_pic_operation(["confirm"], raise_error=False)
-            smoke_pic_operation("clear", raise_error=False)
+            clear_all()
             continue
         for i in range(20):
             time.sleep(0.1)
