@@ -3,11 +3,14 @@ import time
 from common.gui_utils import screen_shot
 from common.common_utils import api_request, upload_file
 import urllib3
+
+from config import server_domain
+
 urllib3.disable_warnings()
 
 
 def send_wechat_notice(title, desc, user_name='MaoCaiYuan', bot_name='yuan_qi', to_group='0'):
-    url = 'https://www.xlovem.club/v1/notice/wechat'
+    url = f'{server_domain}/v1/notice/wechat'
     para_data = {
         'title': title,
         'desc': desc,
@@ -20,7 +23,7 @@ def send_wechat_notice(title, desc, user_name='MaoCaiYuan', bot_name='yuan_qi', 
 
 
 def send_wechat_iamge(server_pic_path, user_name='MaoCaiYuan', bot_name='yuan_qi'):
-    url = 'https://www.xlovem.club/v1/notice/wechat'
+    url = f'{server_domain}/v1/notice/wechat'
     para_data = {
         'title': server_pic_path,
         'desc': "",
@@ -42,7 +45,7 @@ def send_image(user_name, pic_path, send=True):
 
 
 def wx_upload_pic(pic_path):
-    url = "https://www.xlovem.club/v1/file/upload"
+    url = f"{server_domain}/v1/file/upload"
     ref, resp = upload_file(url, pic_path)
     return resp if ref else None
 

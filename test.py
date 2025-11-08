@@ -1,8 +1,9 @@
 from common.common_utils import api_request
+from config import server_domain
 
 
 def get_this_time_info():
-    url = 'https://www.xlovem.club/v1/smoke/run'
+    url = f'{server_domain}/v1/smoke/run'
     para_data = {
         'type': '1'
     }

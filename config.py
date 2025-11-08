@@ -1,6 +1,9 @@
 import os
 self_path = os.path.dirname(os.path.realpath(__file__))
 
+server_domain = 'http://www.xlovem.top'
+# server_domain = 'https://www.xlovem.top'
+
 # pip3 install pyautogui -i http://mirrors.aliyun.com/pypi/simple  --trusted-host mirrors.aliyun.com
 # pip3 install opencv-python -i http://mirrors.aliyun.com/pypi/simple  --trusted-host mirrors.aliyun.com
 # pip3 install opencv-contrib-python -i http://mirrors.aliyun.com/pypi/simple  --trusted-host mirrors.aliyun.com

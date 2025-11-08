@@ -2,8 +2,11 @@ from common.common_utils import api_request
 
 
 # 1获取这次刷单信息 5获取所有刷单map
+from config import server_domain
+
+
 def get_this_time_info(get_type="1"):
-    url = 'https://www.xlovem.club/v1/smoke/run'
+    url = f'{server_domain}/v1/smoke/run'
     para_data = {
         'type': get_type
     }
@@ -15,7 +18,7 @@ def get_this_time_info(get_type="1"):
 
 # 2成功更新商品  4根据当前的主扫比例，给出下次的支付类型
 def set_this_time_stock(item_id, get_type="2", run_count=1, smoke_stock_temp=None, cash_all=0, online_all=0):
-    url = 'https://www.xlovem.club/v1/smoke/run'
+    url = f'{server_domain}/v1/smoke/run'
     para_data = {
         'type': get_type,
         'run_count': int(run_count),
@@ -32,7 +35,7 @@ def set_this_time_stock(item_id, get_type="2", run_count=1, smoke_stock_temp=Non
 
 # 3获取支付码
 def get_pay_no(get_type="3"):
-    url = 'https://www.xlovem.club/v1/smoke/run'
+    url = f'{server_domain}/v1/smoke/run'
     para_data = {
         'type': get_type
     }
