@@ -85,7 +85,7 @@ def prepare_smoke():
 def get_pay_info():
     # 点击收款信息按钮
     smoke_pic_operation("pay_info", error_msg="没找到收款信息按钮")
-    time.sleep(2)
+    time.sleep(8)
 
     # 现金收款的信息，本地识别
     pic_path_1 = ""
