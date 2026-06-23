@@ -21,7 +21,7 @@ def locked_check():
 
 # 判断是不是首页
 def main_page_check():
-    return check_have("input_1")
+    return check_have("input2")
 
 
 # 判断是不是在支付了
@@ -140,7 +140,7 @@ def get_pay_info():
     time.sleep(2)
 
     # 检查输入框，是不是在首页
-    smoke_pic_operation("input_1", error_msg="获取收款信息完成，但没返回到首页", click_flag=False, raise_error=False)
+    smoke_pic_operation("input2", error_msg="获取收款信息完成，但没返回到首页", click_flag=False, raise_error=False)
     return pic_path_1, pic_path_2, pic_path_3
 
 

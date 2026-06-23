@@ -17,7 +17,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
     # 不在首页，异常处理
     not_main_page_deal()
     # 检查输入框，是不是在首页，在首页就点击, 不然就报错
-    smoke_pic_operation("input_1", error_msg="不在首页")
+    smoke_pic_operation("input2", error_msg="不在首页")
 
     # 如果是微信 剩余库存大于2，则刷两个
     for _ in range(run_count):
@@ -54,7 +54,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
         time.sleep(1)
 
         # 检查输入框，是不是在首页
-        smoke_pic_operation("input_1", error_msg="现金收款完成，但不在首页", click_flag=False)
+        smoke_pic_operation("input2", error_msg="现金收款完成，但不在首页", click_flag=False)
         return True, ctx
 
     # 微信

@@ -11,7 +11,7 @@ def stock_run(smoke_id):
         raise Exception("商品id有误")
 
     # 检查输入框，是不是在首页，在首页就点击
-    smoke_pic_operation("input_1", error_msg="不在首页")
+    smoke_pic_operation("input2", error_msg="不在首页")
 
     # 输入编码
     auto_input(smoke_id)
