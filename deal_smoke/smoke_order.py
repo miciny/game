@@ -3,8 +3,8 @@ import time
 from common.gui_utils import auto_key, auto_input, screen_shot, click_screen
 from common.wechat_services import send_wechat_notice
 from deal_smoke.smoke_api import get_pay_no
-from deal_smoke.smoke_script import smoke_pic_operation, stock_check, locked_and_enter, not_main_page_deal, \
-    main_page_check, online_pay_check
+from deal_smoke.smoke_script import stock_check, locked_and_enter, not_main_page_deal, \
+    main_page_check, online_pay_check, smoke_pic_operation_by_dir
 
 
 # pay_type = 1 现金支付， 2 微信支付
@@ -17,7 +17,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
     # 不在首页，异常处理
     not_main_page_deal()
     # 检查输入框，是不是在首页，在首页就点击, 不然就报错
-    smoke_pic_operation("input2", error_msg="不在首页")
+    smoke_pic_operation_by_dir("input", error_msg="不在首页")
 
     # 如果是微信 剩余库存大于2，则刷两个
     for _ in range(run_count):
@@ -30,7 +30,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
         time.sleep(1)
     ctx = dict()
     # 截图，准备后续得到库存
-    smoke_no_page = smoke_pic_operation("smoke_no", click_flag=False, raise_error=False)
+    smoke_no_page = smoke_pic_operation_by_dir("smoke_no", click_flag=False, raise_error=False)
     if smoke_no_page:
         smoke_no_page = (smoke_no_page[0] - smoke_no_page[2] / 2,
                          smoke_no_page[1] + smoke_no_page[3] / 2,
@@ -42,19 +42,19 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
             ctx["all_info_no"] = all_info_no
 
     # 点击收银
-    smoke_pic_operation(["get_pay_1", "get_pay_2", "get_pay"], error_msg="收银按钮没找到")
+    smoke_pic_operation_by_dir("get_pay", error_msg="收银按钮没找到")
 
     # 现金
     if pay_type == 1:
         # 选择现金
-        smoke_pic_operation("cash", error_msg="没找到现金选择按钮")
+        smoke_pic_operation_by_dir("cash", error_msg="没找到现金选择按钮")
 
         # 收款确认
-        smoke_pic_operation("cash_confirm", error_msg="现金支付，没找到收款确认")
+        smoke_pic_operation_by_dir("cash_confirm", error_msg="现金支付，没找到收款确认")
         time.sleep(1)
 
         # 检查输入框，是不是在首页
-        smoke_pic_operation("input2", error_msg="现金收款完成，但不在首页", click_flag=False)
+        smoke_pic_operation_by_dir("input", error_msg="现金收款完成，但不在首页", click_flag=False)
         return True, ctx
 
     # 微信
@@ -79,7 +79,7 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
                     send_wechat_notice("支付提醒", f"{item_name} 请求支付中！\n请手动完成微信支付, 支付后返回到首页", user_name='ZhangGongZhu')
             else:
                 # 有个收款查询，需要点击
-                smoke_pic_operation("pay_check", raise_error=False)
+                smoke_pic_operation_by_dir("pay_check", raise_error=False)
 
                 if send_flag:
                     send_flag = False
@@ -97,13 +97,13 @@ def single_run(smoke_id, item_name, run_count, pay_type=1):
         time.sleep(1)
 
         # 收款确认
-        smoke_pic_operation("cash_confirm", error_msg="微信支付，没找到收款确认")
+        smoke_pic_operation_by_dir("cash_confirm", error_msg="微信支付，没找到收款确认")
         time.sleep(5)
 
         not_found = 0
         for i in range(30):
             # 有个收款查询，需要点击，不成功的情况下，会一直有这个按钮
-            pay_check_page = smoke_pic_operation("pay_check", raise_error=False, click_flag=False)
+            pay_check_page = smoke_pic_operation_by_dir("pay_check", raise_error=False, click_flag=False)
             if pay_check_page:
                 click_screen(pay_check_page, delay_sec=1)
                 not_found = 0

@@ -31,6 +31,15 @@ def click_screen(click_pos, des="", delay_sec=None, random_flag=True):
 
 # 检测图片，返回【x, y, width, height】 或 None
 def get_pic_position(pic_name, dir_name, pic_region=pic_region_full, center=True, without_tail=True):
+    """
+    检测图片，返回【x, y, width, height】 或 None
+    :param pic_name: 图片名称
+    :param dir_name: 目录名称
+    :param pic_region: 检测区域
+    :param center: 是否返回中心位置
+    :param without_tail: 是否去掉文件后缀
+    :return: 检测结果
+    """
     pic_path = os.path.join(self_path, dir_name, pic_name + (".png" if without_tail else ''))
     res = auto.locateOnScreen(pic_path, region=pic_region, confidence=confidence_setting, grayscale=True)
     if res is not None and center:
@@ -49,6 +58,12 @@ def auto_key(key_str):
 
 
 def screen_shot(pic_name, regine=pic_region_full):
+    """
+    截图
+    :param pic_name: 截图名称
+    :param regine: 截图区域
+:return: 截图路径
+    """
     pic_path = os.path.join(self_path, "Logs", pic_name + ".png")
     auto.screenshot(pic_path, region=regine)
 
