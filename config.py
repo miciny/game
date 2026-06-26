@@ -1,7 +1,8 @@
 import os
 self_path = os.path.dirname(os.path.realpath(__file__))
 
-server_domain = 'http://www.xlovem.top'
+server_domain = 'http://101.200.192.147'
+# server_domain = 'http://www.xlovem.top'
 # server_domain = 'https://www.xlovem.top'
 
 # pip3 install pyautogui -i http://mirrors.aliyun.com/pypi/simple  --trusted-host mirrors.aliyun.com

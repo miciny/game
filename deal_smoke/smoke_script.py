@@ -4,6 +4,7 @@ import easyocr
 from common.wechat_services import send_image
 from common.gui_utils import *
 
+
 # 判断是否有图片
 def check_have(pic_name):
     """
@@ -306,9 +307,12 @@ def smoke_pic_operation_by_dir(dir_name, raise_error=True, click_flag=True, erro
     """
 
     # 找到所有图片
-    pic_names = os.listdir(os.path.join(self_path, dir_name))
-    pic_names = [pic_name.split(".")[0] for pic_name in pic_names]
+    pic_names = os.listdir(os.path.join(self_path, f'deal_smoke/pic/{dir_name}'))
+    print(pic_names)
+    pic_names = [str(pic_name).split(".")[0] for pic_name in pic_names]
+    search_page = ""
     for pic_name in pic_names:
+        print(pic_name)
         search_page = get_pic_position(pic_name, f'deal_smoke/pic/{dir_name}', center=center)
         if search_page:
             break
@@ -318,6 +322,7 @@ def smoke_pic_operation_by_dir(dir_name, raise_error=True, click_flag=True, erro
     if click_flag and search_page:
         click_screen(search_page, delay_sec=1, random_flag=random_flag)
     return search_page
+
 
 def screen_shot_error():
     """
