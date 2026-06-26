@@ -9,7 +9,10 @@ from config import server_domain
 urllib3.disable_warnings()
 
 
-def send_wechat_notice(title, desc, user_name='MaoCaiYuan', bot_name='yuan_qi', to_group='0'):
+def send_wechat_notice(title, desc, user_name='MaoCaiYuan', bot_name='yuan_qi', to_group='0', strong_notice=True):
+    if strong_notice:
+        bot_name = 'server_jiang'
+
     url = f'{server_domain}/v1/notice/wechat'
     para_data = {
         'title': title,

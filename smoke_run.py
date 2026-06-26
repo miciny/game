@@ -45,7 +45,7 @@ def run():
             if "run_flag" in smoke_map['data'].keys() and smoke_map['data']['run_flag'] == 0:
                 flag = False
                 continue
-            
+
             # 刷单
             # pay_type = 2 if pay_type == 2 else 1
             pay_type = 1  # 暂时全走现金支付
@@ -79,7 +79,8 @@ def run():
                     pay_info_str += '微信收款失败，请手动查看和收款，收款后返回到首页\n'
 
             pay_info_str += f'下次刷单为{next_type}, {next_gap}分钟后\n停止刷单请回复【停止刷单】'
-            send_wechat_notice(title, pay_info_str, user_name='')
+            strong_notice = True if title == "微信支付失败" else False
+            send_wechat_notice(title, pay_info_str, user_name='', strong_notice=strong_notice)
             print_wait(next_gap * 60, "刷单成功等待：")
 
         except Exception as e:
@@ -87,7 +88,8 @@ def run():
                 clear_all()
             else:
                 error_pic = screen_shot_error()
-                send_wechat_notice("刷单报错了", f"请检查: {e} \n将在{next_gap}分钟后重试", user_name='', to_group='1')
+                send_wechat_notice("刷单报错了", f"请检查: {e} \n将在{next_gap}分钟后重试", user_name='',
+                                   to_group='1')
                 send_pay_info_image(user_name="MaoCaiYuan", pic_path=error_pic, full_path=True)
             print_wait(next_gap * 60, "刷单失败等待：")
 
@@ -95,7 +97,7 @@ def run():
         now_h = datetime.datetime.now()
         if now_h.hour > 18 and now_h.minute > 30:
             flag = False
-    
+
     delay_time = 300
     send_wechat_notice("关机执行中", str(delay_time) + "秒倒计时关机！", user_name='')
     shutdown_pc(delay_time)
