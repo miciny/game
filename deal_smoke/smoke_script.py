@@ -213,7 +213,7 @@ def get_pay_information():
         pay_info_str += f"主扫比例: {rate}%\n"
     else:
         pay_info_str += f"主扫比例: 计算失败 {cash_all}, {online_all}\n"
-    send_pay_info_image()
+    send_pay_info_image(strong_notice=False)
     send_pay_info_image(pic_path="pay_all_info", send=False)
     send_pay_info_image(pic_path="smoke_no_info", send=False)
     return pay_info_str, rate, cash_all, online_all
@@ -256,17 +256,19 @@ def get_smoke_stock():
     return None, None
 
 
-def send_pay_info_image(user_name="MaoCaiYuan", pic_path="pay_total_info", send=True, full_path=False):
+def send_pay_info_image(user_name="MaoCaiYuan", pic_path="pay_total_info", send=True, full_path=False,
+                        strong_notice=True):
     """
     发送收款信息图片
     :param user_name: 用户名
     :param pic_path: 图片路径
     :param send: 是否发送
     :param full_path: 是否是完整路径
+    :param strong_notice
     :return:
     """
     pic_path_real = f"D:\Project\game\Logs\{pic_path}.png" if not full_path else pic_path
-    send_image(user_name, pic_path_real, send=send)
+    send_image(user_name, pic_path_real, send=send, strong_notice=strong_notice)
 
 
 def smoke_pic_operation(pic_name, raise_error=True, click_flag=True, error_msg="", random_flag=True):

@@ -25,7 +25,9 @@ def send_wechat_notice(title, desc, user_name='MaoCaiYuan', bot_name='yuan_qi', 
     return api_request(url, data=para_data)
 
 
-def send_wechat_iamge(server_pic_path, user_name='MaoCaiYuan', bot_name='yuan_qi'):
+def send_wechat_image(server_pic_path, user_name='MaoCaiYuan', bot_name='yuan_qi', strong_notice=True):
+    if strong_notice:
+        bot_name = 'server_jiang'
     url = f'{server_domain}/v1/notice/wechat'
     para_data = {
         'title': server_pic_path,
@@ -37,14 +39,14 @@ def send_wechat_iamge(server_pic_path, user_name='MaoCaiYuan', bot_name='yuan_qi
     return api_request(url, data=para_data)
 
 
-def send_image(user_name, pic_path, send=True):
+def send_image(user_name, pic_path, send=True, strong_notice=True):
     if not os.path.exists(pic_path) or not user_name:
         print("图片不存在或者用户名为空", pic_path, user_name)
         return
     server_pic_path = wx_upload_pic(pic_path)
     print("server_pic_path", server_pic_path)
     if send and server_pic_path:
-        send_wechat_iamge(server_pic_path, user_name=user_name)
+        send_wechat_image(server_pic_path, user_name=user_name, strong_notice=strong_notice)
 
 
 def wx_upload_pic(pic_path):
